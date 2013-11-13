@@ -122,7 +122,7 @@ TUF specification [16]_.
   *consistent-snapshot* role.
 
 * Continuous delivery: A set of processes with which PyPI produces consistent
-  snapshots that can safely coexist and deleted independently.
+  snapshots that can safely coexist and deleted independently [18]_.
 
 * Developer: Either the owner or maintainer of a project who is allowed to
   update the TUF metadata as well as distribution metadata and data for the
@@ -1022,15 +1022,18 @@ References
 .. [6] https://mail.python.org/pipermail/distutils-sig/2013-April/020596.html
 .. [7] https://mail.python.org/pipermail/distutils-sig/2013-May/020701.html
 .. [8] https://mail.python.org/pipermail/distutils-sig/2013-July/022008.html
-.. [9] http://www.python.org/dev/peps/pep-0381/
+.. [9] PEP 381, Mirroring infrastructure for PyPI, Ziadé, Löwis
+       http://www.python.org/dev/peps/pep-0381/
 .. [10] https://mail.python.org/pipermail/distutils-sig/2013-September/022773.html
 .. [11] https://mail.python.org/pipermail/distutils-sig/2013-May/020848.html
-.. [12] http://www.python.org/dev/peps/pep-0449/
+.. [12] PEP 449, Removal of the PyPI Mirror Auto Discovery and Naming Scheme, Stufft
+        http://www.python.org/dev/peps/pep-0449/
 .. [13] https://isis.poly.edu/~jcappos/papers/cappos_mirror_ccs_08.pdf
 .. [14] https://mail.python.org/pipermail/distutils-sig/2013-September/022755.html
 .. [15] https://pypi.python.org/security
 .. [16] https://github.com/theupdateframework/tuf/blob/develop/docs/tuf-spec.txt
-.. [17] http://www.python.org/dev/peps/pep-0426/
+.. [17] PEP 426, Metadata for Python Software Packages 2.0, Coghlan, Holth, Stufft
+        http://www.python.org/dev/peps/pep-0426/
 .. [18] https://en.wikipedia.org/wiki/Continuous_delivery
 .. [19] https://mail.python.org/pipermail/distutils-sig/2013-August/022154.html
 .. [20] https://en.wikipedia.org/wiki/RSA_%28algorithm%29
