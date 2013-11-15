@@ -1,8 +1,9 @@
-PEP: XXX
+PEP: 458
 Title: Surviving a Compromise of PyPI
 Author: Trishank Karthik Kuppusamy <tk47@students.poly.edu>,
         Donald Stufft <donald@stufft.io>,
         Justin Cappos <jcappos@poly.edu>
+BDFL-Delegate: Nick Coghlan <ncoghlan@gmail.com>
 Discussions-To: DistUtils mailing list <distutils-sig@python.org>,
                 TUF mailing list <theupdateframework@googlegroups.com>
 Status: Draft
