@@ -624,6 +624,13 @@ to the latest consistent snapshot.  The mirror MAY then delete the previous
 consistent snapshot once it finds that no client is reading from the previous
 consistent snapshot.
 
+The mirror MAY use extant file transfer software such as rsync__ to mirror
+PyPI. The mirror MUST then ensure that it has copied at least one consistent
+snapshot in its entirety, and that it points package managers such as pip to
+the latest known timestamp metadata.
+
+__ https://rsync.samba.org/
+
 
 Backup Process
 --------------
