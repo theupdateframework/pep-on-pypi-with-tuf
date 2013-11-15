@@ -4,8 +4,7 @@ Author: Trishank Karthik Kuppusamy <tk47@students.poly.edu>,
         Donald Stufft <donald@stufft.io>,
         Justin Cappos <jcappos@poly.edu>
 BDFL-Delegate: Nick Coghlan <ncoghlan@gmail.com>
-Discussions-To: DistUtils mailing list <distutils-sig@python.org>,
-                TUF mailing list <theupdateframework@googlegroups.com>
+Discussions-To: DistUtils mailing list <distutils-sig@python.org>
 Status: Draft
 Type: Process
 Content-Type: text/x-rst
@@ -401,6 +400,14 @@ __ https://en.wikipedia.org/wiki/Collision_(computer_science)
 In this simple but effective manner, we are able to capture a consistent
 snapshot of all projects and the associated metadata at a given time.  The next
 subsection will explicate the implementation details of this idea.
+
+This PEP does not prohibit using advanced file systems or tools to produce
+consistent snapshots (such solutions are mentioned in the Appendix). There are
+two important reasons for why we chose this simple solution for the PEP.
+Firstly, the solution does not mandate that PyPI use any particular file system
+or tool.  Secondly, as we will see later in this section, our generic
+file-system based approach allows mirrors to use extant file transfer tools
+such as rsync to efficiently transfer consistent snapshots from PyPI. 
 
 
 Producing Consistent Snapshots
@@ -1005,9 +1012,10 @@ snapshot with the file system.  As of October 2013, we found that a fairly
 modern computer with a 7200RPM hard disk drive required at least three minutes
 to produce a consistent snapshot with the "cp -lr" command on the ext3__ file
 system.  Perhaps the I/O costs of this scheme may be ameliorated with advanced
-tools or file systems such as ZFS__ or btrfs__.
+tools or file systems such as LVM__, ZFS__ or btrfs__.
 
 __ https://en.wikipedia.org/wiki/Ext3
+__ http://www.tldp.org/HOWTO/LVM-HOWTO/snapshots_backup.html
 __ https://en.wikipedia.org/wiki/ZFS
 __ https://en.wikipedia.org/wiki/Btrfs
 

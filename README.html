@@ -364,7 +364,7 @@ ul.auto-toc {
        width="100%" border="0">
 <tr><td class="navicon" width="150" height="35">
 <a href="http://www.python.org/" title="Python Home Page">
-<img src="http://www.python.org/pics/PyBanner047.gif" alt="[Python]"
+<img src="http://www.python.org/pics/PyBanner051.gif" alt="[Python]"
  border="0" width="150" height="35" /></a></td>
 <td class="textlinks" align="left">
 [<b><a href="http://www.python.org/">Python Home</a></b>]
@@ -386,8 +386,7 @@ Justin Cappos &lt;jcappos&#32;&#97;t&#32;poly.edu&gt;</td>
 </tr>
 <tr class="field"><th class="field-name">BDFL-Delegate:</th><td class="field-body">Nick Coghlan &lt;<a class="reference external" href="mailto:ncoghlan&#64;gmail.com">ncoghlan&#64;gmail.com</a>&gt;</td>
 </tr>
-<tr class="field"><th class="field-name">Discussions-To:</th><td class="field-body">DistUtils mailing list &lt;<a class="reference external" href="mailto:distutils-sig&#64;python.org?subject=PEP%20458">distutils-sig&#32;&#97;t&#32;python.org</a>&gt;,
-TUF mailing list &lt;<a class="reference external" href="mailto:theupdateframework&#64;googlegroups.com?subject=PEP%20458">theupdateframework&#32;&#97;t&#32;googlegroups.com</a>&gt;</td>
+<tr class="field"><th class="field-name">Discussions-To:</th><td class="field-body">DistUtils mailing list &lt;<a class="reference external" href="mailto:distutils-sig&#64;python.org?subject=PEP%20458">distutils-sig&#32;&#97;t&#32;python.org</a>&gt;</td>
 </tr>
 <tr class="field"><th class="field-name">Status:</th><td class="field-body">Draft</td>
 </tr>
@@ -403,50 +402,50 @@ TUF mailing list &lt;<a class="reference external" href="mailto:theupdateframewo
 <div class="contents topic" id="contents">
 <p class="topic-title first">Contents</p>
 <ul class="simple">
-<li><a class="reference internal" href="#abstract" id="id114">Abstract</a></li>
-<li><a class="reference internal" href="#rationale" id="id115">Rationale</a></li>
-<li><a class="reference internal" href="#definitions" id="id116">Definitions</a></li>
-<li><a class="reference internal" href="#overview" id="id117">Overview</a></li>
-<li><a class="reference internal" href="#responsibility-separation" id="id118">Responsibility Separation</a></li>
-<li><a class="reference internal" href="#metadata-management" id="id119">Metadata Management</a><ul>
-<li><a class="reference internal" href="#why-do-we-need-consistent-snapshots" id="id120">Why Do We Need Consistent Snapshots?</a></li>
-<li><a class="reference internal" href="#producing-consistent-snapshots" id="id121">Producing Consistent Snapshots</a></li>
-<li><a class="reference internal" href="#metadata-validation" id="id122">Metadata Validation</a></li>
-<li><a class="reference internal" href="#mirroring-protocol" id="id123">Mirroring Protocol</a></li>
-<li><a class="reference internal" href="#backup-process" id="id124">Backup Process</a></li>
-<li><a class="reference internal" href="#metadata-expiry-times" id="id125">Metadata Expiry Times</a></li>
-<li><a class="reference internal" href="#metadata-scalability" id="id126">Metadata Scalability</a></li>
+<li><a class="reference internal" href="#abstract" id="id117">Abstract</a></li>
+<li><a class="reference internal" href="#rationale" id="id118">Rationale</a></li>
+<li><a class="reference internal" href="#definitions" id="id119">Definitions</a></li>
+<li><a class="reference internal" href="#overview" id="id120">Overview</a></li>
+<li><a class="reference internal" href="#responsibility-separation" id="id121">Responsibility Separation</a></li>
+<li><a class="reference internal" href="#metadata-management" id="id122">Metadata Management</a><ul>
+<li><a class="reference internal" href="#why-do-we-need-consistent-snapshots" id="id123">Why Do We Need Consistent Snapshots?</a></li>
+<li><a class="reference internal" href="#producing-consistent-snapshots" id="id124">Producing Consistent Snapshots</a></li>
+<li><a class="reference internal" href="#metadata-validation" id="id125">Metadata Validation</a></li>
+<li><a class="reference internal" href="#mirroring-protocol" id="id126">Mirroring Protocol</a></li>
+<li><a class="reference internal" href="#backup-process" id="id127">Backup Process</a></li>
+<li><a class="reference internal" href="#metadata-expiry-times" id="id128">Metadata Expiry Times</a></li>
+<li><a class="reference internal" href="#metadata-scalability" id="id129">Metadata Scalability</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#key-management" id="id127">Key Management</a><ul>
-<li><a class="reference internal" href="#number-of-keys" id="id128">Number Of Keys</a></li>
-<li><a class="reference internal" href="#online-and-offline-keys" id="id129">Online and Offline Keys</a></li>
-<li><a class="reference internal" href="#key-strength" id="id130">Key Strength</a></li>
-<li><a class="reference internal" href="#diversity-of-keys" id="id131">Diversity Of Keys</a></li>
-<li><a class="reference internal" href="#key-compromise-analysis" id="id132">Key Compromise Analysis</a></li>
-<li><a class="reference internal" href="#in-the-event-of-a-key-compromise" id="id133">In the Event of a Key Compromise</a></li>
+<li><a class="reference internal" href="#key-management" id="id130">Key Management</a><ul>
+<li><a class="reference internal" href="#number-of-keys" id="id131">Number Of Keys</a></li>
+<li><a class="reference internal" href="#online-and-offline-keys" id="id132">Online and Offline Keys</a></li>
+<li><a class="reference internal" href="#key-strength" id="id133">Key Strength</a></li>
+<li><a class="reference internal" href="#diversity-of-keys" id="id134">Diversity Of Keys</a></li>
+<li><a class="reference internal" href="#key-compromise-analysis" id="id135">Key Compromise Analysis</a></li>
+<li><a class="reference internal" href="#in-the-event-of-a-key-compromise" id="id136">In the Event of a Key Compromise</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#appendix-rejected-proposals" id="id134">Appendix: Rejected Proposals</a><ul>
-<li><a class="reference internal" href="#alternative-proposals-for-producing-consistent-snapshots" id="id135">Alternative Proposals for Producing Consistent Snapshots</a></li>
+<li><a class="reference internal" href="#appendix-rejected-proposals" id="id137">Appendix: Rejected Proposals</a><ul>
+<li><a class="reference internal" href="#alternative-proposals-for-producing-consistent-snapshots" id="id138">Alternative Proposals for Producing Consistent Snapshots</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#references" id="id136">References</a></li>
-<li><a class="reference internal" href="#acknowledgements" id="id137">Acknowledgements</a></li>
-<li><a class="reference internal" href="#copyright" id="id138">Copyright</a></li>
+<li><a class="reference internal" href="#references" id="id139">References</a></li>
+<li><a class="reference internal" href="#acknowledgements" id="id140">Acknowledgements</a></li>
+<li><a class="reference internal" href="#copyright" id="id141">Copyright</a></li>
 </ul>
 </div>
 <div class="section" id="abstract">
-<h1><a class="toc-backref" href="#id114">Abstract</a></h1>
-<p>This PEP describes how the Python Package Index (PyPI <a class="footnote-reference" href="#id54" id="id1">[1]</a>) may be integrated
-with The Update Framework <a class="footnote-reference" href="#id55" id="id2">[2]</a> (TUF).  TUF was designed to be a plug-and-play
+<h1><a class="toc-backref" href="#id117">Abstract</a></h1>
+<p>This PEP describes how the Python Package Index (PyPI <a class="footnote-reference" href="#id55" id="id1">[1]</a>) may be integrated
+with The Update Framework <a class="footnote-reference" href="#id56" id="id2">[2]</a> (TUF).  TUF was designed to be a plug-and-play
 security add-on to a software updater or package manager.  TUF provides
 end-to-end security like SSL, but for software updates instead of HTTP
 connections.  The framework integrates best security practices such as
 separating responsibilities, adopting the many-man rule for signing packages,
 keeping signing keys offline, and revocation of expired or compromised signing
 keys.</p>
-<p>The proposed integration will render modern package managers such as pip <a class="footnote-reference" href="#id56" id="id3">[3]</a>
+<p>The proposed integration will render modern package managers such as pip <a class="footnote-reference" href="#id57" id="id3">[3]</a>
 more secure against various types of security attacks on PyPI and protect users
 against them.  Even in the worst case where an attacker manages to compromise
 PyPI itself, the damage is controlled in scope and limited in duration.</p>
@@ -456,14 +455,14 @@ pip should be adapted to install or update with TUF metadata projects from
 PyPI.</p>
 </div>
 <div class="section" id="rationale">
-<h1><a class="toc-backref" href="#id115">Rationale</a></h1>
-<p>In January 2013, the Python Software Foundation (PSF) announced <a class="footnote-reference" href="#id57" id="id4">[4]</a> that the
+<h1><a class="toc-backref" href="#id118">Rationale</a></h1>
+<p>In January 2013, the Python Software Foundation (PSF) announced <a class="footnote-reference" href="#id58" id="id4">[4]</a> that the
 python.org wikis for Python, Jython, and the PSF were subjected to a security
 breach which caused all of the wiki data to be destroyed on January 5 2013.
 Fortunately, the PyPI infrastructure was not affected by this security breach.
 However, the incident is a reminder that PyPI should take defensive steps to
 protect users as much as possible in the event of a compromise.  Attacks on
-software repositories happen all the time <a class="footnote-reference" href="#id58" id="id5">[5]</a>.  We must accept the possibility
+software repositories happen all the time <a class="footnote-reference" href="#id59" id="id5">[5]</a>.  We must accept the possibility
 of security breaches and prepare PyPI accordingly because it is a valuable
 target used by thousands, if not millions, of people.</p>
 <p>Before the wiki attack, PyPI used MD5 hashes to tell package managers such as
@@ -473,22 +472,22 @@ It was easy to launch a man-in-the-middle attack between pip and PyPI to change
 package contents arbitrarily.  This can be used to trick users into installing
 malicious packages.  After the wiki attack, several steps were proposed (some
 of which were implemented) to deliver a much higher level of security than was
-previously the case: requiring SSL to communicate with PyPI <a class="footnote-reference" href="#id59" id="id6">[6]</a>, restricting
-project names <a class="footnote-reference" href="#id60" id="id7">[7]</a>, and migrating from MD5 to SHA-2 hashes <a class="footnote-reference" href="#id61" id="id8">[8]</a>.</p>
+previously the case: requiring SSL to communicate with PyPI <a class="footnote-reference" href="#id60" id="id6">[6]</a>, restricting
+project names <a class="footnote-reference" href="#id61" id="id7">[7]</a>, and migrating from MD5 to SHA-2 hashes <a class="footnote-reference" href="#id62" id="id8">[8]</a>.</p>
 <p>These steps, though necessary, are insufficient because attacks are still
 possible through other avenues.  For example, a public mirror is trusted to
 honestly mirror PyPI, but some mirrors may misbehave due to malice or accident.
 Package managers such as pip are supposed to use signatures from PyPI to verify
-packages downloaded from a public mirror <a class="footnote-reference" href="#id62" id="id9">[9]</a>, but none are known to actually
-do so <a class="footnote-reference" href="#id63" id="id10">[10]</a>.  Therefore, it is also wise to add more security measures to
-detect attacks from public mirrors or content delivery networks <a class="footnote-reference" href="#id64" id="id11">[11]</a> (CDNs).</p>
-<p>Even though official mirrors are being deprecated on PyPI <a class="footnote-reference" href="#id65" id="id12">[12]</a>, there remain a
-wide variety of other attack vectors on package managers <a class="footnote-reference" href="#id66" id="id13">[13]</a>.  Among other
+packages downloaded from a public mirror <a class="footnote-reference" href="#id63" id="id9">[9]</a>, but none are known to actually
+do so <a class="footnote-reference" href="#id64" id="id10">[10]</a>.  Therefore, it is also wise to add more security measures to
+detect attacks from public mirrors or content delivery networks <a class="footnote-reference" href="#id65" id="id11">[11]</a> (CDNs).</p>
+<p>Even though official mirrors are being deprecated on PyPI <a class="footnote-reference" href="#id66" id="id12">[12]</a>, there remain a
+wide variety of other attack vectors on package managers <a class="footnote-reference" href="#id67" id="id13">[13]</a>.  Among other
 things, these attacks can crash client systems, cause obsolete packages to be
 installed, or even allow an attacker to execute arbitrary code.  In September
 2013, we showed how the latest version of pip then was susceptible to these
-attacks and how TUF could protect users against them <a class="footnote-reference" href="#id67" id="id14">[14]</a>.</p>
-<p>Finally, PyPI allows for packages to be signed with GPG keys <a class="footnote-reference" href="#id68" id="id15">[15]</a>, although no
+attacks and how TUF could protect users against them <a class="footnote-reference" href="#id68" id="id14">[14]</a>.</p>
+<p>Finally, PyPI allows for packages to be signed with GPG keys <a class="footnote-reference" href="#id69" id="id15">[15]</a>, although no
 package manager is known to verify those signatures, thus negating much of the
 benefits of having those signatures at all.  Validating integrity through
 cryptography is important, but issues such as immediate and secure key
@@ -496,37 +495,37 @@ revocation or specifying a required threshold number of signatures still
 remain.  Furthermore, GPG by itself does not immediately address the attacks
 mentioned above.</p>
 <p>In order to protect PyPI against infrastructure compromises, we propose
-integrating PyPI with The Update Framework <a class="footnote-reference" href="#id55" id="id16">[2]</a> (TUF).</p>
+integrating PyPI with The Update Framework <a class="footnote-reference" href="#id56" id="id16">[2]</a> (TUF).</p>
 </div>
 <div class="section" id="definitions">
-<h1><a class="toc-backref" href="#id116">Definitions</a></h1>
+<h1><a class="toc-backref" href="#id119">Definitions</a></h1>
 <p>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;,
 &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be
-interpreted as described in RFC <a class="reference external" href="http://www.ietf.org/rfc/rfc2119.txt">2119</a> <a class="footnote-reference" href="#id79" id="id80">[26]</a>.</p>
+interpreted as described in RFC <a class="reference external" href="http://www.ietf.org/rfc/rfc2119.txt">2119</a> <a class="footnote-reference" href="#id80" id="id81">[26]</a>.</p>
 <p>In order to keep this PEP focused solely on the application of TUF on PyPI, the
 reader is assumed to already be familiar with the design principles of
-TUF <a class="footnote-reference" href="#id55" id="id18">[2]</a>.  It is also strongly RECOMMENDED that the reader be familiar with the
-TUF specification <a class="footnote-reference" href="#id69" id="id19">[16]</a>.</p>
+TUF <a class="footnote-reference" href="#id56" id="id18">[2]</a>.  It is also strongly RECOMMENDED that the reader be familiar with the
+TUF specification <a class="footnote-reference" href="#id70" id="id19">[16]</a>.</p>
 <ul class="simple">
 <li>Projects: Projects are software components that are made available for
 integration.  Projects include Python libraries, frameworks, scripts, plugins,
 applications, collections of data or other resources, and various
 combinations thereof.  Public Python projects are typically registered on the
-Python Package Index <a class="footnote-reference" href="#id70" id="id20">[17]</a>.</li>
-<li>Releases: Releases are uniquely identified snapshots of a project <a class="footnote-reference" href="#id70" id="id21">[17]</a>.</li>
+Python Package Index <a class="footnote-reference" href="#id71" id="id20">[17]</a>.</li>
+<li>Releases: Releases are uniquely identified snapshots of a project <a class="footnote-reference" href="#id71" id="id21">[17]</a>.</li>
 <li>Distributions: Distributions are the packaged files which are used to publish
-and distribute a release <a class="footnote-reference" href="#id70" id="id22">[17]</a>.</li>
+and distribute a release <a class="footnote-reference" href="#id71" id="id22">[17]</a>.</li>
 <li>Simple index: The HTML page which contains internal links to the
-distributions of a project <a class="footnote-reference" href="#id70" id="id23">[17]</a>.</li>
+distributions of a project <a class="footnote-reference" href="#id71" id="id23">[17]</a>.</li>
 <li>Consistent snapshot: A set of TUF metadata and PyPI targets that capture the
 complete state of all projects on PyPI as they were at some fixed point in
 time.</li>
 <li>The <em>consistent-snapshot</em> (<em>release</em>) role: In order to prevent confusion due
-to the different meanings of the term &quot;release&quot; as employed by <a class="reference external" href="http://www.python.org/dev/peps/pep-0426">PEP 426</a> <a class="footnote-reference" href="#id70" id="id24">[17]</a>
-and the TUF specification <a class="footnote-reference" href="#id69" id="id25">[16]</a>, we rename the <em>release</em> role as the
+to the different meanings of the term &quot;release&quot; as employed by <a class="reference external" href="http://www.python.org/dev/peps/pep-0426">PEP 426</a> <a class="footnote-reference" href="#id71" id="id24">[17]</a>
+and the TUF specification <a class="footnote-reference" href="#id70" id="id25">[16]</a>, we rename the <em>release</em> role as the
 <em>consistent-snapshot</em> role.</li>
 <li>Continuous delivery: A set of processes with which PyPI produces consistent
-snapshots that can safely coexist and deleted independently <a class="footnote-reference" href="#id71" id="id26">[18]</a>.</li>
+snapshots that can safely coexist and deleted independently <a class="footnote-reference" href="#id72" id="id26">[18]</a>.</li>
 <li>Developer: Either the owner or maintainer of a project who is allowed to
 update the TUF metadata as well as distribution metadata and data for the
 project.</li>
@@ -552,7 +551,7 @@ requires (t, n) keys.</li>
 </ul>
 </div>
 <div class="section" id="overview">
-<h1><a class="toc-backref" href="#id117">Overview</a></h1>
+<h1><a class="toc-backref" href="#id120">Overview</a></h1>
 <img alt="https://raw.github.com/theupdateframework/pep-on-pypi-with-tuf/master/figure1.png" src="https://raw.github.com/theupdateframework/pep-on-pypi-with-tuf/master/figure1.png" />
 <p>Figure 1: A simplified overview of the roles in PyPI with TUF</p>
 <p>Figure 1 shows a simplified overview of the roles that TUF metadata assume on
@@ -602,7 +601,7 @@ will not be able to discern whether or not a package manager is using TUF to
 install or update a project from PyPI.</p>
 </div>
 <div class="section" id="responsibility-separation">
-<h1><a class="toc-backref" href="#id118">Responsibility Separation</a></h1>
+<h1><a class="toc-backref" href="#id121">Responsibility Separation</a></h1>
 <p>Recall that TUF requires four top-level roles: <em>root</em>, <em>timestamp</em>,
 <em>consistent-snapshot</em> and <em>targets</em>.  The <em>root</em> role specifies the keys of all
 the top-level roles (including itself).  The <em>timestamp</em> role specifies the
@@ -616,7 +615,7 @@ to secure their projects with their own developer keys, then their projects
 will be very secure.  Otherwise, TUF will still protect them in many cases:</p>
 <ol class="arabic simple">
 <li>Minimum security (no action by a developer): protects <em>unclaimed</em> and
-<em>recently-claimed</em> projects without developer keys from CDNs <a class="footnote-reference" href="#id72" id="id27">[19]</a> or public
+<em>recently-claimed</em> projects without developer keys from CDNs <a class="footnote-reference" href="#id73" id="id27">[19]</a> or public
 mirrors, but not from some PyPI compromises.  This is because continuous
 delivery requires some keys to be online.  This level of security protects
 projects from being accidentally or deliberately tampered with by a mirror
@@ -693,11 +692,11 @@ sure about the ownership of the developer keys.  The process for vetting
 developer keys is out of the scope of this PEP.</p>
 </div>
 <div class="section" id="metadata-management">
-<h1><a class="toc-backref" href="#id119">Metadata Management</a></h1>
+<h1><a class="toc-backref" href="#id122">Metadata Management</a></h1>
 <p>In this section, we examine the TUF metadata that PyPI must manage by itself,
 and other TUF metadata that must be safely delegated to projects.  Examples of
 the metadata described here may be seen at our testbed mirror of
-<a class="reference external" href="http://mirror1.poly.edu/">PyPI-with-TUF</a> <a class="footnote-reference" href="#id81" id="id82">[27]</a>.</p>
+<a class="reference external" href="http://mirror1.poly.edu/">PyPI-with-TUF</a> <a class="footnote-reference" href="#id82" id="id83">[27]</a>.</p>
 <p>The metadata files that change most frequently will be <em>timestamp</em>,
 <em>consistent-snapshot</em> and delegated targets  (<em>claimed</em>, <em>recently-claimed</em>,
 <em>unclaimed</em>, project) metadata.  The <em>timestamp</em> and <em>consistent-snapshot</em>
@@ -711,7 +710,7 @@ being updated frequently in order to drive continuous delivery of projects.</p>
 updated accordingly, the details of which are explained in the following
 subsections.</p>
 <div class="section" id="why-do-we-need-consistent-snapshots">
-<h2><a class="toc-backref" href="#id120">Why Do We Need Consistent Snapshots?</a></h2>
+<h2><a class="toc-backref" href="#id123">Why Do We Need Consistent Snapshots?</a></h2>
 <p>In an ideal world, metadata and data should be immediately updated and
 presented whenever a project is updated.  In practice, there will be problems
 when there are many readers and writers who access the same metadata or data at
@@ -724,7 +723,7 @@ project C would be from time T+3, and so on where T is the time that the mirror
 first begun updating itself.  There is no known way for a mirror to update
 itself such that it captures the state of all projects as they were at time T.</p>
 <p>Adding TUF to PyPI will not automatically solve the problem.  Consider what we
-call the <a class="reference external" href="https://groups.google.com/forum/#!topic/theupdateframework/8mkR9iqivQA">&quot;inverse replay&quot; or &quot;fast-forward&quot; problem</a> <a class="footnote-reference" href="#id83" id="id84">[28]</a>.  Suppose that PyPI has
+call the <a class="reference external" href="https://groups.google.com/forum/#!topic/theupdateframework/8mkR9iqivQA">&quot;inverse replay&quot; or &quot;fast-forward&quot; problem</a> <a class="footnote-reference" href="#id84" id="id85">[28]</a>.  Suppose that PyPI has
 timestamped a consistent snapshot at version 1.  A mirror is later in the
 middle of copying PyPI at this snapshot.  While the mirror is copying PyPI at
 this snapshot, PyPI timestamps a new snapshot at, say, version 2.  Without
@@ -741,7 +740,7 @@ snapshot that captures the state of all known projects at a given time.  Each
 consistent snapshot can safely coexist with any other consistent snapshot and
 deleted independently without affecting any other consistent snapshot.</p>
 <p>The gist of the solution is that every metadata or data file written to disk
-MUST include in its filename the <a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic hash</a> <a class="footnote-reference" href="#id85" id="id86">[29]</a> of the file.  How would
+MUST include in its filename the <a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic hash</a> <a class="footnote-reference" href="#id86" id="id87">[29]</a> of the file.  How would
 this help clients which use the TUF protocol to securely and consistently
 install or update a project from PyPI?</p>
 <p>Recall that the first step in the TUF protocol requires the client to download
@@ -754,14 +753,21 @@ every other metadata or target file that are meant to exist together for
 consistency, the client is then able to retrieve any file from this consistent
 snapshot by deterministically including, in the request for the file, the hash
 of the file in the filename.  Assuming infinite disk space and no <a class="reference external" href="https://en.wikipedia.org/wiki/Collision_(computer_science)">hash
-collisions</a> <a class="footnote-reference" href="#id87" id="id88">[30]</a>, a client may safely read from one consistent snapshot while PyPI
+collisions</a> <a class="footnote-reference" href="#id88" id="id89">[30]</a>, a client may safely read from one consistent snapshot while PyPI
 produces another consistent snapshot.</p>
 <p>In this simple but effective manner, we are able to capture a consistent
 snapshot of all projects and the associated metadata at a given time.  The next
 subsection will explicate the implementation details of this idea.</p>
+<p>This PEP does not prohibit using advanced file systems or tools to produce
+consistent snapshots (such solutions are mentioned in the Appendix). There are
+two important reasons for why we chose this simple solution for the PEP.
+Firstly, the solution does not mandate that PyPI use any particular file system
+or tool.  Secondly, as we will see later in this section, our generic
+file-system based approach allows mirrors to use extant file transfer tools
+such as rsync to efficiently transfer consistent snapshots from PyPI.</p>
 </div>
 <div class="section" id="producing-consistent-snapshots">
-<h2><a class="toc-backref" href="#id121">Producing Consistent Snapshots</a></h2>
+<h2><a class="toc-backref" href="#id124">Producing Consistent Snapshots</a></h2>
 <p>Given a project, PyPI is responsible for updating, depending on the project,
 either the <em>claimed</em>, <em>recently-claimed</em> or <em>unclaimed</em> metadata as well as
 associated delegated targets metadata.  Every project MUST upload its set of
@@ -773,7 +779,7 @@ process.  There will also be a consistent snapshot process that we will define
 momentarily; for now, it suffices to know that project transaction processes
 and the consistent snapshot process must coordinate with each other.</p>
 <p>Also, every metadata and target file MUST include in its filename the <a class="reference external" href="http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest">hex
-digest</a> <a class="footnote-reference" href="#id89" id="id90">[31]</a> of its <a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">SHA-256</a> <a class="footnote-reference" href="#id91" id="id92">[32]</a> hash.  For this PEP, it is RECOMMENDED that PyPI
+digest</a> <a class="footnote-reference" href="#id90" id="id91">[31]</a> of its <a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">SHA-256</a> <a class="footnote-reference" href="#id92" id="id93">[32]</a> hash.  For this PEP, it is RECOMMENDED that PyPI
 adopt a simple convention of the form filename.digest.ext, where filename is
 the original filename without a copy of the hash, digest is the hex digest of
 the hash, and ext is the filename extension.</p>
@@ -856,11 +862,11 @@ thereafter but HTTP 404 responses to any request for a file in that consistent
 snapshot.  Clients SHOULD then retry their requests with the latest consistent
 snapshot.</p>
 <p>We do <strong>not</strong> consider updates to any consistent snapshot because <a class="reference external" href="https://en.wikipedia.org/wiki/Collision_(computer_science)">hash
-collisions</a> <a class="footnote-reference" href="#id87" id="id93">[30]</a> are out of the scope of this PEP.  In case a hash collision is
+collisions</a> <a class="footnote-reference" href="#id88" id="id94">[30]</a> are out of the scope of this PEP.  In case a hash collision is
 observed, PyPI MAY wish to check that the file being added is identical to the
 file already stored.  (Should a hash collision be observed, it is far more
 likely the case that the file is identical rather than being a genuine
-<a class="reference external" href="https://en.wikipedia.org/wiki/Collision_attack">collision attack</a> <a class="footnote-reference" href="#id94" id="id95">[33]</a>.)  Otherwise, PyPI MAY either overwrite the existing file
+<a class="reference external" href="https://en.wikipedia.org/wiki/Collision_attack">collision attack</a> <a class="footnote-reference" href="#id95" id="id96">[33]</a>.)  Otherwise, PyPI MAY either overwrite the existing file
 or ignore any write operation to an existing file.</p>
 <p>All clients, such as pip using the TUF protocol, MUST be modified to download
 every metadata and target file (except for <em>timestamp</em> metadata) by including,
@@ -868,12 +874,12 @@ in the request for the file, the hash of the file in the filename.  Following
 the filename convention recommended earlier, a request for the file at
 filename.ext will be transformed to the equivalent request for the file at
 filename.digest.ext.</p>
-<p>Finally, PyPI SHOULD use a <a class="reference external" href="https://en.wikipedia.org/wiki/Transaction_log">transaction log</a> <a class="footnote-reference" href="#id96" id="id97">[34]</a> to record project transaction
+<p>Finally, PyPI SHOULD use a <a class="reference external" href="https://en.wikipedia.org/wiki/Transaction_log">transaction log</a> <a class="footnote-reference" href="#id97" id="id98">[34]</a> to record project transaction
 processes and queues so that it will be easier to recover from errors after a
 server failure.</p>
 </div>
 <div class="section" id="metadata-validation">
-<h2><a class="toc-backref" href="#id122">Metadata Validation</a></h2>
+<h2><a class="toc-backref" href="#id125">Metadata Validation</a></h2>
 <p>A <em>claimed</em> or <em>recently-claimed</em> project will need to upload in its
 transaction to PyPI not just targets (a simple index as well as distributions)
 but also TUF metadata.  The project MAY do so by uploading a ZIP file
@@ -919,8 +925,8 @@ but backward-incompatible formats.</p>
 this PEP.</p>
 </div>
 <div class="section" id="mirroring-protocol">
-<h2><a class="toc-backref" href="#id123">Mirroring Protocol</a></h2>
-<p>The mirroring protocol as described in <a class="reference external" href="http://www.python.org/dev/peps/pep-0381">PEP 381</a> <a class="footnote-reference" href="#id62" id="id37">[9]</a> SHOULD change to mirror
+<h2><a class="toc-backref" href="#id126">Mirroring Protocol</a></h2>
+<p>The mirroring protocol as described in <a class="reference external" href="http://www.python.org/dev/peps/pep-0381">PEP 381</a> <a class="footnote-reference" href="#id63" id="id37">[9]</a> SHOULD change to mirror
 PyPI with TUF.</p>
 <p>A mirror SHOULD have to maintain for its clients only one consistent snapshot
 which would represent the latest consistent snapshot from PyPI known to the
@@ -940,7 +946,7 @@ consistent snapshot has been completely copied SHOULD the mirror switch clients
 to the latest consistent snapshot.  The mirror MAY then delete the previous
 consistent snapshot once it finds that no client is reading from the previous
 consistent snapshot.</p>
-<p>The mirror MAY use extant file transfer software such as <a class="reference external" href="https://rsync.samba.org/">rsync</a> <a class="footnote-reference" href="#id98" id="id99">[35]</a> to mirror
+<p>The mirror MAY use extant file transfer software such as <a class="reference external" href="https://rsync.samba.org/">rsync</a> <a class="footnote-reference" href="#id99" id="id100">[35]</a> to mirror
 PyPI. In that case, the mirror MUST first obtain the latest known timestamp
 metadata from PyPI. The mirror MUST NOT immediately publish the latest known
 timestamp metadata from PyPI. Instead, the mirror MUST first iteratively
@@ -950,7 +956,7 @@ PyPI so that package managers such as pip may be directed to the latest
 consistent snapshot known to the mirror.</p>
 </div>
 <div class="section" id="backup-process">
-<h2><a class="toc-backref" href="#id124">Backup Process</a></h2>
+<h2><a class="toc-backref" href="#id127">Backup Process</a></h2>
 <p>In order to be able to safely restore from static snapshots later in the event
 of a compromise, PyPI SHOULD maintain a small number of its own mirrors to copy
 PyPI consistent snapshots according to some schedule.  The mirroring protocol
@@ -959,7 +965,7 @@ isolated such that they are responsible only for mirroring PyPI.  The mirrors
 can be checked against one another to detect accidental or malicious failures.</p>
 </div>
 <div class="section" id="metadata-expiry-times">
-<h2><a class="toc-backref" href="#id125">Metadata Expiry Times</a></h2>
+<h2><a class="toc-backref" href="#id128">Metadata Expiry Times</a></h2>
 <p>The <em>root</em> and <em>targets</em> role metadata SHOULD expire in a year, because these
 metadata files are expected to change very rarely.</p>
 <p>The <em>claimed</em> role metadata SHOULD expire in three to six months, because this
@@ -973,14 +979,14 @@ into account client clocks that are highly skewed or adrift.</p>
 scope of this PEP.</p>
 </div>
 <div class="section" id="metadata-scalability">
-<h2><a class="toc-backref" href="#id126">Metadata Scalability</a></h2>
+<h2><a class="toc-backref" href="#id129">Metadata Scalability</a></h2>
 <p>Due to the growing number of projects and distributions, the TUF metadata will
 also grow correspondingly.</p>
 <p>For example, consider the <em>unclaimed</em> role.  In August 2013, we found that the
 size of the <em>unclaimed</em> role metadata was about 42MB if the <em>unclaimed</em> role
 itself signed for about 220K PyPI targets (which are simple indices and
 distributions).  We will not delve into details in this PEP, but TUF features a
-so-called &quot;<a class="reference external" href="https://github.com/theupdateframework/tuf/issues/39">lazy bin walk</a> <a class="footnote-reference" href="#id100" id="id101">[36]</a>&quot; scheme which splits a large targets or delegated
+so-called &quot;<a class="reference external" href="https://github.com/theupdateframework/tuf/issues/39">lazy bin walk</a> <a class="footnote-reference" href="#id101" id="id102">[36]</a>&quot; scheme which splits a large targets or delegated
 targets metadata file into many small ones.  This allows a TUF client updater
 to intelligently download only a small number of TUF metadata files in order to
 update any project signed for by the <em>unclaimed</em> role.  For example, applying
@@ -1004,11 +1010,11 @@ of <em>consistent-snapshot</em> metadata SHOULD also be made available.</p>
 </div>
 </div>
 <div class="section" id="key-management">
-<h1><a class="toc-backref" href="#id127">Key Management</a></h1>
+<h1><a class="toc-backref" href="#id130">Key Management</a></h1>
 <p>In this section, we examine the kind of keys required to sign for TUF roles on
 PyPI.  TUF is agnostic with respect to choices of digital signature algorithms.
 For the purpose of discussion, we will assume that most digital signatures will
-be produced with the well-tested and tried RSA algorithm <a class="footnote-reference" href="#id73" id="id40">[20]</a>.  Nevertheless,
+be produced with the well-tested and tried RSA algorithm <a class="footnote-reference" href="#id74" id="id40">[20]</a>.  Nevertheless,
 we do NOT recommend any particular digital signature algorithm in this PEP
 because there are a few important constraints: firstly, cryptography changes
 over time; secondly, package managers such as pip may wish to perform signature
@@ -1017,7 +1023,7 @@ be able to run on as many systems as Python supports; finally, TUF recommends
 diversity of keys for certain applications, and we will soon discuss these
 exceptions.</p>
 <div class="section" id="number-of-keys">
-<h2><a class="toc-backref" href="#id128">Number Of Keys</a></h2>
+<h2><a class="toc-backref" href="#id131">Number Of Keys</a></h2>
 <p>The <em>timestamp</em>, <em>consistent-snapshot</em>, <em>recently-claimed</em> and <em>unclaimed</em>
 roles will need to support continuous delivery.  Even though their respective
 keys will then need to be online, we will require that the keys be independent
@@ -1052,7 +1058,7 @@ security, it is RECOMMENDED that the keys of the <em>targets</em> role are perma
 discarded as soon as they have been created and used to sign for the role.
 Therefore, the <em>targets</em> role SHOULD require (1, 1) keys.  Again, this is
 because the keys are going to be permanently discarded, and more offline keys
-will not help against key recovery attacks <a class="footnote-reference" href="#id74" id="id41">[21]</a> unless diversity of keys is
+will not help against key recovery attacks <a class="footnote-reference" href="#id75" id="id41">[21]</a> unless diversity of keys is
 maintained.</p>
 <p>Similarly, the <em>claimed</em> role will be used only to sign for the dynamic
 delegation of projects to their respective developer keys.  Since these target
@@ -1071,7 +1077,7 @@ for discussion by the distutils-sig community.</p>
 this PEP.</p>
 </div>
 <div class="section" id="online-and-offline-keys">
-<h2><a class="toc-backref" href="#id129">Online and Offline Keys</a></h2>
+<h2><a class="toc-backref" href="#id132">Online and Offline Keys</a></h2>
 <p>In order to support continuous delivery, the <em>timestamp</em>,
 <em>consistent-snapshot</em>, <em>recently-claimed</em> and <em>unclaimed</em> role keys MUST be
 online.</p>
@@ -1081,18 +1087,18 @@ the sense that the private keys MUST NOT be stored on PyPI, though some of them
 may be online on the private infrastructure of the project.</p>
 </div>
 <div class="section" id="key-strength">
-<h2><a class="toc-backref" href="#id130">Key Strength</a></h2>
+<h2><a class="toc-backref" href="#id133">Key Strength</a></h2>
 <p>At the time of writing, we recommend that all RSA keys (both offline and
 online) SHOULD have a minimum key size of 3072 bits for data-protection
-lifetimes beyond 2030 <a class="footnote-reference" href="#id75" id="id42">[22]</a>.</p>
+lifetimes beyond 2030 <a class="footnote-reference" href="#id76" id="id42">[22]</a>.</p>
 </div>
 <div class="section" id="diversity-of-keys">
-<h2><a class="toc-backref" href="#id131">Diversity Of Keys</a></h2>
-<p>Due to the threats of weak key generation and implementation weaknesses <a class="footnote-reference" href="#id55" id="id43">[2]</a>,
+<h2><a class="toc-backref" href="#id134">Diversity Of Keys</a></h2>
+<p>Due to the threats of weak key generation and implementation weaknesses <a class="footnote-reference" href="#id56" id="id43">[2]</a>,
 the types of keys as well as the libraries used to generate them should vary
 within TUF on PyPI.  Our current implementation of TUF supports multiple
-digital signature algorithms such as RSA (with OpenSSL <a class="footnote-reference" href="#id76" id="id44">[23]</a> or PyCrypto <a class="footnote-reference" href="#id77" id="id45">[24]</a>)
-and ed25519 <a class="footnote-reference" href="#id78" id="id46">[25]</a>.  Furthermore, TUF supports the binding of other
+digital signature algorithms such as RSA (with OpenSSL <a class="footnote-reference" href="#id77" id="id44">[23]</a> or PyCrypto <a class="footnote-reference" href="#id78" id="id45">[24]</a>)
+and ed25519 <a class="footnote-reference" href="#id79" id="id46">[25]</a>.  Furthermore, TUF supports the binding of other
 cryptographic libraries that it does not immediately support &quot;out of the box&quot;,
 and so one MAY generate keys using other cryptographic libraries and use them
 for TUF on PyPI.</p>
@@ -1100,7 +1106,7 @@ for TUF on PyPI.</p>
 signature algorithms as implemented by different cryptographic libraries.</p>
 </div>
 <div class="section" id="key-compromise-analysis">
-<h2><a class="toc-backref" href="#id132">Key Compromise Analysis</a></h2>
+<h2><a class="toc-backref" href="#id135">Key Compromise Analysis</a></h2>
 <img alt="https://raw.github.com/theupdateframework/pep-on-pypi-with-tuf/master/table1.png" src="https://raw.github.com/theupdateframework/pep-on-pypi-with-tuf/master/table1.png" />
 <p>Table 1: Attacks possible by compromising certain combinations of role keys</p>
 <p>Table 1 summarizes the kinds of attacks rendered possible by compromising a
@@ -1108,7 +1114,7 @@ threshold number of keys belonging to the TUF roles on PyPI.  Except for the
 <em>timestamp</em> and <em>consistent-snapshot</em> roles, the pairwise interaction of role
 compromises may be found by taking the union of both rows.</p>
 <p>In September 2013, we showed how the latest version of pip then was susceptible
-to these attacks and how TUF could protect users against them <a class="footnote-reference" href="#id67" id="id47">[14]</a>.</p>
+to these attacks and how TUF could protect users against them <a class="footnote-reference" href="#id68" id="id47">[14]</a>.</p>
 <p>An attacker who compromises developer keys for a project and who is able to
 somehow upload malicious metadata and targets to PyPI will be able to serve
 malicious updates to users of that project (and that project alone).  Note that
@@ -1129,7 +1135,7 @@ offline keys.  Therefore, it is RECOMMENDED that high-value projects register
 their developer keys with PyPI and sign for their own distributions.</p>
 </div>
 <div class="section" id="in-the-event-of-a-key-compromise">
-<h2><a class="toc-backref" href="#id133">In the Event of a Key Compromise</a></h2>
+<h2><a class="toc-backref" href="#id136">In the Event of a Key Compromise</a></h2>
 <p>By a key compromise, we mean that the key as well as PyPI infrastructure has
 been compromised and used to sign new metadata on PyPI.</p>
 <p>If a threshold number of developer keys of a project have been compromised,
@@ -1220,18 +1226,18 @@ to verify the integrity of the new <em>root</em> metadata with a threshold numbe
 previously known <em>root</em> keys.  This will be the common case.  Otherwise, in the
 worst case where a threshold number of <em>root</em> keys have been revoked due to a
 compromise, an end-user may choose to update new <em>root</em> metadata with
-<a class="reference external" href="https://en.wikipedia.org/wiki/Out-of-band#Authentication">out-of-band</a> <a class="footnote-reference" href="#id102" id="id103">[37]</a> mechanisms.</p>
+<a class="reference external" href="https://en.wikipedia.org/wiki/Out-of-band#Authentication">out-of-band</a> <a class="footnote-reference" href="#id103" id="id104">[37]</a> mechanisms.</p>
 </div>
 </div>
 <div class="section" id="appendix-rejected-proposals">
-<h1><a class="toc-backref" href="#id134">Appendix: Rejected Proposals</a></h1>
+<h1><a class="toc-backref" href="#id137">Appendix: Rejected Proposals</a></h1>
 <div class="section" id="alternative-proposals-for-producing-consistent-snapshots">
-<h2><a class="toc-backref" href="#id135">Alternative Proposals for Producing Consistent Snapshots</a></h2>
+<h2><a class="toc-backref" href="#id138">Alternative Proposals for Producing Consistent Snapshots</a></h2>
 <p>The complete file snapshot (CFS) scheme uses file system directories to store
 efficient consistent snapshots over time.  In this scheme, every consistent
 snapshot will be stored in a separate directory, wherein files that are shared
-with previous consistent snapshots will be <a class="reference external" href="https://en.wikipedia.org/wiki/Hard_link">hard links</a> <a class="footnote-reference" href="#id104" id="id105">[38]</a> instead of copies.</p>
-<p>The <a class="reference external" href="http://dl.acm.org/citation.cfm?id=320484">differential file</a> <a class="footnote-reference" href="#id106" id="id107">[39]</a> snapshot (DFS) scheme is a variant of the CFS scheme,
+with previous consistent snapshots will be <a class="reference external" href="https://en.wikipedia.org/wiki/Hard_link">hard links</a> <a class="footnote-reference" href="#id105" id="id106">[38]</a> instead of copies.</p>
+<p>The <a class="reference external" href="http://dl.acm.org/citation.cfm?id=320484">differential file</a> <a class="footnote-reference" href="#id107" id="id108">[39]</a> snapshot (DFS) scheme is a variant of the CFS scheme,
 wherein the next consistent snapshot directory will contain only the additions
 of new files and updates to existing files of the previous consistent snapshot.
 (The first consistent snapshot will contain a complete set of files known
@@ -1249,9 +1255,9 @@ at which point the file will be reported as missing.</p>
 <p>With the CFS scheme, the trade-off is the I/O costs of producing a consistent
 snapshot with the file system.  As of October 2013, we found that a fairly
 modern computer with a 7200RPM hard disk drive required at least three minutes
-to produce a consistent snapshot with the &quot;cp -lr&quot; command on the <a class="reference external" href="https://en.wikipedia.org/wiki/Ext3">ext3</a> <a class="footnote-reference" href="#id108" id="id109">[40]</a> file
+to produce a consistent snapshot with the &quot;cp -lr&quot; command on the <a class="reference external" href="https://en.wikipedia.org/wiki/Ext3">ext3</a> <a class="footnote-reference" href="#id109" id="id110">[40]</a> file
 system.  Perhaps the I/O costs of this scheme may be ameliorated with advanced
-tools or file systems such as <a class="reference external" href="https://en.wikipedia.org/wiki/ZFS">ZFS</a> <a class="footnote-reference" href="#id110" id="id111">[41]</a> or <a class="reference external" href="https://en.wikipedia.org/wiki/Btrfs">btrfs</a> <a class="footnote-reference" href="#id112" id="id113">[42]</a>.</p>
+tools or file systems such as <a class="reference external" href="http://www.tldp.org/HOWTO/LVM-HOWTO/snapshots_backup.html">LVM</a> <a class="footnote-reference" href="#id111" id="id112">[41]</a>, <a class="reference external" href="https://en.wikipedia.org/wiki/ZFS">ZFS</a> <a class="footnote-reference" href="#id113" id="id114">[42]</a> or <a class="reference external" href="https://en.wikipedia.org/wiki/Btrfs">btrfs</a> <a class="footnote-reference" href="#id115" id="id116">[43]</a>.</p>
 <p>While the DFS scheme improves upon the CFS scheme in terms of producing faster
 consistent snapshots, there are at least two trade-offs.  The first is that a
 web server will need to be modified to perform the &quot;daisy chain&quot; resolution of
@@ -1263,265 +1269,271 @@ conceptually si</p>
 </div>
 </div>
 <div class="section" id="references">
-<h1><a class="toc-backref" href="#id136">References</a></h1>
-<table class="docutils footnote" frame="void" id="id54" rules="none">
+<h1><a class="toc-backref" href="#id139">References</a></h1>
+<table class="docutils footnote" frame="void" id="id55" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td><a class="reference external" href="https://pypi.python.org">https://pypi.python.org</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id55" rules="none">
+<table class="docutils footnote" frame="void" id="id56" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label">[2]</td><td><em>(<a class="fn-backref" href="#id2">1</a>, <a class="fn-backref" href="#id16">2</a>, <a class="fn-backref" href="#id18">3</a>, <a class="fn-backref" href="#id43">4</a>)</em> <a class="reference external" href="https://isis.poly.edu/~jcappos/papers/samuel_tuf_ccs_2010.pdf">https://isis.poly.edu/~jcappos/papers/samuel_tuf_ccs_2010.pdf</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id56" rules="none">
+<table class="docutils footnote" frame="void" id="id57" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id3">[3]</a></td><td><a class="reference external" href="http://www.pip-installer.org">http://www.pip-installer.org</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id57" rules="none">
+<table class="docutils footnote" frame="void" id="id58" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id4">[4]</a></td><td><a class="reference external" href="https://wiki.python.org/moin/WikiAttack2013">https://wiki.python.org/moin/WikiAttack2013</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id58" rules="none">
+<table class="docutils footnote" frame="void" id="id59" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id5">[5]</a></td><td><a class="reference external" href="https://github.com/theupdateframework/pip/wiki/Attacks-on-software-repositories">https://github.com/theupdateframework/pip/wiki/Attacks-on-software-repositories</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id59" rules="none">
+<table class="docutils footnote" frame="void" id="id60" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id6">[6]</a></td><td><a class="reference external" href="https://mail.python.org/pipermail/distutils-sig/2013-April/020596.html">https://mail.python.org/pipermail/distutils-sig/2013-April/020596.html</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id60" rules="none">
+<table class="docutils footnote" frame="void" id="id61" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id7">[7]</a></td><td><a class="reference external" href="https://mail.python.org/pipermail/distutils-sig/2013-May/020701.html">https://mail.python.org/pipermail/distutils-sig/2013-May/020701.html</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id61" rules="none">
+<table class="docutils footnote" frame="void" id="id62" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id8">[8]</a></td><td><a class="reference external" href="https://mail.python.org/pipermail/distutils-sig/2013-July/022008.html">https://mail.python.org/pipermail/distutils-sig/2013-July/022008.html</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id62" rules="none">
+<table class="docutils footnote" frame="void" id="id63" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label">[9]</td><td><em>(<a class="fn-backref" href="#id9">1</a>, <a class="fn-backref" href="#id37">2</a>)</em> <a class="reference external" href="http://www.python.org/dev/peps/pep-0381">PEP 381</a>, Mirroring infrastructure for PyPI, Ziadé, Löwis
 <a class="reference external" href="http://www.python.org/dev/peps/pep-0381/">http://www.python.org/dev/peps/pep-0381/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id63" rules="none">
+<table class="docutils footnote" frame="void" id="id64" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id10">[10]</a></td><td><a class="reference external" href="https://mail.python.org/pipermail/distutils-sig/2013-September/022773.html">https://mail.python.org/pipermail/distutils-sig/2013-September/022773.html</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id64" rules="none">
+<table class="docutils footnote" frame="void" id="id65" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id11">[11]</a></td><td><a class="reference external" href="https://mail.python.org/pipermail/distutils-sig/2013-May/020848.html">https://mail.python.org/pipermail/distutils-sig/2013-May/020848.html</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id65" rules="none">
+<table class="docutils footnote" frame="void" id="id66" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id12">[12]</a></td><td><a class="reference external" href="http://www.python.org/dev/peps/pep-0449">PEP 449</a>, Removal of the PyPI Mirror Auto Discovery and Naming Scheme, Stufft
 <a class="reference external" href="http://www.python.org/dev/peps/pep-0449/">http://www.python.org/dev/peps/pep-0449/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id66" rules="none">
+<table class="docutils footnote" frame="void" id="id67" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id13">[13]</a></td><td><a class="reference external" href="https://isis.poly.edu/~jcappos/papers/cappos_mirror_ccs_08.pdf">https://isis.poly.edu/~jcappos/papers/cappos_mirror_ccs_08.pdf</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id67" rules="none">
+<table class="docutils footnote" frame="void" id="id68" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label">[14]</td><td><em>(<a class="fn-backref" href="#id14">1</a>, <a class="fn-backref" href="#id47">2</a>)</em> <a class="reference external" href="https://mail.python.org/pipermail/distutils-sig/2013-September/022755.html">https://mail.python.org/pipermail/distutils-sig/2013-September/022755.html</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id68" rules="none">
+<table class="docutils footnote" frame="void" id="id69" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id15">[15]</a></td><td><a class="reference external" href="https://pypi.python.org/security">https://pypi.python.org/security</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id69" rules="none">
+<table class="docutils footnote" frame="void" id="id70" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label">[16]</td><td><em>(<a class="fn-backref" href="#id19">1</a>, <a class="fn-backref" href="#id25">2</a>)</em> <a class="reference external" href="https://github.com/theupdateframework/tuf/blob/develop/docs/tuf-spec.txt">https://github.com/theupdateframework/tuf/blob/develop/docs/tuf-spec.txt</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id70" rules="none">
+<table class="docutils footnote" frame="void" id="id71" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label">[17]</td><td><em>(<a class="fn-backref" href="#id20">1</a>, <a class="fn-backref" href="#id21">2</a>, <a class="fn-backref" href="#id22">3</a>, <a class="fn-backref" href="#id23">4</a>, <a class="fn-backref" href="#id24">5</a>)</em> <a class="reference external" href="http://www.python.org/dev/peps/pep-0426">PEP 426</a>, Metadata for Python Software Packages 2.0, Coghlan, Holth, Stufft
 <a class="reference external" href="http://www.python.org/dev/peps/pep-0426/">http://www.python.org/dev/peps/pep-0426/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id71" rules="none">
+<table class="docutils footnote" frame="void" id="id72" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id26">[18]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Continuous_delivery">https://en.wikipedia.org/wiki/Continuous_delivery</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id72" rules="none">
+<table class="docutils footnote" frame="void" id="id73" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id27">[19]</a></td><td><a class="reference external" href="https://mail.python.org/pipermail/distutils-sig/2013-August/022154.html">https://mail.python.org/pipermail/distutils-sig/2013-August/022154.html</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id73" rules="none">
+<table class="docutils footnote" frame="void" id="id74" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id40">[20]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/RSA_%28algorithm%29">https://en.wikipedia.org/wiki/RSA_%28algorithm%29</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id74" rules="none">
+<table class="docutils footnote" frame="void" id="id75" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id41">[21]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Key-recovery_attack">https://en.wikipedia.org/wiki/Key-recovery_attack</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id75" rules="none">
+<table class="docutils footnote" frame="void" id="id76" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id42">[22]</a></td><td><a class="reference external" href="http://csrc.nist.gov/publications/nistpubs/800-57/SP800-57-Part1.pdf">http://csrc.nist.gov/publications/nistpubs/800-57/SP800-57-Part1.pdf</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id76" rules="none">
+<table class="docutils footnote" frame="void" id="id77" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id44">[23]</a></td><td><a class="reference external" href="https://www.openssl.org/">https://www.openssl.org/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id77" rules="none">
+<table class="docutils footnote" frame="void" id="id78" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id45">[24]</a></td><td><a class="reference external" href="https://pypi.python.org/pypi/pycrypto">https://pypi.python.org/pypi/pycrypto</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id78" rules="none">
+<table class="docutils footnote" frame="void" id="id79" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
 <tr><td class="label"><a class="fn-backref" href="#id46">[25]</a></td><td><a class="reference external" href="http://ed25519.cr.yp.to/">http://ed25519.cr.yp.to/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id79" rules="none">
+<table class="docutils footnote" frame="void" id="id80" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id80">[26]</a></td><td><a class="reference external" href="http://www.ietf.org/rfc/rfc2119.txt">http://www.ietf.org/rfc/rfc2119.txt</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id81">[26]</a></td><td><a class="reference external" href="http://www.ietf.org/rfc/rfc2119.txt">http://www.ietf.org/rfc/rfc2119.txt</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id81" rules="none">
+<table class="docutils footnote" frame="void" id="id82" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id82">[27]</a></td><td><a class="reference external" href="http://mirror1.poly.edu/">http://mirror1.poly.edu/</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id83">[27]</a></td><td><a class="reference external" href="http://mirror1.poly.edu/">http://mirror1.poly.edu/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id83" rules="none">
+<table class="docutils footnote" frame="void" id="id84" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id84">[28]</a></td><td><a class="reference external" href="https://groups.google.com/forum/#!topic/theupdateframework/8mkR9iqivQA">https://groups.google.com/forum/#!topic/theupdateframework/8mkR9iqivQA</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id85">[28]</a></td><td><a class="reference external" href="https://groups.google.com/forum/#!topic/theupdateframework/8mkR9iqivQA">https://groups.google.com/forum/#!topic/theupdateframework/8mkR9iqivQA</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id85" rules="none">
+<table class="docutils footnote" frame="void" id="id86" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id86">[29]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">https://en.wikipedia.org/wiki/Cryptographic_hash_function</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id87">[29]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Cryptographic_hash_function">https://en.wikipedia.org/wiki/Cryptographic_hash_function</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id87" rules="none">
+<table class="docutils footnote" frame="void" id="id88" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label">[30]</td><td><em>(<a class="fn-backref" href="#id88">1</a>, <a class="fn-backref" href="#id93">2</a>)</em> <a class="reference external" href="https://en.wikipedia.org/wiki/Collision_(computer_science)">https://en.wikipedia.org/wiki/Collision_(computer_science)</a></td></tr>
+<tr><td class="label">[30]</td><td><em>(<a class="fn-backref" href="#id89">1</a>, <a class="fn-backref" href="#id94">2</a>)</em> <a class="reference external" href="https://en.wikipedia.org/wiki/Collision_(computer_science)">https://en.wikipedia.org/wiki/Collision_(computer_science)</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id89" rules="none">
+<table class="docutils footnote" frame="void" id="id90" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id90">[31]</a></td><td><a class="reference external" href="http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest">http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id91">[31]</a></td><td><a class="reference external" href="http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest">http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id91" rules="none">
+<table class="docutils footnote" frame="void" id="id92" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id92">[32]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">https://en.wikipedia.org/wiki/SHA-2</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id93">[32]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">https://en.wikipedia.org/wiki/SHA-2</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id94" rules="none">
+<table class="docutils footnote" frame="void" id="id95" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id95">[33]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Collision_attack">https://en.wikipedia.org/wiki/Collision_attack</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id96">[33]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Collision_attack">https://en.wikipedia.org/wiki/Collision_attack</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id96" rules="none">
+<table class="docutils footnote" frame="void" id="id97" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id97">[34]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Transaction_log">https://en.wikipedia.org/wiki/Transaction_log</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id98">[34]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Transaction_log">https://en.wikipedia.org/wiki/Transaction_log</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id98" rules="none">
+<table class="docutils footnote" frame="void" id="id99" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id99">[35]</a></td><td><a class="reference external" href="https://rsync.samba.org/">https://rsync.samba.org/</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id100">[35]</a></td><td><a class="reference external" href="https://rsync.samba.org/">https://rsync.samba.org/</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id100" rules="none">
+<table class="docutils footnote" frame="void" id="id101" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id101">[36]</a></td><td><a class="reference external" href="https://github.com/theupdateframework/tuf/issues/39">https://github.com/theupdateframework/tuf/issues/39</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id102">[36]</a></td><td><a class="reference external" href="https://github.com/theupdateframework/tuf/issues/39">https://github.com/theupdateframework/tuf/issues/39</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id102" rules="none">
+<table class="docutils footnote" frame="void" id="id103" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id103">[37]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Out-of-band#Authentication">https://en.wikipedia.org/wiki/Out-of-band#Authentication</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id104">[37]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Out-of-band#Authentication">https://en.wikipedia.org/wiki/Out-of-band#Authentication</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id104" rules="none">
+<table class="docutils footnote" frame="void" id="id105" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id105">[38]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Hard_link">https://en.wikipedia.org/wiki/Hard_link</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id106">[38]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Hard_link">https://en.wikipedia.org/wiki/Hard_link</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id106" rules="none">
+<table class="docutils footnote" frame="void" id="id107" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id107">[39]</a></td><td><a class="reference external" href="http://dl.acm.org/citation.cfm?id=320484">http://dl.acm.org/citation.cfm?id=320484</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id108">[39]</a></td><td><a class="reference external" href="http://dl.acm.org/citation.cfm?id=320484">http://dl.acm.org/citation.cfm?id=320484</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id108" rules="none">
+<table class="docutils footnote" frame="void" id="id109" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id109">[40]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Ext3">https://en.wikipedia.org/wiki/Ext3</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id110">[40]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Ext3">https://en.wikipedia.org/wiki/Ext3</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id110" rules="none">
+<table class="docutils footnote" frame="void" id="id111" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id111">[41]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/ZFS">https://en.wikipedia.org/wiki/ZFS</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id112">[41]</a></td><td><a class="reference external" href="http://www.tldp.org/HOWTO/LVM-HOWTO/snapshots_backup.html">http://www.tldp.org/HOWTO/LVM-HOWTO/snapshots_backup.html</a></td></tr>
 </tbody>
 </table>
-<table class="docutils footnote" frame="void" id="id112" rules="none">
+<table class="docutils footnote" frame="void" id="id113" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
 <tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id113">[42]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Btrfs">https://en.wikipedia.org/wiki/Btrfs</a></td></tr>
+<tr><td class="label"><a class="fn-backref" href="#id114">[42]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/ZFS">https://en.wikipedia.org/wiki/ZFS</a></td></tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id115" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id116">[43]</a></td><td><a class="reference external" href="https://en.wikipedia.org/wiki/Btrfs">https://en.wikipedia.org/wiki/Btrfs</a></td></tr>
 </tbody>
 </table>
 </div>
 <div class="section" id="acknowledgements">
-<h1><a class="toc-backref" href="#id137">Acknowledgements</a></h1>
+<h1><a class="toc-backref" href="#id140">Acknowledgements</a></h1>
 <p>Nick Coghlan, Daniel Holth and the distutils-sig community in general for
 helping us to think about how to usably and efficiently integrate TUF with
 PyPI.</p>
@@ -1536,7 +1548,7 @@ this PEP.</p>
 <p>Zane Fisher for helping us to review and transcribe this PEP.</p>
 </div>
 <div class="section" id="copyright">
-<h1><a class="toc-backref" href="#id138">Copyright</a></h1>
+<h1><a class="toc-backref" href="#id141">Copyright</a></h1>
 <p>This document has been placed in the public domain.</p>
 </div>
 
