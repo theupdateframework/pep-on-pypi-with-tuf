@@ -364,7 +364,7 @@ ul.auto-toc {
        width="100%" border="0">
 <tr><td class="navicon" width="150" height="35">
 <a href="http://www.python.org/" title="Python Home Page">
-<img src="http://www.python.org/pics/PyBanner060.gif" alt="[Python]"
+<img src="http://www.python.org/pics/PyBanner011.gif" alt="[Python]"
  border="0" width="150" height="35" /></a></td>
 <td class="textlinks" align="left">
 [<b><a href="http://www.python.org/">Python Home</a></b>]
@@ -939,9 +939,13 @@ to the latest consistent snapshot.  The mirror MAY then delete the previous
 consistent snapshot once it finds that no client is reading from the previous
 consistent snapshot.</p>
 <p>The mirror MAY use extant file transfer software such as <a class="reference external" href="https://rsync.samba.org/">rsync</a> <a class="footnote-reference" href="#id100" id="id101">[35]</a> to mirror
-PyPI. The mirror MUST then ensure that it has copied at least one consistent
-snapshot in its entirety, and that it points package managers such as pip to
-the latest known timestamp metadata.</p>
+PyPI. In that case, the mirror MUST first obtain the latest known timestamp
+metadata from PyPI. The mirror MUST NOT immediately publish the latest known
+timestamp metadata from PyPI. Instead, the mirror MUST first iteratively
+transfer all new files from PyPI until there are no new files left to transfer.
+Finally, the mirror MUST publish the latest known timestamp it fetched from
+PyPI so that package managers such as pip may be directed to the latest
+consistent snapshot known to the mirror.</p>
 </div>
 <div class="section" id="backup-process">
 <h2><a class="toc-backref" href="#id126">Backup Process</a></h2>

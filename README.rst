@@ -625,9 +625,13 @@ consistent snapshot once it finds that no client is reading from the previous
 consistent snapshot.
 
 The mirror MAY use extant file transfer software such as rsync__ to mirror
-PyPI. The mirror MUST then ensure that it has copied at least one consistent
-snapshot in its entirety, and that it points package managers such as pip to
-the latest known timestamp metadata.
+PyPI. In that case, the mirror MUST first obtain the latest known timestamp
+metadata from PyPI. The mirror MUST NOT immediately publish the latest known
+timestamp metadata from PyPI. Instead, the mirror MUST first iteratively
+transfer all new files from PyPI until there are no new files left to transfer.
+Finally, the mirror MUST publish the latest known timestamp it fetched from
+PyPI so that package managers such as pip may be directed to the latest
+consistent snapshot known to the mirror.
 
 __ https://rsync.samba.org/
 
