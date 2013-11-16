@@ -632,16 +632,32 @@ to the latest consistent snapshot.  The mirror MAY then delete the previous
 consistent snapshot once it finds that no client is reading from the previous
 consistent snapshot.
 
-The mirror MAY use extant file transfer software such as rsync__ to mirror
-PyPI. In that case, the mirror MUST first obtain the latest known timestamp
-metadata from PyPI. The mirror MUST NOT immediately publish the latest known
-timestamp metadata from PyPI. Instead, the mirror MUST first iteratively
-transfer all new files from PyPI until there are no new files left to transfer.
-Finally, the mirror MUST publish the latest known timestamp it fetched from
-PyPI so that package managers such as pip may be directed to the latest
-consistent snapshot known to the mirror.
+On the other hand, as mentioned earlier, the mirror MAY use extant file
+transfer software such as rsync__ to mirror PyPI. In that case, the mirror MUST
+first obtain the last known *timestamp* metadata from PyPI. The mirror MUST NOT
+immediately publish the last known *timestamp* metadata from PyPI.  Instead,
+the mirror MUST first iteratively transfer all new files from PyPI until there
+are no new files left to transfer.  Finally, the mirror MUST publish the last
+known *timestamp* it fetched from PyPI so that package managers such as pip may
+be directed to the latest consistent snapshot known to the mirror.
 
 __ https://rsync.samba.org/
+
+Even after this PEP is implemented, the main PyPI server will continue to
+operate as a pure web service, exposing only HTTPS resources and the legacy
+XML-RPC endpoints.
+
+As Nick Coghlan has observed, since the TUF metadata are simply flat files, it
+becomes feasible for a mirror to retrieve a consistent snapshot via the web
+API, save it to disk and republish it via pure file system interfaces such as
+FTP, NFS or rsync. A mirror could then copy PyPI with rsync via the method
+outlined above. Since the *timestamp* metadata acts as the root defining the
+consistent snapshot of interest, it would not matter should the actual rsync
+operation add new files from new consistent snapshots to the mirror, because
+the new files would not be described in the metadata tree anchored from the
+last known timestamp metadata that was copied before the rsync operation
+started. This is an improvement that this PEP provides as a side effect of how
+consistent snapshots and TUF metadata work.
 
 
 Backup Process
