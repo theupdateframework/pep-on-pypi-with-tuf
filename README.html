@@ -364,7 +364,7 @@ ul.auto-toc {
        width="100%" border="0">
 <tr><td class="navicon" width="150" height="35">
 <a href="http://www.python.org/" title="Python Home Page">
-<img src="http://www.python.org/pics/PyBanner061.gif" alt="[Python]"
+<img src="http://www.python.org/pics/PyBanner044.gif" alt="[Python]"
  border="0" width="150" height="35" /></a></td>
 <td class="textlinks" align="left">
 [<b><a href="http://www.python.org/">Python Home</a></b>]
@@ -384,9 +384,9 @@ ul.auto-toc {
 </tr>
 <tr class="field"><th class="field-name">Last-Modified:</th><td class="field-body"><a class="reference external" href="http://svn.python.org/view/*checkout*/peps/trunk/pep-0458.txt">$Date$</a></td>
 </tr>
-<tr class="field"><th class="field-name">Author:</th><td class="field-body">Trishank Karthik Kuppusamy &lt;tk47&#32;&#97;t&#32;students.poly.edu&gt;,
+<tr class="field"><th class="field-name">Author:</th><td class="field-body">Trishank Karthik Kuppusamy &lt;trishank&#32;&#97;t&#32;nyu.edu&gt;,
 Donald Stufft &lt;donald&#32;&#97;t&#32;stufft.io&gt;,
-Justin Cappos &lt;jcappos&#32;&#97;t&#32;poly.edu&gt;</td>
+Justin Cappos &lt;jcappos&#32;&#97;t&#32;nyu.edu&gt;</td>
 </tr>
 <tr class="field"><th class="field-name">BDFL-Delegate:</th><td class="field-body">Nick Coghlan &lt;<a class="reference external" href="mailto:ncoghlan&#64;gmail.com">ncoghlan&#64;gmail.com</a>&gt;</td>
 </tr>
@@ -784,7 +784,7 @@ momentarily; for now, it suffices to know that project transaction processes
 and the consistent snapshot process must coordinate with each other.</p>
 <p>Also, every metadata and target file MUST include in its filename the <a class="reference external" href="http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest">hex
 digest</a> <a class="footnote-reference" href="#id90" id="id91">[31]</a> of its <a class="reference external" href="https://en.wikipedia.org/wiki/SHA-2">SHA-256</a> <a class="footnote-reference" href="#id92" id="id93">[32]</a> hash.  For this PEP, it is RECOMMENDED that PyPI
-adopt a simple convention of the form filename.digest.ext, where filename is
+adopt a simple convention of the form digest.filename.ext, where filename is
 the original filename without a copy of the hash, digest is the hex digest of
 the hash, and ext is the filename extension.</p>
 <p>When an <em>unclaimed</em> project uploads a new transaction, a project transaction
@@ -877,7 +877,7 @@ every metadata and target file (except for <em>timestamp</em> metadata) by inclu
 in the request for the file, the hash of the file in the filename.  Following
 the filename convention recommended earlier, a request for the file at
 filename.ext will be transformed to the equivalent request for the file at
-filename.digest.ext.</p>
+digest.filename.ext.</p>
 <p>Finally, PyPI SHOULD use a <a class="reference external" href="https://en.wikipedia.org/wiki/Transaction_log">transaction log</a> <a class="footnote-reference" href="#id97" id="id98">[34]</a> to record project transaction
 processes and queues so that it will be easier to recover from errors after a
 server failure.</p>
@@ -905,7 +905,7 @@ another delegator.</li>
 <li>A delegatee MUST NOT sign for targets that were not delegated to itself by a
 delegator.</li>
 <li>Every file MUST contain a unique copy of its hash in its filename following
-the filename.digest.ext convention recommended earlier.</li>
+the digest.filename.ext convention recommended earlier.</li>
 </ul>
 <p>If PyPI chooses to check the project TUF metadata, then PyPI MAY choose to
 reject publishing any set of metadata or targets that do not meet these

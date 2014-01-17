@@ -2,9 +2,9 @@ PEP: 458
 Title: Surviving a Compromise of PyPI
 Version: $Revision$
 Last-Modified: $Date$
-Author: Trishank Karthik Kuppusamy <tk47@students.poly.edu>,
+Author: Trishank Karthik Kuppusamy <trishank@nyu.edu>,
         Donald Stufft <donald@stufft.io>,
-        Justin Cappos <jcappos@poly.edu>
+        Justin Cappos <jcappos@nyu.edu>
 BDFL-Delegate: Nick Coghlan <ncoghlan@gmail.com>
 Discussions-To: DistUtils mailing list <distutils-sig@python.org>
 Status: Draft
@@ -428,7 +428,7 @@ and the consistent snapshot process must coordinate with each other.
 
 Also, every metadata and target file MUST include in its filename the `hex
 digest`__ of its `SHA-256`__ hash.  For this PEP, it is RECOMMENDED that PyPI
-adopt a simple convention of the form filename.digest.ext, where filename is
+adopt a simple convention of the form digest.filename.ext, where filename is
 the original filename without a copy of the hash, digest is the hex digest of
 the hash, and ext is the filename extension.
 
@@ -540,7 +540,7 @@ every metadata and target file (except for *timestamp* metadata) by including,
 in the request for the file, the hash of the file in the filename.  Following
 the filename convention recommended earlier, a request for the file at
 filename.ext will be transformed to the equivalent request for the file at
-filename.digest.ext.
+digest.filename.ext.
 
 Finally, PyPI SHOULD use a `transaction log`__ to record project transaction
 processes and queues so that it will be easier to recover from errors after a
@@ -580,7 +580,7 @@ project TUF metadata for at least the following properties:
   delegator.
 
 * Every file MUST contain a unique copy of its hash in its filename following
-  the filename.digest.ext convention recommended earlier.
+  the digest.filename.ext convention recommended earlier.
 
 If PyPI chooses to check the project TUF metadata, then PyPI MAY choose to
 reject publishing any set of metadata or targets that do not meet these
