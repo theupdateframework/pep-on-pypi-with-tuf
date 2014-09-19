@@ -152,15 +152,14 @@ Overview
 
 .. image:: figure1.png
 
-Figure 1: A simplified overview of the roles in PyPI with TUF
+Figure 1: An overview of the role metadata available on PyPI
 
-Figure 1 shows a simplified overview of the roles that TUF metadata assume on
+Figure 1 shows an overview of the roles that TUF metadata assume on
 PyPI.  The top-level *root* role signs for the keys of the top-level
 *timestamp*, *snapshot*, *targets* and *root* roles.  The *timestamp* role
 signs for every new snapshot of the repository metadata.  The *snapshot* role
 signs for the *root*, *targets* and all delegated targets metadata.  keys with
-PyPI.  The *bins* role signs for all projects that have not registered
-developer keys with PyPI.
+PyPI.  The *bins* role signs for all distributions of registered PyPI projects.
 
 TUF helps secure new or existing software update systems. Software update
 systems are vulnerable to many known attacks, including those that can result
@@ -282,7 +281,7 @@ updated accordingly, the details of which are explained in the following
 subsections.
 
 
-Why the Need for Consistent Snapshots?
+Why Need Consistent Snapshots?
 ------------------------------------
 
 Project developers expect the projects they upload to PyPI to be immediately
@@ -342,13 +341,14 @@ from PyPI.
 Producing Consistent Snapshots
 ------------------------------
 
-Given a project, PyPI is responsible for updating *bins* metadata as well
-as associated delegated targets metadata.  Every project MUST upload its set of
-metadata and targets in a single transaction.  We will call this set of files
-the project transaction.  We will discuss later how PyPI MAY validate the files
-in a project transaction.  For now, let us focus on how PyPI will respond to a
-project transaction.  We will call this response the project transaction
-process.  There will also be a consistent snapshot process that we will define
+Given a project, PyPI is responsible for updating the metadata of uploaded
+projects (roles delegated by the *bins* role and signed with an online key).
+Every project MUST upload its set of metadata and targets in a single
+transaction.  The uploaded set of files is called the "project transaction".
+How PyPI MAY validate the files in a project transaction will be discussed
+later.  For now, let us focus on how PyPI will respond to a project
+transaction.  We will call this response the project transaction process.
+There will also be a consistent snapshot process that we will define
 momentarily; for now, it suffices to know that project transaction processes
 and the consistent snapshot process must coordinate with each other.
 
@@ -367,23 +367,12 @@ will see later in this section why the *bins* role will delegate targets to a
 number of delegated *bins* roles.)  Finally, the project transaction process
 MUST inform the snapshot process about new delegated *bins* metadata.
 
-When a *recently-claimed* project uploads a new a transaction, a project
-transaction process MUST add all new targets and delegated targets metadata for
-the project.  If the project is new, then the project transaction process MUST
-also add new *recently-claimed* metadata with public keys and threshold number
-(which MUST be part of the transaction) for the project.  Finally, the project
-transaction process MUST inform the consistent snapshot process about new
-*recently-claimed* metadata as well as the current set of delegated targets
-metadata for the project.
-
-Project transaction processes SHOULD be automated, except when PyPI
-administrators move a project from the *recently-claimed* role to the *claimed*
-role.  Project transaction processes MUST also be applied atomically: either
-all metadata and targets, or none of them, are added.  The project transaction
-processes and consistent snapshot process SHOULD work concurrently.  Finally,
-project transaction processes SHOULD keep in memory the latest *claimed*,
-*recently-claimed* and *bins* metadata so that they will be correctly
-updated in new consistent snapshots.
+Project transaction processes SHOULD be automated.  Project transaction
+processes MUST also be applied atomically: either all metadata and targets, or
+none of them, are added.  The project transaction and snapshot processes SHOULD
+work concurrently.  Finally, project transaction processes SHOULD keep in
+memory the latest *bins* metadata so that they will be correctly updated in new
+consistent snapshots.
 
 All project transactions MAY be placed in a single queue and processed
 serially.  Alternatively, the queue MAY be processed concurrently in order of
@@ -425,17 +414,6 @@ fashion.  Deleting a consistent snapshot will cause clients to see nothing
 thereafter but HTTP 404 responses to any request for a file in that consistent
 snapshot.  Clients SHOULD then retry their requests with the latest consistent
 snapshot.
-
-We do **not** consider updates to any consistent snapshot because `hash
-collisions`__ are out of the scope of this PEP.  In case a hash collision is
-observed, PyPI MAY wish to check that the file being added is identical to the
-file already stored.  (Should a hash collision be observed, it is far more
-likely the case that the file is identical rather than being a genuine
-`collision attack`__.)  Otherwise, PyPI MAY either overwrite the existing file
-or ignore any write operation to an existing file.
-
-__ https://en.wikipedia.org/wiki/Collision_(computer_science)
-__ https://en.wikipedia.org/wiki/Collision_attack
 
 All clients, such as pip using the TUF protocol, MUST be modified to download
 every metadata and target file (except for *timestamp* metadata) by including,
