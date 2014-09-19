@@ -194,20 +194,20 @@ compromised, the end-user will not be able to discern whether or not a package
 manager is using TUF to install or update a project from PyPI.
 
 This PEP has **not** been designed to be backward-compatible for package
-managers that do not use TUF security protocol to install or update a
-project from the PyPI described here.  Instead, it is RECOMMENDED that PyPI
-maintain a backward-compatible API of itself that does NOT offer TUF so that
-older package managers that do not use TUF will be able to install or update
-projects from PyPI as usual but without any of the security offered by TUF.
-For the rest of this PEP, we will assume that PyPI will simultaneously maintain
-a backward-incompatible API of itself for package managers that MUST use TUF to
-securely install or update projects.  We think that this approach represents a
-reasonable trade-off: older package managers that do not TUF will still be able
-to install or update projects without any TUF security from PyPI, and newer
-package managers that do use TUF will be able to securely install or update
-projects.  At some point in the future, PyPI administrators MAY choose to
-permanently deprecate the backward-compatible version of itself that does not
-offer TUF metadata.
+managers that do not use TUF security protocol to install or update a project
+from the PyPI described here.  Instead, it is RECOMMENDED that PyPI maintain a
+backward-compatible API of itself that does NOT offer TUF so that older package
+managers that do not use TUF will be able to install or update projects from
+PyPI as usual but without any of the security offered by TUF.  For the rest of
+this PEP, it is assumed that PyPI will simultaneously maintain a
+backward-incompatible API of itself for package managers that MUST use TUF to
+securely install or update projects.  This approach represents a reasonable
+trade-off: older package managers that do not TUF will still be able to install
+or update projects without any TUF security from PyPI, and newer package
+managers that do use TUF will be able to securely install or update projects.
+At some point in the future, PyPI administrators MAY choose to permanently
+deprecate the backward-compatible version of itself that does not offer TUF
+metadata.
 
 Every year, PyPI administrators are going to sign for *root* role keys.  After
 that, automation will continuously sign for a timestamped, snapshot of all
@@ -236,7 +236,7 @@ This proposal offers some security for developers because PyPI will sign (with
 an online key) for projects in order to permit continuous delivery.  An
 extension to this proposal, discussed in Appendex A, offers the maximum
 security because developers sign for their projects.  Projects signed by
-developers will be safe from PyPI compromises because the keys used for this
+developers will be safe from PyPI compromises because the keys used for these
 projects are not stored on PyPI.
 
 The minimum security model (this proposal) requires no action from developers
@@ -246,22 +246,23 @@ keys to be online.  This level of security protects projects from being
 accidentally or deliberately tampered with by a mirror or a CDN because the
 mirror or CDN will not have any of the PyPI or developer keys required to sign
 for projects.  However, it would not protect projects from attackers who have
-compromised PyPI because they will be able to manipulate the TUF metadata of
-the *bins* role by using the compromised online keys.
+compromised PyPI because attackers will be able to manipulate the TUF metadata
+of the *bins* role with the compromised online keys.
 
-In order to complete support for continuous delivery, we propose that the
-*bins* role (and its delegated roles) sign for all PyPI projects with an online
-key.  The *targets* role, which only signs with an offline key, MUST delegate
-all PyPI projects to *bins* role.  This means that when pip downloads with TUF
-a distribution from a project on PyPI, it will consult the *bins* role about
-the TUF metadata for the project.  If the *bins* role has not delegated the
-project, then the project is considered to be non-existent on PyPI.
+In order to complete support for continuous delivery, this PEP proposes that
+the *bins* role (and its delegated roles) sign for all PyPI projects with an
+online key.  The *targets* role, which only signs with an offline key, MUST
+delegate all PyPI projects to the *bins* role.  This means that when pip
+downloads with TUF a distribution from a project on PyPI, it will consult the
+*bins* role about the TUF metadata for the project.  If the *bins* role has not
+delegated the project, then the project is considered to be non-existent on
+PyPI.
 
 
 Metadata Management
 ===================
 
-In this section, we examine the TUF metadata that PyPI must manage.  Examples
+This section examines the management of TUF metadata stored on PyPI.  Examples
 of the metadata described here may be seen at our testbed mirror of
 `PyPI-with-TUF`__.
 
@@ -281,76 +282,61 @@ updated accordingly, the details of which are explained in the following
 subsections.
 
 
-Why Do We Need Consistent Snapshots?
+Why the Need for Consistent Snapshots?
 ------------------------------------
 
-PyPI requires that uploaded packages be immediately available for download.  As
-a consequence, TUF metadata MUST continually reflect the latest version of
-uploaded packages.  Unfortunately, there will be problems when there are many
-readers and writers who access the same metadata and packages at the same time.
-An important example is a mirror attempting to sync with PyPI.at the time of
-writing is that mirrors are very likely, as far as we can tell, to update in an
-inconsistent manner from PyPI as it is without TUF.  Specifically, a mirror
-would update itself in such a way that project A would be from time T, whereas
-project B would be from time T+5, project C would be from time T+3, and so on
-where T is the time that the mirror first begun updating itself.  There is no
-known way for a mirror to update itself such that it captures the state of all
-projects as they were at time T.
-
-Adding TUF to PyPI will not automatically solve the problem.  Consider what we
-call the `"inverse replay" or "fast-forward" problem`__.  Suppose that PyPI has
-timestamped a snapshot at version 1.  A mirror is later in the
-middle of copying PyPI at this snapshot.  While the mirror is copying PyPI at
-this snapshot, PyPI timestamps a new snapshot at, say, version 2.  Without
+Project developers expect the projects they upload to PyPI to be immediately
+available for download.  Unfortunately, there will be problems when there are
+many readers and writers simultaneously accessessing the same metadata and
+packages.  An example is a mirror attempting to sync with PyPI.  Suppose that
+PyPI has timestamped a *snapshot* at version 1.  A mirror is later in the middle
+of copying PyPI at this snapshot.  While the mirror is copying PyPI at this
+snapshot, PyPI timestamps a new snapshot at, say, version 2.  Without
 accounting for consistency, the mirror would then find itself with a copy of
 PyPI in an inconsistent state, which is indistinguishable from arbitrary
-metadata or target attacks.  The problem would also apply when the mirror is
+metadata or package attacks.  The problem would also apply when the mirror is
 substituted with a pip user.
-
-__ https://groups.google.com/forum/#!topic/theupdateframework/8mkR9iqivQA
 
 Therefore, the problem can be summarized as such: there are problems of
 consistency on PyPI with or without TUF.  TUF requires its metadata to be
 consistent with the data, but how would the metadata be kept consistent with
-projects that change all the time?
+projects that change all the time?  As a result, this proposal MUST address the
+problem of producing a consistent snapshot that captures the state of all known
+projects at a given time.  Each snapshot can safely coexist with any other
+snapshot, and deleted independently without affecting any other snapshot.
 
-As a result, we will solve for PyPI the problem of producing a consistent
-snapshot that captures the state of all known projects at a given time.  Each
-snapshot can safely coexist with any other snapshot and deleted independently
-without affecting any other snapshot.
-
-The gist of the solution is that every metadata or data file written to disk
-MUST include in its filename the `cryptographic hash`__ of the file.  How would
-this help clients that use the TUF protocol to securely and consistently
-install or update a project from PyPI?
+The solution presented in this PEP is that every metadata or data file written
+to disk MUST include in its filename the `cryptographic hash`__ of the file.
+How would this help clients that use the TUF protocol to securely and
+consistently install or update a project from PyPI?
 
 __ https://en.wikipedia.org/wiki/Cryptographic_hash_function
 
-Recall that the first step in the TUF protocol requires the client to download
-the latest *timestamp* metadata.  However, the client would not know in advance
-the hash of the *timestamp* metadata file from the latest snapshot.  Therefore,
-PyPI MUST redirect all HTTP GET requests for *timestamp* metadata to the
-*timestamp* metadata file from the latest snapshot.  Since the *timestamp*
-metadata is the root of a tree of cryptographic hashes pointing to every other
-metadata or target file that are meant to exist together for consistency, the
-client is then able to retrieve any file from this snapshot by
-deterministically including, in the request for the file, the hash of the file
-in the filename.  Assuming infinite disk space and no `hash collisions`__, a
-client may safely read from one snapshot while PyPI produces another snapshot.
+The first step in the TUF protocol requires the client to download the latest
+*timestamp* metadata.  However, the client would not know in advance the hash
+of the *timestamp* metadata file from the latest snapshot.  Therefore, PyPI
+MUST redirect all HTTP GET requests for *timestamp* metadata to the *timestamp*
+metadata file from the latest snapshot.  Since the *timestamp* metadata is the
+root of a tree of cryptographic hashes pointing to every other metadata or
+target file that are meant to exist together for consistency, the client is
+then able to retrieve any file from this snapshot by deterministically
+including, in the request for the file, the hash of the file in the filename.
+Assuming infinite disk space and no `hash collisions`__, a client may safely
+read from one snapshot while PyPI produces another snapshot.
 
 __ https://en.wikipedia.org/wiki/Collision_(computer_science)
 
-In this simple but effective manner, we are able to capture a consistent
+In this simple but effective manner, PyPI is able to capture a consistent
 snapshot of all projects and the associated metadata at a given time.  The next
 subsection will explicate the implementation details of this idea.
 
 This PEP does not prohibit using advanced file systems or tools to produce
 consistent snapshots (such solutions are mentioned in the Appendix). There are
-two important reasons for why we chose this simple solution for the PEP.
-Firstly, the solution does not mandate that PyPI use any particular file system
-or tool.  Secondly, as we will see later in this section, our generic
-file-system based approach allows mirrors to use extant file transfer tools
-such as rsync to efficiently transfer consistent snapshots from PyPI. 
+two important reasons for why the PEP chose this simple solution.  Firstly, the
+solution does not mandate that PyPI use any particular file system or tool.
+Secondly, the generic file-system based approach allows mirrors to use extant
+file transfer tools such as rsync to efficiently transfer consistent snapshots
+from PyPI. 
 
 
 Producing Consistent Snapshots
