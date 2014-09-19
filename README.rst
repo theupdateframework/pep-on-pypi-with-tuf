@@ -346,17 +346,13 @@ projects (roles delegated by the *bins* role and signed with an online key).
 Every project MUST upload its set of metadata and targets in a single
 transaction.  The uploaded set of files is called the "project transaction".
 How PyPI MAY validate the files in a project transaction will be discussed
-later.  For now, let us focus on how PyPI will respond to a project
-transaction.  We will call this response the project transaction process.
-There will also be a consistent snapshot process that we will define
-momentarily; for now, it suffices to know that project transaction processes
-and the consistent snapshot process must coordinate with each other.
+soon.  For now, let us focus on how PyPI will respond to a project transaction.
 
-Also, every metadata and target file MUST include in its filename the `hex
-digest`__ of its `SHA-256`__ hash.  For this PEP, it is RECOMMENDED that PyPI
-adopt a simple convention of the form digest.filename.ext, where filename is
-the original filename without a copy of the hash, digest is the hex digest of
-the hash, and ext is the filename extension.
+Every metadata and target file MUST include in its filename the `hex digest`__
+of its `SHA-256`__ hash.  For this PEP, it is RECOMMENDED that PyPI adopt a
+simple convention of the form: digest.filename.ext, where filename is the
+original filename without a copy of the hash, digest is the hex digest of the
+hash, and ext is the filename extension.
 
 __ http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest
 __ https://en.wikipedia.org/wiki/SHA-2
