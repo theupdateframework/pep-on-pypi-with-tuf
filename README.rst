@@ -537,8 +537,8 @@ maintained.
 Online and Offline Keys
 -----------------------
 
-In order to support continuous delivery, the *timestamp*, *snapshot*,
-*bins* role keys MUST be online.
+In order to support continuous delivery, the *timestamp*, *snapshot*, *bins*
+role keys MUST be online.
 
 As explained in the previous section, the *root*, and *targets* role keys MUST
 be offline for maximum security.  Developers keys will be offline in the sense
@@ -659,23 +659,28 @@ Recovering from a Repository Compromise
 =======================================
 
 When a repository compromise has been detected, the integrity of three types of
-information must be validated. First, if the online keys of the repository have
-been compromised, they can be revoked by having the bins role key signs new
-role metadata delegating to a new key. Second, the role metadata on the
-repository may have been changed. This would impact the metadata that is signed
-by online keys.  Any role information created since the last period should be
-discarded. This means developers of new projects will need to re-register their
-projects. Third, the packages themselves may have been tampered with. For
-packages that existed at the time of the last period, they can be validated
-using the stored hash information.  signed by developers in the claimed role
-may be safely retained.
+information must be validated.
+
+1. If the online keys of the repository have been compromised, they can be
+revoked by having the bins role key sign new role metadata delegating to a new
+key.
+
+2. If the role metadata on the repository has been changed, this would impact
+the metadata that is signed by online keys.  Any role information created since
+the last period should be discarded. As a result developers of new projects
+will need to re-register their projects.
+
+3. If the packages themselves may have been tampered with. For packages that
+existed at the time of the last period, they can be validated using the stored
+hash information.  signed by developers in the claimed role may be safely
+retained.
 
 
 Auditing Snapshots
 ==================
 
 If a malicious party compromises the community repository, they can sign
-arbitrary files with any online keys. How- ever, the community repository is
+arbitrary files with any online keys. However, the community repository is
 still resilient against many types of attacks.  Replace a claimed project’s
 key. This attack cannot be performed by modifying the claimed-projects because
 the signing key is offline. If the attacker modifies the new- projects role
