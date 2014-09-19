@@ -156,19 +156,42 @@ Figure 1: A simplified overview of the roles in PyPI with TUF
 
 Figure 1 shows a simplified overview of the roles that TUF metadata assume on
 PyPI.  The top-level *root* role signs for the keys of the top-level
-*timestamp*, *snapshot*, *targets* and *root* roles.  The
-*timestamp* role signs for a new and consistent snapshot.  The *snapshot* role
-signs for the *root*, *targets* and all delegated targets metadata.
-keys with PyPI.  The *bins* role signs for all projects that have not
-registered developer keys with PyPI.
+*timestamp*, *snapshot*, *targets* and *root* roles.  The *timestamp* role
+signs for every new snapshot of the repository metadata.  The *snapshot* role
+signs for the *root*, *targets* and all delegated targets metadata.  keys with
+PyPI.  The *bins* role signs for all projects that have not registered
+developer keys with PyPI.
 
-Every year, PyPI administrators are going to sign for *root* role keys.  After
-that, automation will continuously sign for a timestamped, snapshot of all
-projects.
+TUF helps secure new or existing software update systems. Software update
+systems are vulnerable to many known attacks, including those that can result
+in clients being compromised or crashed. TUF helps solve this problem by
+providing a flexible security framework that can be added to software updaters.
+Some attacks TUF is designed to address include:
+
+* An attacker keeps giving clients the same file, so they never realize there
+is an update.
+
+* An attacker gives clients an older, insecure version of a file that they
+already have, so they download that one and blindly use it thinking it is
+newer.
+
+* An attacker gives clients a newer version of a file they have but it is not
+the newest one. It's newer to them, but it may be insecure and exploitable by
+the attacker.
+
+* An attacker compromises the key used to sign these files and now they
+download a malicious file that is properly signed.
+
+An outline of the attacks and updater weaknesses TUF is designed to address is
+available on the `TUF security document`__.
+
+__ https://github.com/theupdateframework/tuf/blob/develop/SECURITY.md
 
 This PEP does not require project developers to use TUF to secure their
 packages from attacks on PyPI.  By default, all projects will be signed for by
-the *bins* role.
+the *bins* role.  Unless a mirror, CDN or the PyPI repository has been
+compromised, the end-user will not be able to discern whether or not a package
+manager is using TUF to install or update a project from PyPI.
 
 This PEP has **not** been designed to be backward-compatible for package
 managers that do not use TUF security protocol to install or update a
@@ -186,53 +209,53 @@ projects.  At some point in the future, PyPI administrators MAY choose to
 permanently deprecate the backward-compatible version of itself that does not
 offer TUF metadata.
 
-Unless a mirror, CDN or the PyPI repository has been compromised, the end-user
-will not be able to discern whether or not a package manager is using TUF to
-install or update a project from PyPI.
+Every year, PyPI administrators are going to sign for *root* role keys.  After
+that, automation will continuously sign for a timestamped, snapshot of all
+projects.
 
 
-Responsibility Separation
-=========================
+Repository Metadata
+===================
 
-TUF requires four top-level roles: *root*, *timestamp*,
-*snapshot* and *targets*.  The *root* role specifies the keys of all
-the top-level roles (including itself).  The *timestamp* role specifies the
-latest consistent snapshot.  The *snapshot* role specifies the
-latest versions of all TUF metadata files (other than *timestamp*).  The
-*targets* role specifies available target files (in our case, it will be all
-files on PyPI under the /simple and /packages directories).  In this PEP, each
-of these roles will serve their responsibilities without exception.
+Metadata files provide information that clients can use to make update
+decisions. Different metadata files provide different information. The various
+metadata files are signed by different roles as are indicated by the *root*
+role.  The concept of roles allows TUF to only trust information that a role is
+trusted to provide.
 
-Our proposal offers two levels of security to developers.  If developers opt in
-to secure their projects with their own developer keys, then their projects
-will be very secure.  Otherwise, TUF will still protect them in many cases:
+TUF requires four top-level roles: *root*, *timestamp*, *snapshot* and
+*targets*.  The *root* role specifies the keys of the top-level roles
+(including itself).  The *timestamp* role specifies the latest *snapshot*.  The
+*snapshot* role specifies the latest version of all the TUF metadata files
+(other than *timestamp*).  The *targets* role specifies available target files
+(in our case, it will be all files on PyPI under the /simple and /packages
+directories).  In this PEP, each of these roles will serve their
+responsibilities without exception.
 
-1.  Minimum security (no action by a developer): protects *bins* and
-    projects without developer keys from CDNs [19]_ or public mirrors, but not from
-    some PyPI compromises.  This is because continuous delivery requires some keys
-    to be online.  This level of security protects projects from being accidentally
-    or deliberately tampered with by a mirror or a CDN because the mirror or CDN
-    will not have any of the PyPI or developer keys required to sign for projects.
-    However, it would not protect projects from attackers who have compromised PyPI
-    because they will be able to manipulate the TUF metadata for *bins*
-    projects with the appropriate online keys.
+This proposal offers some security for developers because PyPI will sign (with
+an online key) for projects in order to permit continuous delivery.  An
+extension to this proposal, discussed in Appendex A, offers the maximum
+security because developers sign for their projects.  Projects signed by
+developers will be safe from PyPI compromises because the keys used for this
+projects are not stored on PyPI.
 
-In order to complete support for continuous delivery, we propose three
-delegated targets roles:
+The minimum security model (this proposal) requires no action from developers
+and protects projects from malicious CDNs [19]_ and public mirrors, but not
+from some PyPI compromises.  This is because continuous delivery requires some
+keys to be online.  This level of security protects projects from being
+accidentally or deliberately tampered with by a mirror or a CDN because the
+mirror or CDN will not have any of the PyPI or developer keys required to sign
+for projects.  However, it would not protect projects from attackers who have
+compromised PyPI because they will be able to manipulate the TUF metadata of
+the *bins* role by using the compromised online keys.
 
-3. *bins*: Signs for all PyPI projects.
-
-The *targets* role MUST delegate all PyPI projects to the three delegated
-targets roles in the order of appearance listed above.  This means that when
-pip downloads with TUF a distribution from a project on PyPI, it will consult
-the *bins* role about the TUF metadata for the project.  If the *bins*
-role has not delegated the project, then the project is considered to be
-non-existent on PyPI.  Therefore, the project will be signed for by the
-*bins* role. 
-
-The *bins* role offers minimum security because PyPI will sign for
-projects without developer keys with an online key in order to permit
-continuous delivery.
+In order to complete support for continuous delivery, we propose that the
+*bins* role (and its delegated roles) sign for all PyPI projects with an online
+key.  The *targets* role, which only signs with an offline key, MUST delegate
+all PyPI projects to *bins* role.  This means that when pip downloads with TUF
+a distribution from a project on PyPI, it will consult the *bins* role about
+the TUF metadata for the project.  If the *bins* role has not delegated the
+project, then the project is considered to be non-existent on PyPI.
 
 
 Metadata Management
