@@ -150,7 +150,7 @@ TUF specification [16]_.
 Overview
 ========
 
-.. image:: https://raw.github.com/theupdateframework/pep-on-pypi-with-tuf/master/figure1.png
+.. image:: figure1.png
 
 Figure 1: A simplified overview of the roles in PyPI with TUF
 
