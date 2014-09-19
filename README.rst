@@ -159,7 +159,7 @@ PyPI.  The top-level *root* role signs for the keys of the top-level
 *timestamp*, *snapshot*, *targets* and *root* roles.  The
 *timestamp* role signs for a new and consistent snapshot.  The *snapshot* role
 signs for the *root*, *targets* and all delegated targets metadata.
-keys with PyPI.  The *binned* role signs for all projects that have not
+keys with PyPI.  The *bins* role signs for all projects that have not
 registered developer keys with PyPI.
 
 Every year, PyPI administrators are going to sign for *root* role keys.  After
@@ -168,7 +168,7 @@ projects.
 
 This PEP does not require project developers to use TUF to secure their
 packages from attacks on PyPI.  By default, all projects will be signed for by
-the *binned* role.
+the *bins* role.
 
 This PEP has **not** been designed to be backward-compatible for package
 managers that do not use TUF security protocol to install or update a
@@ -207,30 +207,30 @@ Our proposal offers two levels of security to developers.  If developers opt in
 to secure their projects with their own developer keys, then their projects
 will be very secure.  Otherwise, TUF will still protect them in many cases:
 
-1.  Minimum security (no action by a developer): protects *binned* and
+1.  Minimum security (no action by a developer): protects *bins* and
     projects without developer keys from CDNs [19]_ or public mirrors, but not from
     some PyPI compromises.  This is because continuous delivery requires some keys
     to be online.  This level of security protects projects from being accidentally
     or deliberately tampered with by a mirror or a CDN because the mirror or CDN
     will not have any of the PyPI or developer keys required to sign for projects.
     However, it would not protect projects from attackers who have compromised PyPI
-    because they will be able to manipulate the TUF metadata for *binned*
+    because they will be able to manipulate the TUF metadata for *bins*
     projects with the appropriate online keys.
 
 In order to complete support for continuous delivery, we propose three
 delegated targets roles:
 
-3. *binned*: Signs for all PyPI projects.
+3. *bins*: Signs for all PyPI projects.
 
 The *targets* role MUST delegate all PyPI projects to the three delegated
 targets roles in the order of appearance listed above.  This means that when
 pip downloads with TUF a distribution from a project on PyPI, it will consult
-the *binned* role about the TUF metadata for the project.  If the *binned*
+the *bins* role about the TUF metadata for the project.  If the *bins*
 role has not delegated the project, then the project is considered to be
 non-existent on PyPI.  Therefore, the project will be signed for by the
-*binned* role. 
+*bins* role. 
 
-The *binned* role offers minimum security because PyPI will sign for
+The *bins* role offers minimum security because PyPI will sign for
 projects without developer keys with an online key in order to permit
 continuous delivery.
 
@@ -245,7 +245,7 @@ of the metadata described here may be seen at our testbed mirror of
 __ http://mirror1.poly.edu/
 
 The metadata files that change most frequently will be *timestamp*, *snapshot*
-and delegated targets (*binned* projects) metadata.  The *timestamp* and
+and delegated targets (*bins* projects) metadata.  The *timestamp* and
 *snapshot* metadata MUST be updated whenever *root*, *targets* or delegated
 targets metadata are updated.  Observe, though, that *root* and *targets*
 metadata are much less likely to be updated as often as delegated targets
@@ -333,7 +333,7 @@ such as rsync to efficiently transfer consistent snapshots from PyPI.
 Producing Consistent Snapshots
 ------------------------------
 
-Given a project, PyPI is responsible for updating *binned* metadata as well
+Given a project, PyPI is responsible for updating *bins* metadata as well
 as associated delegated targets metadata.  Every project MUST upload its set of
 metadata and targets in a single transaction.  We will call this set of files
 the project transaction.  We will discuss later how PyPI MAY validate the files
@@ -352,11 +352,11 @@ the hash, and ext is the filename extension.
 __ http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest
 __ https://en.wikipedia.org/wiki/SHA-2
 
-When an *binned* project uploads a new transaction, a project transaction
-process MUST add all new targets and relevant delegated *binned* metadata.  (We
-will see later in this section why the *binned* role will delegate targets to a
-number of delegated *binned* roles.)  Finally, the project transaction process
-MUST inform the snapshot process about new delegated *binned* metadata.
+When an *bins* project uploads a new transaction, a project transaction
+process MUST add all new targets and relevant delegated *bins* metadata.  (We
+will see later in this section why the *bins* role will delegate targets to a
+number of delegated *bins* roles.)  Finally, the project transaction process
+MUST inform the snapshot process about new delegated *bins* metadata.
 
 When a *recently-claimed* project uploads a new a transaction, a project
 transaction process MUST add all new targets and delegated targets metadata for
@@ -373,7 +373,7 @@ role.  Project transaction processes MUST also be applied atomically: either
 all metadata and targets, or none of them, are added.  The project transaction
 processes and consistent snapshot process SHOULD work concurrently.  Finally,
 project transaction processes SHOULD keep in memory the latest *claimed*,
-*recently-claimed* and *binned* metadata so that they will be correctly
+*recently-claimed* and *bins* metadata so that they will be correctly
 updated in new consistent snapshots.
 
 All project transactions MAY be placed in a single queue and processed
@@ -384,7 +384,7 @@ appearance provided that the following rules are observed:
    project.
 
 2. No pair of project transaction processes must concurrently work on
-   *binned* projects that belong to the same delegated *binned* targets
+   *bins* projects that belong to the same delegated *bins* targets
    role.
 
 These rules MUST be observed so that metadata is not read from or written to
@@ -448,7 +448,7 @@ Metadata Expiry Times
 The *root* and *targets* role metadata SHOULD expire in a year, because these
 metadata files are expected to change very rarely.
 
-The *timestamp*, *snapshot*, and *binned* role metadata SHOULD expire in a
+The *timestamp*, *snapshot*, and *bins* role metadata SHOULD expire in a
 day because a CDN or mirror SHOULD synchronize itself with PyPI every day.
 Furthermore, this generous time frame also takes into account client clocks
 that are highly skewed or adrift.
@@ -460,31 +460,31 @@ Metadata Scalability
 Due to the growing number of projects and distributions, TUF metadata will also
 grow correspondingly.
 
-For example, consider the *binned* role.  In August 2013, we found that the
-size of the *binned* role metadata was about 42MB if the *binned* role
+For example, consider the *bins* role.  In August 2013, we found that the
+size of the *bins* role metadata was about 42MB if the *bins* role
 itself signed for about 220K PyPI targets (which are simple indices and
 distributions).  We will not delve into details in this PEP, but TUF features a
 so-called "`lazy bin walk`__" scheme which splits a large targets or delegated
 targets metadata file into many small ones.  This allows a TUF client updater
 to intelligently download only a small number of TUF metadata files in order to
-update any project signed for by the *binned* role.  For example, applying
+update any project signed for by the *bins* role.  For example, applying
 this scheme to the previous repository resulted in pip downloading between
 1.3KB and 111KB to install or upgrade a PyPI project via TUF.
 
 __ https://github.com/theupdateframework/tuf/issues/39
 
 From our findings as of the time of writing, PyPI SHOULD split all targets in
-the *binned* role by delegating it to 1024 delegated targets role, each of
+the *bins* role by delegating it to 1024 delegated targets role, each of
 which would sign for PyPI targets whose hashes fall into that "bin" or
-delegated targets role.  We found that 1024 bins would result in the *binned*
-role metadata and each of its binned delegated targets role metadata to be
+delegated targets role.  We found that 1024 bins would result in the *bins*
+role metadata and each of its bins delegated targets role metadata to be
 about the same size (40-50KB) for about 220K PyPI targets (simple indices and
 distributions).
 
 It is possible to make TUF metadata more compact by representing it in a binary
 format as opposed to the JSON text format.  Nevertheless, we believe that a
 sufficiently large number of project and distributions will induce scalability
-challenges at some point, and therefore the *binned* role will then still need
+challenges at some point, and therefore the *bins* role will then still need
 delegations in order to address the problem.  Furthermore, the JSON format is
 an open and well-known standard for data interchange.
 
@@ -511,17 +511,17 @@ exceptions.
 Number Of Keys
 --------------
 
-The *timestamp*, *snapshot*, and *binned* roles will need to support
+The *timestamp*, *snapshot*, and *bins* roles will need to support
 continuous delivery.  Even though their respective keys will then need to be
 online, we will require that the keys be independent of each other.  This
 allows for each of the keys to be placed on separate servers if need be, and
 prevents side channel attacks that compromise one key from automatically
 compromising the rest of the keys.  Therefore, each of the *timestamp*,
-*snapshot*, and *binned* roles MUST require (1, 1) keys.
+*snapshot*, and *bins* roles MUST require (1, 1) keys.
 
-The *binned* role MAY delegate targets in an automated manner to a number of
-roles called "binned", as we discussed in the previous section.  Each of the
-"bin" roles SHOULD share the same key as the *binned* role, due
+The *bins* role MAY delegate targets in an automated manner to a number of
+roles called "bins", as we discussed in the previous section.  Each of the
+"bin" roles SHOULD share the same key as the *bins* role, due
 simultaneously to space efficiency of metadata and because there is no security
 advantage in requiring separate keys.
 
@@ -539,7 +539,7 @@ either all PyPI administrators or all PSF board members, and t > 1 (so that at
 least two members must sign the *root* role).
 
 The *targets* role will be used only to sign for the static delegation of all
-targets to the *binned* role.  Since these target delegations must be secured
+targets to the *bins* role.  Since these target delegations must be secured
 against attacks in the event of a
 compromise, the keys for the *targets* role MUST be offline and independent
 from other keys.  For simplicity of key management without sacrificing
@@ -555,7 +555,7 @@ Online and Offline Keys
 -----------------------
 
 In order to support continuous delivery, the *timestamp*, *snapshot*,
-*binned* role keys MUST be online.
+*bins* role keys MUST be online.
 
 As explained in the previous section, the *root*, and *targets* role keys MUST
 be offline for maximum security.  Developers keys will be offline in the sense
@@ -595,7 +595,7 @@ any attack other than a freeze attack, one must also compromise the
 *snapshot* key.
 
 Finally, a compromise of the PyPI infrastructure MAY introduce malicious
-updates to *binned* projects because the keys for
+updates to *bins* projects because the keys for
 those roles are online.
 
 
@@ -620,28 +620,28 @@ Whereas PyPI MUST take the following steps:
 
 2. A new timestamped consistent snapshot MUST be issued.
 
-If a threshold number of *timestamp*, *snapshot*, or *binned* keys have
+If a threshold number of *timestamp*, *snapshot*, or *bins* keys have
 been compromised, then PyPI MUST take the following steps:
 
 1. Revoke the *timestamp*, *snapshot* and *targets* role keys from
    the *root* role.  This is done by replacing the compromised *timestamp*,
    *snapshot* and *targets* keys with newly issued keys.
 
-2. Revoke the *binned* keys from the *targets* role by replacing their keys
+2. Revoke the *bins* keys from the *targets* role by replacing their keys
    with newly issued keys.  Sign the new *targets* role metadata and discard the
    new keys (because, as we explained earlier, this increases the security of
    *targets* metadata).
 
-4. All targets of the *binned* roles SHOULD be compared with the last known
+4. All targets of the *bins* roles SHOULD be compared with the last known
    good consistent snapshot where none of the *timestamp*, *snapshot*, or
-   *binned* keys
+   *bins* keys
    were known to have been compromised.  Added, updated or deleted targets in
    the compromised consistent snapshot that do not match the last known good
    consistent snapshot MAY be restored to their previous versions.  After
-   ensuring the integrity of all *binned* targets, the *binned* metadata
+   ensuring the integrity of all *bins* targets, the *bins* metadata
    MUST be regenerated.
 
-5. The *binned* metadata MUST have their version numbers incremented, expiry
+5. The *bins* metadata MUST have their version numbers incremented, expiry
    times suitably extended and signatures renewed.
 
 6. A new timestamped consistent snapshot MUST be issued.
@@ -677,7 +677,7 @@ Recovering from a Repository Compromise
 
 When a repository compromise has been detected, the integrity of three types of
 information must be validated. First, if the online keys of the repository have
-been compromised, they can be revoked by having the binned role key signs new
+been compromised, they can be revoked by having the bins role key signs new
 role metadata delegating to a new key. Second, the role metadata on the
 repository may have been changed. This would impact the metadata that is signed
 by online keys.  Any role information created since the last period should be
@@ -717,12 +717,12 @@ attacks by known techniques such as implicit key revocation and metadata
 mismatch detection [81].  Replace an existing package with a malicious ver-
 sion. If developers are signing packages, the developer sig- natures will not
 match the package and will be detected and rejected. However, in the case of
-the legacy model, the online binned-packages role signs for packages. When
+the legacy model, the online bins-packages role signs for packages. When
 the packages role delegates to a claimed project, the repository tool checks
 that the hashes of its packages are valid. The attack will be detected at this
-point.  Add a project to the new-projects role. This is equiv- alent to
-registering a new project through the normal inter- face. Since registering
-project names is open to any devel- oper, this is not an attack.
+point.  Add a project to the new-projects role. This is equivalent to
+registering a new project through the normal interface. Since registering
+project names is open to any developer, this is not an attack.
 
 In order to be able to safely restore from static snapshots later in the event
 of a compromise, PyPI SHOULD maintain a small number of its own mirrors to copy
