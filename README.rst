@@ -172,47 +172,49 @@ The following are the attacks on PyPI that TUF addresses.  Also included are
 weaknesses that make attacks possible.
 
 * Arbitrary software installation: An attacker installs anything they want on
-the client system. That is, an attacker can provide arbitrary files in response
-to download requests and the files will not be detected as illegitimate.
+  the client system. That is, an attacker can provide arbitrary files in
+  response to download requests and the files will not be detected as
+  illegitimate.
 
 * Rollback attacks: An attacker presents a software update system with older
-files than those the client has already seen, causing the client to use files
-older than those the client knows about.
+  files than those the client has already seen, causing the client to use files
+  older than those the client knows about.
 
 * Indefinite freeze attacks: An attacker continues to present a software update
-system with the same files the client has already seen. The result is that the
-client does not know that new files are available.
+  system with the same files the client has already seen. The result is that
+  the client does not know that new files are available.
 
 * Endless data attacks: An attacker responds to a file download request with an
-endless stream of data, causing harm to clients (e.g., a disk partition filling
-up or memory exhaustion).
+  endless stream of data, causing harm to clients (e.g., a disk partition
+  filling up or memory exhaustion).
 
 * Slow retrieval attacks: An attacker responds to clients with a very slow
-stream of data that essentially results in the client never continuing the
-update process.
+  stream of data that essentially results in the client never continuing the
+  update process.
 
 * Extraneous dependencies attacks: An attacker indicates
-to clients that in order to install the software they wanted, they also need to
-install unrelated software.  This unrelated software can be from a trusted
-source but may have known vulnerabilities that are exploitable by the attacker.
+  to clients that in order to install the software they wanted, they also need
+  to install unrelated software.  This unrelated software can be from a trusted
+  source but may have known vulnerabilities that are exploitable by the
+  attacker.
 
 * Mix-and-match attacks: An attacker presents clients with a view of a
-repository that includes files that never existed together on the repository at
-the same time. This can result in, for example, outdated versions of
-dependencies being installed.
+  repository that includes files that never existed together on the repository
+  at the same time. This can result in, for example, outdated versions of
+  dependencies being installed.
 
 * Wrong software installation: An attacker provides a client with a trusted
-file that is not the one the client wanted.
+  file that is not the one the client wanted.
 
 * Malicious mirrors preventing updates: An attacker in control of one
-repository mirror is able to prevent users from obtaining updates from other,
-good mirrors.
+  repository mirror is able to prevent users from obtaining updates from other,
+  good mirrors.
 
 * Vulnerability to key compromises: An attacker who is able to compromise a
-single key or less than a given threshold of keys can compromise clients. This
-includes relying on a single online key (such as only being protected by SSL)
-or a single offline key (such as most software update systems use to sign
-files).
+  single key or less than a given threshold of keys can compromise clients.
+  This includes relying on a single online key (such as only being protected by
+  SSL) or a single offline key (such as most software update systems use to
+  sign files).
 
 
 
@@ -317,8 +319,8 @@ updated accordingly, the details of which are explained in the following
 subsections.
 
 
-Why Need Consistent Snapshots?
-------------------------------------
+Why Does a PyPI Need Consistent Snapshots?
+------------------------------------------
 
 Project developers expect the projects they upload to PyPI to be immediately
 available for download.  Unfortunately, there will be problems when there are
