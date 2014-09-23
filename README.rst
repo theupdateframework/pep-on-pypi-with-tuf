@@ -691,24 +691,8 @@ Auditing Snapshots
 ------------------
 
 If a malicious party compromises the community repository, they can sign
-arbitrary files with any online keys. However, the community repository is
-still resilient against many types of attacks.
-
-Replace a claimed project’s
-key. This attack cannot be performed by modifying the claimed-projects because
-the signing key is offline. If the attacker modifies the newprojects role
-metadata to include the malicious project key, the use of cutting delegation
-will prevent clients from trusting this project key. Even if an attempt is
-made to merge this project key into the claimed-projects role file, the
-repository tool is designed to notify the administrator of the extraneous entry
-(which indicates an attack).  The attacker’s best option is to try to revoke
-the project key and replace it with a key they control. If the attacker can add
-an entry to the revoked role file which is not noticed by the administrator,
-this would replace a key. However, the use of a publicly verifiable
-append-only log will give the administrator an easy way to check for project
-key replacement.  If the attacker is successful and does replace the key
-through revocation, the project developer can recover through the project key
-revocation process described above.
+arbitrary files with any of the online keys. However, the community repository
+is still resilient against many types of attacks.
 
 Replace a newly created project’s key.
 This attack will successfully work because the key for this file is online.
