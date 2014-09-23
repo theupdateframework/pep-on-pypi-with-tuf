@@ -217,8 +217,8 @@ possible.
   sign files).
 
 
-What Additional Files Must Exist on a Repository?
--------------------------------------------------
+What Changes are Required on PyPI?
+----------------------------------
 
 In order for package updaters to securely download and verify packages with
 TUF, a few extra files are required to exist on the repository. These extra
@@ -243,17 +243,13 @@ __ https://github.com/theupdateframework/tuf/blob/develop/METADATA.md
 PyPI and TUF Metadata
 =====================
 
-TUF metadata files provide information that clients can use to make update
+TUF metadata provides information that clients can use to make update
 decisions.  For example, a metadata file can list the available packages on
 PyPI and include information like signatures, hashes, and file size.  Different
 metadata files provide different information.  The various metadata files are
 signed by different roles as are indicated by the *root* role.  The concept of
 roles allows TUF to delegate responsiblities to multiple roles and minimize the
 impact of a compromised role.
-
-
-Which Metadata Must Be Available on PyPI?
------------------------------------------
 
 TUF requires four top-level roles: *root*, *timestamp*, *snapshot* and
 *targets*.  The *root* role specifies the keys of the top-level roles
@@ -270,7 +266,7 @@ Figure 1: An overview of the role metadata available on PyPI.
 
 
 How Should TUF Metadata be Signed?
------------------------------
+----------------------------------
 
 The top-level *root* role signs for the keys of the top-level *timestamp*,
 *snapshot*, *targets* and *root* roles.  The *timestamp* role signs for every
