@@ -591,7 +591,7 @@ may be found by taking the union of both rows.
 +-----------------+-------------------+----------------+--------------------------------+
 | Role Compromise | Malicious Updates | Freeze Attack  |  Metadata Inconsistency Attack |
 +=================+===================+================+================================+
-|    timetamp     |       NO          |       YES      |              NO                |
+|    timetamp     | NO                | YES            | NO                             |
 |                 | snapshot and      | limited by     | snapshot need to cooperate     |
 |                 | targets or any    | ealiest root,  |                                |
 |                 | of the bins need  | targets, or    |                                |
