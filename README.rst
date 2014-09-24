@@ -597,34 +597,34 @@ may be found by taking the union of both rows.
 |                 | of the bins need  | targets, or    |                                |
 |                 | to cooperate      | bin expiry     |                                |
 |                 |                   | time           |                                |
-+=================+===================+================+================================+
++-----------------+-------------------+----------------+--------------------------------+
 |    snapshot     |       NO          |       NO       |              NO                |
-|                 | timestamp and     | timestamp needs| timestamp needs to cooperate   |
-|                 | targets or any of | to coooperate  |                                |
-|                 | the bins need to  |                |                                |
+|                 | timestamp and     | timestamp      | timestamp needs to cooperate   |
+|                 | targets or any of | needs to       |                                |
+|                 | the bins need to  | cooperate      |                                |
 |                 | cooperate         |                |                                |
-+=================+===================+================+================================+
++-----------------+-------------------+----------------+--------------------------------+
 |    timestamp    |      NO           |       YES      |              YES               |
 |    **AND**      | targets or any    | limited by     | limited by earliest root,      |
 |    snapshot     | of the bins need  | earliest root, | targets, or bin metadata       |
 |                 | to cooperate      | targets, or    | expiry time                    |
 |                 |                   | bin metadata   |                                |
 |                 |                   | expiry time    |                                |
-+=================+===================+================+================================+
++-----------------+-------------------+----------------+--------------------------------+
 |    targets      |       NO          | NOT APPLICABLE |        NOT APPLICABLE          |
 |    **OR**       | timestamp and     | need timestamp | need timestamp and snapshot    |
 |    bin          | snapshot need to  | and snapshot   |                                |
 |                 | cooperate         |                |                                |
-+=================+===================+================+================================+
++-----------------+-------------------+----------------+--------------------------------+
 |   timestamp     |       YES         |    YES         |              YES               |
 |   **AND**       |                   | limited by     | limited by earliest root,      |
 |   snapshot      |                   | earliest root, | targets, or bin metadata       |
 |   **AND**       |                   | targets, or    | expiry time                    |
 |   bin           |                   | bin metadata   |                                |
 |                 |                   | expiry time    |                                |
-+=================+===================+================+================================+
++-----------------+-------------------+----------------+--------------------------------+
 |     root        |       YES         |      YES       |               YES              |
-+=================+===================+================+================================+
++-----------------+-------------------+----------------+--------------------------------+
 
 Table 1: Attacks possible by compromising certain combinations of role keys
 
@@ -757,6 +757,9 @@ Appendix A: Extension
 =====================
 1. Cover claimed roles.
 2. End-to-End verification of packages.
+
+
+Potential issues:
 3. Management of developer keys.
 4. Build farm.
 
