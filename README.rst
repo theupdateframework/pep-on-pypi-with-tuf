@@ -591,20 +591,20 @@ may be found by taking the union of both rows.
 +-----------------+-------------------+----------------+--------------------------------+
 | Role Compromise | Malicious Updates | Freeze Attack  |  Metadata Inconsistency Attack |
 +=================+===================+================+================================+
-|    timetamp     | NO                | YES            | NO                             |
+|    timetamp     |       NO          |       YES      |       NO                       |
 |                 | snapshot and      | limited by     | snapshot need to cooperate     |
 |                 | targets or any    | ealiest root,  |                                |
 |                 | of the bins need  | targets, or    |                                |
 |                 | to cooperate      | bin expiry     |                                |
 |                 |                   | time           |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|    snapshot     |       NO          |       NO       |              NO                |
+|    snapshot     |       NO          |       NO       |       NO                       |
 |                 | timestamp and     | timestamp      | timestamp needs to cooperate   |
 |                 | targets or any of | needs to       |                                |
 |                 | the bins need to  | cooperate      |                                |
 |                 | cooperate         |                |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|    timestamp    |      NO           |       YES      |              YES               |
+|    timestamp    |       NO          |       YES      |       YES                      |
 |    **AND**      | targets or any    | limited by     | limited by earliest root,      |
 |    snapshot     | of the bins need  | earliest root, | targets, or bin metadata       |
 |                 | to cooperate      | targets, or    | expiry time                    |
@@ -616,14 +616,14 @@ may be found by taking the union of both rows.
 |    bin          | snapshot need to  | and snapshot   |                                |
 |                 | cooperate         |                |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|   timestamp     |       YES         |    YES         |              YES               |
+|   timestamp     |       YES         |       YES      |       YES                      |
 |   **AND**       |                   | limited by     | limited by earliest root,      |
 |   snapshot      |                   | earliest root, | targets, or bin metadata       |
 |   **AND**       |                   | targets, or    | expiry time                    |
 |   bin           |                   | bin metadata   |                                |
 |                 |                   | expiry time    |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|     root        |       YES         |      YES       |               YES              |
+|     root        |       YES         |       YES      |       YES                      |
 +-----------------+-------------------+----------------+--------------------------------+
 
 Table 1: Attacks possible by compromising certain combinations of role keys
