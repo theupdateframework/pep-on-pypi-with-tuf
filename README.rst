@@ -168,45 +168,45 @@ steps, there is plenty they can do.
 Repository Attacks Prevented by TUF
 -----------------------------------
 
-* Arbitrary software installation: An attacker installs anything they want on
-  the client system. That is, an attacker can provide arbitrary files in
+* **Arbitrary software installation**: An attacker installs anything they want
+  on the client system. That is, an attacker can provide arbitrary files in
   response to download requests and the files will not be detected as
   illegitimate.
 
-* Rollback attacks: An attacker presents a software update system with older
-  files than those the client has already seen, causing the client to use files
-  older than those the client knows about.
+* **Rollback attacks**: An attacker presents a software update system with
+  older files than those the client has already seen, causing the client to use
+  files older than those the client knows about.
 
-* Indefinite freeze attacks: An attacker continues to present a software update
-  system with the same files the client has already seen. The result is that
-  the client does not know that new files are available.
+* **Indefinite freeze attacks**: An attacker continues to present a software
+  update system with the same files the client has already seen. The result is
+  that the client does not know that new files are available.
 
-* Endless data attacks: An attacker responds to a file download request with an
-  endless stream of data, causing harm to clients (e.g., a disk partition
-  filling up or memory exhaustion).
+* **Endless data attacks**: An attacker responds to a file download request
+  with an endless stream of data, causing harm to clients (e.g., a disk
+  partition filling up or memory exhaustion).
 
-* Slow retrieval attacks: An attacker responds to clients with a very slow
+* **Slow retrieval attacks**: An attacker responds to clients with a very slow
   stream of data that essentially results in the client never continuing the
   update process.
 
-* Extraneous dependencies attacks: An attacker indicates to clients that in
+* **Extraneous dependencies attacks**: An attacker indicates to clients that in
   order to install the software they wanted, they also need to install
   unrelated software.  This unrelated software can be from a trusted source but
   may have known vulnerabilities that are exploitable by the attacker.
 
-* Mix-and-match attacks: An attacker presents clients with a view of a
+* **Mix-and-match attacks**: An attacker presents clients with a view of a
   repository that includes files that never existed together on the repository
   at the same time. This can result in, for example, outdated versions of
   dependencies being installed.
 
-* Wrong software installation: An attacker provides a client with a trusted
+* **Wrong software installation**: An attacker provides a client with a trusted
   file that is not the one the client wanted.
 
-* Malicious mirrors preventing updates: An attacker in control of one
+* **Malicious mirrors preventing updates**: An attacker in control of one
   repository mirror is able to prevent users from obtaining updates from other,
   good mirrors.
 
-* Vulnerability to key compromises: An attacker who is able to compromise a
+* **Vulnerability to key compromises**: An attacker who is able to compromise a
   single key or less than a given threshold of keys can compromise clients.
   This includes relying on a single online key (such as only being protected by
   SSL) or a single offline key (such as most software update systems use to
@@ -296,15 +296,15 @@ have any of the keys required to sign for projects.  It also does not protect
 projects from attackers who have compromised PyPI, since attackers can
 manipulate TUF metadata using the keys stored online.   An extension to this
 PEP, discussed in Appendix A, offers the maximum security model and allows
-developers sign for their projects.  Developer keys are not stored online:
+developers to sign for their projects.  Developer keys are not stored online:
 therefore, projects are safe from PyPI compromises.
 
 This PEP proposes that the *bins* role (and its delegated roles) sign for all
 PyPI projects with an online key.  The *targets* role, which only signs with an
 offline key, MUST delegate all PyPI projects to the *bins* role.  This means
-that when pip downloads with TUF a distribution from a project on PyPI, it will
-consult the *bins* role about the TUF metadata for the project.  If the *bins*
-role has not delegated the project, then the project is considered to be
+that when pip (with TUF) downloads a distribution from a project on PyPI, it
+will consult the *bins* role about the TUF metadata for the project.  If the
+*bins* role has , then the project is considered to be
 non-existent on PyPI.
 
 
@@ -430,17 +430,17 @@ online on the private infrastructure of the project.
 How Should Metadata be Generated?
 =================================
 
-Project developers expect the projects they upload to PyPI to be immediately
-available for download.  Unfortunately, there will be problems when there are
-many readers and writers simultaneously accessing the same metadata and
-packages.  An example is a mirror attempting to sync with PyPI.  Suppose that
-PyPI has timestamped a *snapshot* at version 1.  A mirror is later in the
-middle of copying PyPI at this snapshot.  While the mirror is copying PyPI at
-this snapshot, PyPI timestamps a new snapshot at, say, version 2.  Without
-accounting for consistency, the mirror would then find itself with a copy of
-PyPI in an inconsistent state, which is indistinguishable from arbitrary
-metadata or package attacks.  The problem would also apply when the mirror is
-substituted with a pip user.
+Project developers expect the distributions they upload to PyPI to be
+immediately available for download.  Unfortunately, there will be problems when
+there are many readers and writers simultaneously accessing the same metadata
+and distributions.  An example is a mirror attempting to sync with PyPI.
+Suppose that PyPI has timestamped a *snapshot* at version 1.  A mirror is later
+in the middle of copying PyPI at this snapshot.  While the mirror is copying
+PyPI at this snapshot, PyPI timestamps a new snapshot at, say, version 2.
+Without accounting for consistency, the mirror would then find itself with a
+copy of PyPI in an inconsistent state, which is indistinguishable from
+arbitrary metadata or package attacks.  The problem would also apply when the
+mirror is substituted with a pip user.
 
 
 Consistent Snapshots
@@ -493,10 +493,10 @@ Producing Consistent Snapshots
 
 Given a project, PyPI is responsible for updating the *Bins* metadata (roles
 delegated by the *bins* role and signed with an online key).  Every project
-MUST upload its package files in a single transaction.  The uploaded set of
-files is called the "project transaction".  How PyPI MAY validate the files in
-a project transaction will be discussed soon.  For now, focused is placed on
-how PyPI will respond to a project transaction.
+MUST upload its release in a single transaction.  The uploaded set of files is
+called the "project transaction".  How PyPI MAY validate the files in a project
+transaction will be discussed soon.  For now, focused is placed on how PyPI
+will respond to a project transaction.
 
 Every metadata and target file MUST include in its filename the `hex digest`__
 of its `SHA-256`__ hash.  For this PEP, it is RECOMMENDED that PyPI adopt a
@@ -584,11 +584,47 @@ Key Compromise Analysis
 
 Table 1 summarizes the kinds of attacks rendered possible by compromising a
 threshold number of keys belonging to the TUF roles on PyPI.  Except for the
-*timestamp* and *snapshot* roles, the pairwise interaction of role
-compromises may be found by taking the union of both rows.
+*timestamp* and *snapshot* roles, the pairwise interaction of role compromises
+may be found by taking the union of both rows.
 
-.. image:: https://raw.github.com/theupdateframework/pep-on-pypi-with-tuf/master/table1.png
-DO NOT LIST RECENTLY-CLAIMED and CLAIMED, and convert table1.png to rst table.
+
++-----------------+-------------------+----------------+--------------------------------+
+| Role Compromise | Malicious Updates | Freeze Attack  |  Metadata Inconsistency Attack |
++=================+===================+================+================================+
+|    timetamp     |       NO          |       YES      |              NO                |
+|                 | snapshot and      | limited by     | snapshot need to cooperate     |
+|                 | targets or any    | ealiest root,  |                                |
+|                 | of the bins need  | targets, or    |                                |
+|                 | to cooperate      | bin expiry     |                                |
+|                 |                   | time           |                                |
++=================+===================+================+================================+
+|    snapshot     |       NO          |       NO       |              NO                |
+|                 | timestamp and     | timestamp needs| timestamp needs to cooperate   |
+|                 | targets or any of | to coooperate  |                                |
+|                 | the bins need to  |                |                                |
+|                 | cooperate         |                |                                |
++=================+===================+================+================================+
+|    timestamp    |      NO           |       YES      |              YES               |
+|    **AND**      | targets or any    | limited by     | limited by earliest root,      |
+|    snapshot     | of the bins need  | earliest root, | targets, or bin metadata       |
+|                 | to cooperate      | targets, or    | expiry time                    |
+|                 |                   | bin metadata   |                                |
+|                 |                   | expiry time    |                                |
++=================+===================+================+================================+
+|    targets      |       NO          | NOT APPLICABLE |        NOT APPLICABLE          |
+|    **OR**       | timestamp and     | need timestamp | need timestamp and snapshot    |
+|    bin          | snapshot need to  | and snapshot   |                                |
+|                 | cooperate         |                |                                |
++=================+===================+================+================================+
+|   timestamp     |       YES         |    YES         |              YES               |
+|   **AND**       |                   | limited by     | limited by earliest root,      |
+|   snapshot      |                   | earliest root, | targets, or bin metadata       |
+|   **AND**       |                   | targets, or    | expiry time                    |
+|   bin           |                   | bin metadata   |                                |
+|                 |                   | expiry time    |                                |
++=================+===================+================+================================+
+|     root        |       YES         |      YES       |               YES              |
++=================+===================+================+================================+
 
 Table 1: Attacks possible by compromising certain combinations of role keys
 
@@ -691,28 +727,10 @@ Auditing Snapshots
 ------------------
 
 If a malicious party compromises the community repository, they can sign
-arbitrary files with any of the online keys. However, the community repository
-is still resilient against many types of attacks.
-
-Replace a newly created project’s key.
-This attack will successfully work because the key for this file is online.
-However, the project developers will notice the changed key file whenever they
-try to update their packages because the developer tool is designed to notify
-them about the project key change.
-
-Serve different versions of metadata or freeze a version of a package at a
-specific version. Diplomat handles these attacks by known techniques such as
-implicit key revocation and metadata mismatch detection [81].
-
-Replace an existing package with a malicious version. If developers are signing
-packages, the developer signatures will not match the package and will be
-detected and rejected. However, in the case of the legacy model, the online
-bins-packages role signs for packages. When the packages role delegates to a
-claimed project, the repository tool checks that the hashes of its packages are
-valid. The attack will be detected at this point.  Add a project to the
-new-projects role. This is equivalent to registering a new project through the
-normal interface. Since registering project names is open to any developer,
-this is not an attack.
+arbitrary files with any of the online keys.  The roles with offline keys
+(i.e., *root* and *targets*) are still protected.  To safely recover from a
+repository compromise, snapshots should be audited to ensure files are only
+restored to trusted versions.
 
 In order to be able to safely restore from static snapshots later in the event
 of a compromise, PyPI SHOULD maintain a small number of its own mirrors to copy
@@ -720,6 +738,19 @@ PyPI snapshots according to some schedule.  The mirroring protocol can be used
 immediately for this purpose.  The mirrors must be secured and isolated such
 that they are responsible only for mirroring PyPI.  The mirrors can be checked
 against one another to detect accidental or malicious failures.
+
+Another approach is to generate the hash of snapshot.json periodically and
+tweet it.  Perhaps a user comes forward with the actual metadata and the
+repository maintainers can verify the metadata's hash.  PyPI may also
+periodically archive their own versions of *snapshot*.
+
+For the second approach, the administrator SHOULD take the cryptographic hash
+of every package on the repository and store this data on an offline device. If
+any package hash has changed, this indicates an attack.
+
+For attacks that serve different versions of metadata, or freeze a version of a
+package at a specific version, can be handled by TUF with techniques like
+implicit key revocation and metadata mismatch detection [81].
 
 
 Appendix A: Extension 
