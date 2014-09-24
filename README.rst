@@ -726,11 +726,10 @@ hash information.
 Auditing Snapshots
 ------------------
 
-If a malicious party compromises the community repository, they can sign
-arbitrary files with any of the online keys.  The roles with offline keys
-(i.e., *root* and *targets*) are still protected.  To safely recover from a
-repository compromise, snapshots should be audited to ensure files are only
-restored to trusted versions.
+If a malicious party compromises PyPI, they can sign arbitrary files with any
+of the online keys.  The roles with offline keys (i.e., *root* and *targets*)
+are still protected.  To safely recover from a repository compromise, snapshots
+should be audited to ensure files are only restored to trusted versions.
 
 In order to be able to safely restore from static snapshots later in the event
 of a compromise, PyPI SHOULD maintain a small number of its own mirrors to copy
