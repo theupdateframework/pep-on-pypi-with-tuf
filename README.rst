@@ -598,12 +598,14 @@ threshold number of keys belonging to the TUF roles on PyPI.  Except for the
 may be found by taking the union of both rows.
 
 
+
+
 +-----------------+-------------------+----------------+--------------------------------+
 | Role Compromise | Malicious Updates | Freeze Attack  |  Metadata Inconsistency Attack |
 +=================+===================+================+================================+
 |    timetamp     |       NO          |       YES      |       NO                       |
-|                 | snapshot and      | limited by     | snapshot need to cooperate     |
-|                 | targets or any    | ealiest root,  |                                |
+|                 | snapshot and      | limited by     | snapshot needs to cooperate    |
+|                 | targets or any    | earliest root, |                                |
 |                 | of the bins need  | targets, or    |                                |
 |                 | to cooperate      | bin expiry     |                                |
 |                 |                   | time           |                                |
@@ -636,7 +638,7 @@ may be found by taking the union of both rows.
 |     root        |       YES         |       YES      |       YES                      |
 +-----------------+-------------------+----------------+--------------------------------+
 
-Table 1: Attacks possible by compromising certain combinations of role keys
+Table 1: Attacks possible by compromising certain combinations of role keys.
 
 
 In September 2013, we showed how the latest version of pip (at the time) was
@@ -654,7 +656,7 @@ any attack other than a freeze attack, one must also compromise the *snapshot*
 key.
 
 Finally, a compromise of the PyPI infrastructure MAY introduce malicious
-updates to *bins* projects because the keys for those roles are online.
+updates to *bins* projects because the keys for these roles are online.
 
 
 In the Event of a Key Compromise
@@ -734,9 +736,9 @@ the metadata that is signed by online keys.  Any role information created since
 the last period should be discarded. As a result, developers of new projects
 will need to re-register their projects.
 
-3. If the packages themselves may have been tampered with. For packages that
-existed at the time of the last period, they can be validated using the stored
-hash information.
+3. If the packages themselves may have been tampered with, they can be
+validated using the stored hash information for packages that existed at the
+time of the last period.
 
 In order to safely restore snapshots in the event of a compromise, PyPI SHOULD
 maintain a small number of its own mirrors to copy PyPI snapshots according to
@@ -745,14 +747,14 @@ purpose.  The mirrors must be secured and isolated such that they are
 responsible only for mirroring PyPI.  The mirrors can be checked against one
 another to detect accidental or malicious failures.
 
-Another approach is to generate the hash of *snapshot* periodically and tweet
-it.  Perhaps a user comes forward with the actual metadata and the repository
-maintainers can verify the metadata's hash.  PyPI may also periodically archive
-their own versions of *snapshot*.
-
-In the second approach, the administrator SHOULD take the cryptographic hash
-of every package on the repository and store this data on an offline device. If
-any package hash has changed, this indicates an attack.
+Another approach is to generate the cryptographic hash of *snapshot*
+periodically and tweet it.  Perhaps a user comes forward with the actual
+metadata and the repository maintainers can verify the metadata's cryptographic
+hash.  Alternatively, PyPI may also periodically archive its own versions of
+*snapshot* rather than rely on externally provided metadata.  In this case,
+PyPI SHOULD take the cryptographic hash of every package on the repository and
+store this data on an offline device. If any package hash has changed, this
+indicates an attack.
 
 As for attacks that serve different versions of metadata, or freeze a version
 of a package at a specific version, they can be handled by TUF with techniques
@@ -765,8 +767,13 @@ Appendix A: Extension
 Maximum Security Model
 ======================
 
-The maximum security model uses offline keys for metadata belonging to
-every PyPI project.
+The maximum security model relies on developers signing their own projects and
+uploading signed metadata to PyPI.  If the PyPI infrastructure were to be
+compromised, attackers would be unable to serve malicious versions of claimed
+projects without access to the project's developer key.  Figure 2 depicts the
+changes made to figure 1, namely that developer roles are now supported, and
+that three new targets roles exist: *claimed*, *recently-claimed*, and
+*unclaimed*.
 
 Cover claimed roles:
 
