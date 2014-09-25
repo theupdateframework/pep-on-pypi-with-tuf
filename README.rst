@@ -261,9 +261,9 @@ exception.
 Figure 1 provides an overview of the roles available on PyPI, which includes
 the top-level roles and the roles delegated by *targets*.  The figure also
 indicates the types of keys used to sign each role and which roles are trusted
-to sign for the targets, or files, available on PyPI.  The next sections cover
-the details of signing repository files and the types of keys used for each
-role.
+to sign for the targets, or files, available on PyPI.  The next two sections
+cover the details of signing repository files and the types of keys used for
+each role.
 
 .. image:: figure1.png
 
@@ -773,7 +773,8 @@ compromised, attackers would be unable to serve malicious versions of claimed
 projects without access to the project's developer key.  Figure 2 depicts the
 changes made to figure 1, namely that developer roles are now supported, and
 that three new targets roles exist: *claimed*, *recently-claimed*, and
-*unclaimed*.
+*unclaimed*.  The *bins* role has been renamed *unclaimed* and can contain
+any projects that have not been added to *claimed*.
 
 Cover claimed roles:
 
@@ -782,6 +783,8 @@ Considerations: build farm.
 .. image:: figure2.png
 
 Figure 2: An overview of the metadata layout in the Maximum Security Model.
+The Maximum Security Model support continuous delivery and survivable key
+compromise.
 
 
 End-to-End Signing
