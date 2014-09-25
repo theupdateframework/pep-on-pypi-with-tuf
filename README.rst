@@ -752,8 +752,11 @@ package at a specific version, can be handled by TUF with techniques like
 implicit key revocation and metadata mismatch detection [81].
 
 
-Appendix A: Extension 
-=====================
+Appendix A: End-to-End Signing Extension 
+========================================
+
+.. image:: figure2.png
+
 1. Cover claimed roles.
 2. End-to-End verification of packages.
 
