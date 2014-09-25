@@ -71,8 +71,8 @@ Even though official mirrors are being deprecated on PyPI [12]_, there remain a
 wide variety of other attack vectors on package managers [13]_.  Among other
 things, these attacks can crash client systems, cause obsolete packages to be
 installed, or even allow an attacker to execute arbitrary code.  In September
-2013, we showed how the latest version of pip then was susceptible to these
-attacks and how TUF could protect users against them [14]_.
+2013, we showed how the latest version of pip (at the time) was susceptible to
+these attacks and how TUF could protect users against them [14]_.
 
 Finally, PyPI allows for packages to be signed with GPG keys [15]_, although no
 package manager is known to verify those signatures, thus negating much of the
@@ -95,10 +95,9 @@ interpreted as described in RFC 2119__.
 
 __ http://www.ietf.org/rfc/rfc2119.txt
 
-In order to keep this PEP focused solely on the application of TUF on PyPI, the
-reader is assumed to already be familiar with the design principles of
-TUF [2]_.  It is also strongly RECOMMENDED that the reader be familiar with the
-TUF specification [16]_.
+In order to keep this PEP focused mostly on the application of TUF on PyPI, the
+reader is encouraged to read about the design principles of TUF [2]_.  It is
+also RECOMMENDED that the reader be familiar with the TUF specification [16]_.
 
 * Projects: Projects are software components that are made available for
   integration.  Projects include Python libraries, frameworks, scripts, plugins,
@@ -108,10 +107,10 @@ TUF specification [16]_.
 
 * Releases: Releases are uniquely identified snapshots of a project [17]_.
 
-* Distributions: Distributions are the packaged files which are used to publish
+* Distributions: Distributions are the packaged files that are used to publish
   and distribute a release [17]_.
 
-* Simple index: The HTML page which contains internal links to the
+* Simple index: The HTML page that contains internal links to the
   distributions of a project [17]_.
 
 * Consistent snapshot: A set of TUF metadata and PyPI targets that capture the
@@ -138,8 +137,8 @@ TUF specification [16]_.
   prevents automated signing with the key.  An attacker who compromises PyPI
   infrastructure will not be able to immediately read these keys.
 
-* Threshold signature scheme: A role could increase its resilience to key
-  compromises by requiring that at least t out of n keys are REQUIRED to sign
+* Threshold signature scheme: A role can increase its resilience to key
+  compromises by specifying that at least t out of n keys are REQUIRED to sign
   its metadata.  A compromise of t-1 keys is insufficient to compromise the
   role itself.  Saying that a role requires (t, n) keys denotes the threshold
   signature property.
@@ -157,8 +156,8 @@ At the highest level, TUF simply provides applications with a secure method of
 obtaining files and knowing when new versions of files are available. On the
 surface, this all sounds simple. Securely obtaining updates just means:
 
-    * Knowing when an update exists.
-    * Downloading the updated file.
+  * Knowing when an update exists.
+  * Downloading the updated file.
 
 The problem is that this is only simple when there are no malicious parties
 involved. If an attacker is trying to interfere with these seemingly simple
@@ -213,25 +212,27 @@ Repository Attacks Prevented by TUF
   sign files).
 
 
-What Changes are Required on PyPI?
-----------------------------------
+What Repository Changes are Required on PyPI?
+---------------------------------------------
 
-In order for package updaters like pip to securely download and verify packages
-with TUF, a few extra files are required to exist on PyPI. These extra
-repository files are called TUF metadata. TUF metadata contains information
-like which keys are trusted, the cryptographic hashes of files, signatures on
-the metadata, metadata version numbers, and the date after which the metadata
+In order for package managers like pip to download and verify packages with
+TUF, a few extra files are required to exist on PyPI. These extra repository
+files are called TUF metadata. TUF metadata contains information like which
+keys are trusted, the cryptographic hashes of files, signatures on the
+metadata, metadata version numbers, and the date after which the metadata
 should be considered expired.
 
-When a package updater wants to check for updates, it asks TUF to do the work.
-That is, a package updater never has to deal with this additional metadata or
+When a package manager wants to check for updates, it asks TUF to do the work.
+That is, a package manager never has to deal with this additional metadata or
 understand what's going on underneath. If TUF reports back that there are
-updates available, a package updater can then ask TUF to download these files
+updates available, a package manager can then ask TUF to download these files
 from PyPI. TUF downloads them and checks them against the TUF metadata that it
 also downloads from the repository. If the downloaded target files are
-trustworthy, TUF then hands them over to the package updater.  `Metadata`__
-provides information about each of the required metadata and their expected
-content.  The next section covers the different metadata recommended for PyPI.
+trustworthy, TUF then hands them over to the package manager.
+
+`Metadata`__ provides information about each of the required metadata files and
+their expected content.  The next section covers the different kinds of
+metadata recommended for PyPI.
 
 __ https://github.com/theupdateframework/tuf/blob/develop/METADATA.md
 
@@ -241,20 +242,28 @@ PyPI and TUF Metadata
 
 TUF metadata provides information that clients can use to make update
 decisions.  For example, a targets metadata file can list the available
-packages on PyPI and include information like signatures, hashes, and file
-size.  Different metadata files provide different information.  The various
+packages on PyPI and include their signatures, cryptographic hashes, and file
+sizes.  Different metadata files provide different information.  The various
 metadata files are signed by different roles as are indicated by the *root*
 role.  The concept of roles allows TUF to delegate responsiblities to multiple
 roles and minimize the impact of a compromised role.
 
-TUF requires four top-level roles: *root*, *timestamp*, *snapshot* and
-*targets*.  The *root* role specifies the keys of the top-level roles
-(including itself).  The *timestamp* role references the latest *snapshot*.
-The *snapshot* role indicates the latest version of all the TUF metadata files
-(other than *timestamp*).  The *targets* role lists the available target files
-(in our case, it will be all files on PyPI under the /simple and /packages
+TUF requires four top-level roles.  They are *root*, *timestamp*, *snapshot*
+and *targets*.  The *root* role specifies the keys of the top-level roles
+(including itself).  The *timestamp* role references the latest *snapshot* and
+can signify when a new snapshot of the repository is available.  The *snapshot*
+role indicates the latest version of all the TUF metadata files (other than
+*timestamp*).  The *targets* role lists the available target files (in our
+case, it will be all files on PyPI under the /simple and /packages
 directories).  Each top-level role will serve its responsibilities without
 exception.
+
+Figure 1 provides an overview of the roles available on PyPI, which includes
+the top-level roles and the roles delegated by *targets*.  The figure also
+indicates the types of keys used to sign each role and which roles are trusted
+to sign for the targets, or files, available on PyPI.  The next sections cover
+the details of signing repository files and the types of keys used for each
+role.
 
 .. image:: figure1.png
 
@@ -281,81 +290,82 @@ being updated frequently in order to drive continuous delivery of projects.
 
 Every year, PyPI administrators are going to sign for *root* role keys.  After
 that, automation will continuously sign for a timestamped, snapshot of all
-projects.
+projects.  There is a `repository management`__ tool available that can handle
+signing metadata files, generating cryptographic keys, and managing a TUF
+repository.
+
+__ https://github.com/theupdateframework/tuf/tree/develop/tuf#repository-management
 
 
 Minimum Security Model
 ----------------------
 
-The minimum security model (this PEP) requires no action from developers and
+The minimum security model (this PEP) requires no action from a developer and
 protects against malicious CDNs [19]_ and public mirrors.  To support
-continuous delivery of uploaded packages, PyPI signs for projects with a online
-key.  This level of security prevents projects from being accidentally or
-deliberately tampered by a mirror or a CDN because the mirror or CDN will not
-have any of the keys required to sign for projects.  It also does not protect
-projects from attackers who have compromised PyPI, since attackers can
+continuous delivery of uploaded packages, PyPI signs for projects with an
+online key.  This level of security prevents projects from being accidentally
+or deliberately tampered by a mirror or a CDN because the mirror or CDN will
+not have any of the keys required to sign for projects.  It also does not
+protect projects from attackers who have compromised PyPI, since attackers can
 manipulate TUF metadata using the keys stored online.   An extension to this
 PEP, discussed in Appendix A, offers the maximum security model and allows
-developers to sign for their projects.  Developer keys are not stored online:
+a developer to sign for his/her project.  Developer keys are not stored online:
 therefore, projects are safe from PyPI compromises.
 
 This PEP proposes that the *bins* role (and its delegated roles) sign for all
 PyPI projects with an online key.  The *targets* role, which only signs with an
 offline key, MUST delegate all PyPI projects to the *bins* role.  This means
-that when pip (with TUF) downloads a distribution from a project on PyPI, it
-will consult the *bins* role about the TUF metadata for the project.  If the
-*bins* role has , then the project is considered to be
-non-existent on PyPI.
+that when package manager such as pip (with TUF) downloads a distribution from
+a project on PyPI, it will consult the *bins* role about the TUF metadata for
+the project.  If none of bin roles delegated by *bins* specify the project's
+distribution, then the project is considered to be non-existent on PyPI.
 
 
 Metadata Expiry Times
 ---------------------
 
 The *root* and *targets* role metadata SHOULD expire in a year, because these
-metadata files are expected to change very rarely.
+two metadata files are expected to change very rarely.
 
-The *timestamp*, *snapshot*, and *bins* role metadata SHOULD expire in a
-day because a CDN or mirror SHOULD synchronize itself with PyPI every day.
-Furthermore, this generous time frame also takes into account client clocks
-that are highly skewed or adrift.
+The *timestamp*, *snapshot*, and *bins* metadata SHOULD expire in a day because
+a CDN or mirror SHOULD synchronize itself with PyPI every day.  Furthermore,
+this generous time frame also takes into account client clocks that are highly
+skewed or adrift.
 
 
 Metadata Scalability
 --------------------
 
 Due to the growing number of projects and distributions, TUF metadata will also
-grow correspondingly.
-
-For example, consider the *bins* role.  In August 2013, we found that the size
-of the *bins* role metadata was about 42MB if the *bins* role itself signed for
-about 220K PyPI targets (which are simple indices and distributions).  We will
-not delve into details in this PEP, but TUF features a so-called "`lazy bin
-walk`__" scheme that splits a large targets or delegated targets metadata file
-into many small ones.  This allows a TUF client updater to intelligently
-download only a small number of TUF metadata files in order to update any
-project signed for by the *bins* role.  For example, applying this scheme to
-the previous repository resulted in pip downloading between 1.3KB and 111KB to
-install or upgrade a PyPI project via TUF.
+grow correspondingly.  For example, consider the *bins* role.  In August 2013,
+it was found that the size of the *bins* metadata was about 42MB if the *bins*
+role itself signed for about 220K PyPI targets (which are simple indices and
+distributions).  We will not delve into details in this PEP, but TUF features a
+so-called "`lazy bin walk`__" scheme that splits a large targets or delegated
+targets metadata file into many small ones.  This allows a TUF client updater
+to intelligently download only a small number of TUF metadata files in order to
+update any project signed for by the *bins* role.  For example, applying this
+scheme to the previous repository resulted in pip downloading between 1.3KB and
+111KB to install or upgrade a PyPI project via TUF.
 
 __ https://github.com/theupdateframework/tuf/issues/39
 
 From our findings as of the time of writing, PyPI SHOULD split all targets in
-the *bins* role by delegating it to 1024 delegated targets role, each of which
+the *bins* role by delegating it to 1024 delegated targets roles, each of which
 would sign for PyPI targets whose hashes fall into that "bin" or delegated
 targets role (see Figure 1).  We found that 1024 bins would result in the
-*bins* role metadata and each of its bins delegated targets role metadata to be
-about the same size (40-50KB) for about 220K PyPI targets (simple indices and
+*bins* metadata and each of its bins delegated targets metadata to be about the
+same size (40-50KB) for about 220K PyPI targets (simple indices and
 distributions).
 
 It is possible to make TUF metadata more compact by representing it in a binary
 format as opposed to the JSON text format.  Nevertheless, we believe that a
-sufficiently large number of project and distributions will induce scalability
+sufficiently large number of projects and distributions will induce scalability
 challenges at some point, and therefore the *bins* role will then still need
 delegations in order to address the problem.  Furthermore, the JSON format is
-an open and well-known standard for data interchange.
-
-Due to the large number of delegated target metadata files, compressed versions
-of *snapshot* metadata SHOULD also be made available.
+an open and well-known standard for data interchange.  Due to the large number
+of delegated target metadata files, compressed versions of *snapshot* metadata
+SHOULD also be made available.
 
 
 PyPI and Key Requirements
@@ -491,12 +501,12 @@ from PyPI.
 Producing Consistent Snapshots
 ------------------------------
 
-Given a project, PyPI is responsible for updating the *Bins* metadata (roles
+Given a project, PyPI is responsible for updating the *bins* metadata (roles
 delegated by the *bins* role and signed with an online key).  Every project
 MUST upload its release in a single transaction.  The uploaded set of files is
 called the "project transaction".  How PyPI MAY validate the files in a project
-transaction will be discussed soon.  For now, focused is placed on how PyPI
-will respond to a project transaction.
+transaction will be discussed soon.  For now, focuse is placed on how PyPI will
+respond to a project transaction.
 
 Every metadata and target file MUST include in its filename the `hex digest`__
 of its `SHA-256`__ hash.  For this PEP, it is RECOMMENDED that PyPI adopt a
@@ -567,10 +577,10 @@ snapshot.
 
 All clients, such as pip using the TUF protocol, MUST be modified to download
 every metadata and target file (except for *timestamp* metadata) by including,
-in the request for the file, the hash of the file in the filename.  Following
-the filename convention recommended earlier, a request for the file at
-filename.ext will be transformed to the equivalent request for the file at
-digest.filename.ext.
+in the request for the file, the cryptographic hash of the file in the
+filename.  Following the filename convention recommended earlier, a request for
+the file at filename.ext will be transformed to the equivalent request for the
+file at digest.filename.ext.
 
 Finally, PyPI SHOULD use a `transaction log`__ to record project transaction
 processes and queues so that it will be easier to recover from errors after a
@@ -629,8 +639,9 @@ may be found by taking the union of both rows.
 Table 1: Attacks possible by compromising certain combinations of role keys
 
 
-In September 2013, we showed how the latest version of pip then was susceptible
-to these attacks and how TUF could protect users against them [14]_.
+In September 2013, we showed how the latest version of pip (at the time) was
+susceptible to these attacks and how TUF could protect users against them
+[14]_.
 
 Note that compromising *targets* or any delegated targets role (except for
 project targets metadata) does not immediately endow the attacker with the
@@ -664,7 +675,7 @@ been compromised, then PyPI MUST take the following steps:
    new keys (because, as we explained earlier, this increases the security of
    *targets* metadata).
 
-4. All targets of the *bins* roles SHOULD be compared with the last known
+3. All targets of the *bins* roles SHOULD be compared with the last known
    good consistent snapshot where none of the *timestamp*, *snapshot*, or
    *bins* keys
    were known to have been compromised.  Added, updated or deleted targets in
@@ -673,10 +684,10 @@ been compromised, then PyPI MUST take the following steps:
    ensuring the integrity of all *bins* targets, the *bins* metadata
    MUST be regenerated.
 
-5. The *bins* metadata MUST have their version numbers incremented, expiry
+4. The *bins* metadata MUST have their version numbers incremented, expiry
    times suitably extended and signatures renewed.
 
-6. A new timestamped consistent snapshot MUST be issued.
+5. A new timestamped consistent snapshot MUST be issued.
 
 This would preemptively protect all of these roles even though only one of them
 may have been compromised.
@@ -687,7 +698,7 @@ replace all of the *root* keys.
 
 It is also RECOMMENDED that PyPI sufficiently document compromises with
 security bulletins.  These security bulletins will be most informative when
-users of pip with TUF are unable to install or update a project because the
+users of pip-with-TUF are unable to install or update a project because the
 keys for the *timestamp*, *snapshot* or *root* roles are no longer
 valid.  They could then visit the PyPI web site to consult security bulletins
 that would help to explain why they are no longer able to install or update,
@@ -704,11 +715,16 @@ compromise, an end-user may choose to update new *root* metadata with
 __ https://en.wikipedia.org/wiki/Out-of-band#Authentication
 
 
-Recovering from a Repository Compromise
----------------------------------------
+Auditing Snapshots
+------------------
+
+If a malicious party compromises PyPI, they can sign arbitrary files with any
+of the online keys.  The roles with offline keys (i.e., *root* and *targets*)
+are still protected.  To safely recover from a repository compromise, snapshots
+should be audited to ensure files are only restored to trusted versions.
 
 When a repository compromise has been detected, the integrity of three types of
-information must be validated.
+information must be validated:
 
 1. If the online keys of the repository have been compromised, they can be
 revoked by having the *targets* role sign new metadata delegating to a new key.
@@ -722,48 +738,51 @@ will need to re-register their projects.
 existed at the time of the last period, they can be validated using the stored
 hash information.
 
+In order to safely restore snapshots in the event of a compromise, PyPI SHOULD
+maintain a small number of its own mirrors to copy PyPI snapshots according to
+some schedule.  The mirroring protocol can be used immediately for this
+purpose.  The mirrors must be secured and isolated such that they are
+responsible only for mirroring PyPI.  The mirrors can be checked against one
+another to detect accidental or malicious failures.
 
-Auditing Snapshots
-------------------
+Another approach is to generate the hash of *snapshot* periodically and tweet
+it.  Perhaps a user comes forward with the actual metadata and the repository
+maintainers can verify the metadata's hash.  PyPI may also periodically archive
+their own versions of *snapshot*.
 
-If a malicious party compromises PyPI, they can sign arbitrary files with any
-of the online keys.  The roles with offline keys (i.e., *root* and *targets*)
-are still protected.  To safely recover from a repository compromise, snapshots
-should be audited to ensure files are only restored to trusted versions.
-
-In order to be able to safely restore from static snapshots later in the event
-of a compromise, PyPI SHOULD maintain a small number of its own mirrors to copy
-PyPI snapshots according to some schedule.  The mirroring protocol can be used
-immediately for this purpose.  The mirrors must be secured and isolated such
-that they are responsible only for mirroring PyPI.  The mirrors can be checked
-against one another to detect accidental or malicious failures.
-
-Another approach is to generate the hash of snapshot.json periodically and
-tweet it.  Perhaps a user comes forward with the actual metadata and the
-repository maintainers can verify the metadata's hash.  PyPI may also
-periodically archive their own versions of *snapshot*.
-
-For the second approach, the administrator SHOULD take the cryptographic hash
+In the second approach, the administrator SHOULD take the cryptographic hash
 of every package on the repository and store this data on an offline device. If
 any package hash has changed, this indicates an attack.
 
-For attacks that serve different versions of metadata, or freeze a version of a
-package at a specific version, can be handled by TUF with techniques like
-implicit key revocation and metadata mismatch detection [81].
+As for attacks that serve different versions of metadata, or freeze a version
+of a package at a specific version, they can be handled by TUF with techniques
+like implicit key revocation and metadata mismatch detection [81].
 
 
-Appendix A: Extension for End-to-End Signing and Maximum Security Model
-=======================================================================
+Appendix A: Extension
+=====================
+
+Maximum Security Model
+======================
+
+The maximum security model uses offline keys for metadata belonging to
+every PyPI project.
+
+Cover claimed roles:
+
+Considerations: build farm.
 
 .. image:: figure2.png
 
-1. Cover claimed roles.
-2. End-to-End verification of packages.
+Figure 2: An overview of the metadata layout in the Maximum Security Model.
 
 
-Potential issues:
-3. Management of developer keys.
-4. Build farm.
+End-to-End Signing
+==================
+
+Cover: End-to-End verification of packages.
+
+Considerations: management of developer keys.
 
 
 Appendix: Rejected Proposals
