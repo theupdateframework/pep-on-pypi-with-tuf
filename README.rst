@@ -764,8 +764,41 @@ like implicit key revocation and metadata mismatch detection [81].
 Appendix A: Extension
 =====================
 
+The maximum security model and end-to-end signing have been intentionally
+excluded from this PEP.  Although both improve PyPI's ability to survive a
+repository compromise and allow developers to sign their distributions, they
+have been postponed as a potential future extension to PEP 458.  PEP XXX, which
+discusses the extension in detail, is available for review to those developers
+interested in the end-to-end signing option.  The Maximum Security Model and
+End-to-End Signing are briefly covered in subsections below.
+
+There are several reasons for not initially supporting the features discussed
+in this section:
+
+1. A build farm (distribution wheels on supported platforms are generated on
+PyPI infrastructure for each project) may possibly complicate matters.  PyPI
+wants to support a build farm in the future.  Unfortunately, if wheels are
+auto-generated externally, developer signatures for these wheels are unlikely.
+However, there might still be a benefit to generating wheels from source
+distributions that *are* signed by developers (provided reproducible wheels are
+possible).  Another possibility is to optionally delegate trust of these wheels
+to an online role.
+
+2. An easy-to-use key management solution is needed for developers.
+`MiniLock`__ is one likely candidate for management and generation of keys.
+Although developer signatures can be left as an option, this approach may be
+insufficient due to great number of unsigned dependencies that can occur for
+a signed distribution requested by a client.
+
+__ https://minilock.io/
+
+3. A two-phase approach, where the Minimum Security Model is first implemented
+followed by the maximum security model, can simplify matters and give PyPI
+administrators time to review the feasiblity of End-to-End Signing.
+
+
 Maximum Security Model
-======================
+----------------------
 
 The maximum security model relies on developers signing their own projects and
 uploading signed metadata to PyPI.  If the PyPI infrastructure were to be
@@ -778,8 +811,6 @@ any projects that have not been added to *claimed*.
 
 Cover claimed roles:
 
-Considerations: build farm.
-
 .. image:: figure2.png
 
 Figure 2: An overview of the metadata layout in the Maximum Security Model.
@@ -788,11 +819,9 @@ compromise.
 
 
 End-to-End Signing
-==================
+------------------
 
 Cover: End-to-End verification of packages.
-
-Considerations: management of developer keys.
 
 
 Appendix: Rejected Proposals
