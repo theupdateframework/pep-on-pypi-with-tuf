@@ -825,9 +825,17 @@ compromise.
 End-to-End Signing
 ------------------
 
+End-to-End signing allows both PyPI and developers to sign for the metadata
+downloaded by clients.  PyPI is trusted to make uploaded projects available to
+clients, and developers can sign the distributions they upload.
 
-
-Cover: End-to-End verification of packages.
+PEP XXX will discuss the tools available to developers who sign the
+distributions they upload to PyPI.  In summary, developers will generate
+cryptographic keys and sign metadata in some automated fashion, where the
+metadata includes the information required to verify the authenticity of the
+distribution.  The metadata is then uploaded to PyPI where it will be available
+for download by package managers such as pip (i.e., package managers that
+support TUF metadata).
 
 
 Appendix: Rejected Proposals
