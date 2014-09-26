@@ -769,8 +769,8 @@ excluded from this PEP.  Although both improve PyPI's ability to survive a
 repository compromise and allow developers to sign their distributions, they
 have been postponed as a potential future extension to PEP 458.  PEP XXX, which
 discusses the extension in detail, is available for review to those developers
-interested in the end-to-end signing option.  The Maximum Security Model and
-End-to-End Signing are briefly covered in subsections below.
+interested in the end-to-end signing option.  The maximum security model and
+end-to-end signing are briefly covered in the subsections that follow.
 
 There are several reasons for not initially supporting the features discussed
 in this section:
@@ -785,16 +785,18 @@ possible).  Another possibility is to optionally delegate trust of these wheels
 to an online role.
 
 2. An easy-to-use key management solution is needed for developers.
-`MiniLock`__ is one likely candidate for management and generation of keys.
+`miniLock`__ is one likely candidate for management and generation of keys.
 Although developer signatures can be left as an option, this approach may be
-insufficient due to great number of unsigned dependencies that can occur for
-a signed distribution requested by a client.
+insufficient due to the great number of unsigned dependencies that can occur
+for a signed distribution requested by a client.  Requiring developers to
+manually sign distributions and manage keys is expected to render key signing
+an unused feature.
 
 __ https://minilock.io/
 
-3. A two-phase approach, where the Minimum Security Model is first implemented
+3. A two-phase approach, where the minimum security model is first implemented
 followed by the maximum security model, can simplify matters and give PyPI
-administrators time to review the feasiblity of End-to-End Signing.
+administrators time to review the feasiblity of end-to-end signing.   
 
 
 Maximum Security Model
