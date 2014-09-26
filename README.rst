@@ -802,26 +802,30 @@ administrators time to review the feasiblity of end-to-end signing.
 Maximum Security Model
 ----------------------
 
-The maximum security model relies on developers signing their own projects and
+The maximum security model relies on developers signing their projects and
 uploading signed metadata to PyPI.  If the PyPI infrastructure were to be
 compromised, attackers would be unable to serve malicious versions of claimed
 projects without access to the project's developer key.  Figure 2 depicts the
 changes made to figure 1, namely that developer roles are now supported, and
 that three new targets roles exist: *claimed*, *recently-claimed*, and
-*unclaimed*.  The *bins* role has been renamed *unclaimed* and can contain
-any projects that have not been added to *claimed*.
-
-Cover claimed roles:
+*unclaimed*.  The *bins* role has been renamed *unclaimed* and can contain any
+projects that have not been added to *claimed*.  The strength of this model over
+the minimum security model is in the offline keys provided by developers.  Although
+the minimum securuity model supports continuous delivery, all of the projects
+are signed by an online key.  An attacker can corrupt package in the first,
+but not in the second without also compromising a developer's key.
 
 .. image:: figure2.png
 
-Figure 2: An overview of the metadata layout in the Maximum Security Model.
-The Maximum Security Model support continuous delivery and survivable key
+Figure 2: An overview of the metadata layout in the maximum security model.
+The maximum Security model supports continuous delivery and survivable key
 compromise.
 
 
 End-to-End Signing
 ------------------
+
+
 
 Cover: End-to-End verification of packages.
 
