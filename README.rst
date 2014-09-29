@@ -154,52 +154,7 @@ involved. If an attacker is trying to interfere with these seemingly simple
 steps, there is plenty they can do.
 
 
-Repository Attacks Prevented by TUF
------------------------------------
-
-* **Arbitrary software installation**: An attacker installs anything they want
-  on the client system. That is, an attacker can provide arbitrary files in
-  response to download requests and the files will not be detected as
-  illegitimate.
-
-* **Rollback attacks**: An attacker presents a software update system with
-  older files than those the client has already seen, causing the client to use
-  files older than those the client knows about.
-
-* **Indefinite freeze attacks**: An attacker continues to present a software
-  update system with the same files the client has already seen. The result is
-  that the client does not know that new files are available.
-
-* **Endless data attacks**: An attacker responds to a file download request
-  with an endless stream of data, causing harm to clients (e.g., a disk
-  partition filling up or memory exhaustion).
-
-* **Slow retrieval attacks**: An attacker responds to clients with a very slow
-  stream of data that essentially results in the client never continuing the
-  update process.
-
-* **Extraneous dependencies attacks**: An attacker indicates to clients that in
-  order to install the software they wanted, they also need to install
-  unrelated software.  This unrelated software can be from a trusted source but
-  may have known vulnerabilities that are exploitable by the attacker.
-
-* **Mix-and-match attacks**: An attacker presents clients with a view of a
-  repository that includes files that never existed together on the repository
-  at the same time. This can result in, for example, outdated versions of
-  dependencies being installed.
-
-* **Wrong software installation**: An attacker provides a client with a trusted
-  file that is not the one the client wanted.
-
-* **Malicious mirrors preventing updates**: An attacker in control of one
-  repository mirror is able to prevent users from obtaining updates from other,
-  good mirrors.
-
-* **Vulnerability to key compromises**: An attacker who is able to compromise a
-  single key or less than a given threshold of keys can compromise clients.
-  This includes relying on a single online key (such as only being protected by
-  SSL) or a single offline key (such as most software update systems use to
-  sign files).
+2-3 examples of repository attacks... 
 
 
 What Repository Changes are Required on PyPI?
@@ -300,7 +255,7 @@ or deliberately tampered by a mirror or a CDN because the mirror or CDN will
 not have any of the keys required to sign for projects.  It also does not
 protect projects from attackers who have compromised PyPI, since attackers can
 manipulate TUF metadata using the keys stored online.   An extension to this
-PEP, discussed in Appendix A, offers the maximum security model and allows
+PEP, discussed in Appendix B, offers the maximum security model and allows
 a developer to sign for his/her project.  Developer keys are not stored online:
 therefore, projects are safe from PyPI compromises.
 
@@ -502,9 +457,8 @@ respond to a project transaction.
 
 Every metadata and target file MUST include in its filename the `hex digest`__
 of its `SHA-256`__ hash.  For this PEP, it is RECOMMENDED that PyPI adopt a
-simple convention of the form: digest.filename.ext, where filename is the
-original filename without a copy of the hash, digest is the hex digest of the
-hash, and ext is the filename extension.
+simple convention of the form: digest.filename, where filename is the original
+filename without a copy of the hash, and digest is the hex digest of the hash.
 
 __ http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest
 __ https://en.wikipedia.org/wiki/SHA-2
@@ -753,8 +707,56 @@ of a package at a specific version, they can be handled by TUF with techniques
 like implicit key revocation and metadata mismatch detection [81].
 
 
-Appendix A: Extension
-=====================
+Appendix A: List of Repository Attacks Prevented by TUF
+=======================================================
+
+* **Arbitrary software installation**: An attacker installs anything they want
+  on the client system. That is, an attacker can provide arbitrary files in
+  response to download requests and the files will not be detected as
+  illegitimate.
+
+* **Rollback attacks**: An attacker presents a software update system with
+  older files than those the client has already seen, causing the client to use
+  files older than those the client knows about.
+
+* **Indefinite freeze attacks**: An attacker continues to present a software
+  update system with the same files the client has already seen. The result is
+  that the client does not know that new files are available.
+
+* **Endless data attacks**: An attacker responds to a file download request
+  with an endless stream of data, causing harm to clients (e.g., a disk
+  partition filling up or memory exhaustion).
+
+* **Slow retrieval attacks**: An attacker responds to clients with a very slow
+  stream of data that essentially results in the client never continuing the
+  update process.
+
+* **Extraneous dependencies attacks**: An attacker indicates to clients that in
+  order to install the software they wanted, they also need to install
+  unrelated software.  This unrelated software can be from a trusted source but
+  may have known vulnerabilities that are exploitable by the attacker.
+
+* **Mix-and-match attacks**: An attacker presents clients with a view of a
+  repository that includes files that never existed together on the repository
+  at the same time. This can result in, for example, outdated versions of
+  dependencies being installed.
+
+* **Wrong software installation**: An attacker provides a client with a trusted
+  file that is not the one the client wanted.
+
+* **Malicious mirrors preventing updates**: An attacker in control of one
+  repository mirror is able to prevent users from obtaining updates from other,
+  good mirrors.
+
+* **Vulnerability to key compromises**: An attacker who is able to compromise a
+  single key or less than a given threshold of keys can compromise clients.
+  This includes relying on a single online key (such as only being protected by
+  SSL) or a single offline key (such as most software update systems use to
+  sign files).
+
+
+Appendix B: Extension to Minimum Security Model
+===============================================
 
 The maximum security model and end-to-end signing have been intentionally
 excluded from this PEP.  Although both improve PyPI's ability to survive a
