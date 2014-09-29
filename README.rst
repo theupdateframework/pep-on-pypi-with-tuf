@@ -33,7 +33,8 @@ PyPI itself, the damage is controlled in scope and limited in duration.
 Specifically, this PEP will describe how PyPI processes should be adapted to
 incorporate TUF metadata.  It will not prescribe how package managers such as
 pip should be adapted to install or update with TUF metadata projects from
-PyPI.
+PyPI.  Package managers interested in adopting TUF on the client side may
+consult TUF's `library documentation`__ that exists for this purpose.
 
 
 Rationale
@@ -74,13 +75,6 @@ installed, or even allow an attacker to execute arbitrary code.  In September
 2013, we showed how the latest version of pip (at the time) was susceptible to
 these attacks and how TUF could protect users against them [14]_.
 
-Finally, PyPI allows for packages to be signed with GPG keys [15]_, although no
-package manager is known to verify those signatures, thus negating much of the
-benefits of having those signatures at all.  Validating integrity through
-cryptography is important, but issues such as immediate and secure key
-revocation or specifying a required threshold number of signatures still
-remain.  Furthermore, GPG by itself does not immediately address the attacks
-mentioned above.
 
 In order to protect PyPI against infrastructure compromises, we propose
 integrating PyPI with The Update Framework [2]_ (TUF).
