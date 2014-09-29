@@ -75,7 +75,6 @@ installed, or even allow an attacker to execute arbitrary code.  In September
 2013, we showed how the latest version of pip (at the time) was susceptible to
 these attacks and how TUF could protect users against them [14]_.
 
-
 In order to protect PyPI against infrastructure compromises, we propose
 integrating PyPI with The Update Framework [2]_ (TUF).
 
@@ -116,9 +115,6 @@ also RECOMMENDED that the reader be familiar with the TUF specification [16]_.
   and the TUF specification [16]_, we rename the *release* role as the
   *snapshot* role.
 
-* Continuous delivery: A set of processes with which PyPI produces consistent
-  snapshots that can safely coexist and deleted independently [18]_.
-
 * Developer: Either the owner or maintainer of a project who is allowed to
   update the TUF metadata as well as distribution metadata and data for the
   project.
@@ -151,7 +147,7 @@ obtaining files and knowing when new versions of files are available. On the
 surface, this all sounds simple. Securely obtaining updates just means:
 
   * Knowing when an update exists.
-  * Downloading the updated file.
+  * Downloading the latest version of an updated file.
 
 The problem is that this is only simple when there are no malicious parties
 involved. If an attacker is trying to interfere with these seemingly simple
@@ -239,7 +235,7 @@ decisions.  For example, a targets metadata file can list the available
 packages on PyPI and include their signatures, cryptographic hashes, and file
 sizes.  Different metadata files provide different information.  The various
 metadata files are signed by different roles as are indicated by the *root*
-role.  The concept of roles allows TUF to delegate responsiblities to multiple
+role.  The concept of roles allows TUF to delegate responsibilities to multiple
 roles and minimize the impact of a compromised role.
 
 TUF requires four top-level roles.  They are *root*, *timestamp*, *snapshot*
@@ -281,6 +277,8 @@ metadata are much less likely to be updated as often as delegated targets
 metadata.  Therefore, *timestamp* and *snapshot* metadata will most likely be
 updated frequently (possibly every minute) due to delegated targets metadata
 being updated frequently in order to drive continuous delivery of projects.
+Continuous delivery is a set of processes with which PyPI produces consistent
+snapshots that can safely coexist and be deleted independently [18]_.
 
 Every year, PyPI administrators are going to sign for *root* role keys.  After
 that, automation will continuously sign for a timestamped, snapshot of all
@@ -499,7 +497,7 @@ Given a project, PyPI is responsible for updating the *bins* metadata (roles
 delegated by the *bins* role and signed with an online key).  Every project
 MUST upload its release in a single transaction.  The uploaded set of files is
 called the "project transaction".  How PyPI MAY validate the files in a project
-transaction will be discussed soon.  For now, focuse is placed on how PyPI will
+transaction will be discussed soon.  For now, focus is placed on how PyPI will
 respond to a project transaction.
 
 Every metadata and target file MUST include in its filename the `hex digest`__
