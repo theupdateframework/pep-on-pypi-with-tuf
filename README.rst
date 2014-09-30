@@ -36,6 +36,7 @@ pip should be adapted to install or update with TUF metadata projects from
 PyPI.  Package managers interested in adopting TUF on the client side may
 consult TUF's `library documentation`__ that exists for this purpose.
 
+__ https://github.com/theupdateframework/tuf/tree/develop/tuf/client
 
 Rationale
 =========
@@ -93,8 +94,8 @@ reader is encouraged to read about the design principles of TUF [2]_.  It is
 also RECOMMENDED that the reader be familiar with the TUF specification [16]_.
 
 * Projects: Projects are software components that are made available for
-  integration.  Projects include Python libraries, frameworks, scripts, plugins,
-  applications, collections of data or other resources, and various
+  integration.  Projects include Python libraries, frameworks, scripts,
+  plugins, applications, collections of data or other resources, and various
   combinations thereof.  Public Python projects are typically registered on the
   Python Package Index [17]_.
 
@@ -146,15 +147,32 @@ At the highest level, TUF simply provides applications with a secure method of
 obtaining files and knowing when new versions of files are available. On the
 surface, this all sounds simple. Securely obtaining updates just means:
 
-  * Knowing when an update exists.
-  * Downloading the latest version of an updated file.
+* Knowing when an update exists.
+* Downloading the latest version of an updated file.
 
 The problem is that this is only simple when there are no malicious parties
 involved. If an attacker is trying to interfere with these seemingly simple
 steps, there is plenty they can do.
 
+Let's assume you take the approach that most systems do (at least, the ones
+that even try to be secure). You download both the file you want and a
+cryptographic signature of the file. You already know which key you trust to
+make the signature. You check that the signature is correct and was made by
+this trusted key. All seems well, right? Wrong. You are still at risk in many
+ways, including:
 
-2-3 examples of repository attacks... 
+* An attacker keeps giving you the same file, so you never realize there is an
+update.
+* An attacker gives you an older, insecure version of a file that you
+already have, so you download that one and blindly use it thinking it's newer.
+* An attacker gives you a newer version of a file you have but it's not the
+newest one. It's newer to you, but it may be insecure and exploitable by the
+attacker.
+* An attacker compromises the key used to sign these files and now you
+download a malicious file that is properly signed.
+
+Appendix A provides a list of all the repository attacks prevented by TUF.
+
 
 
 What Repository Changes are Required on PyPI?
@@ -352,10 +370,10 @@ primarily used for key revocation, and it is the root of trust for all of PyPI.
 The *root* role signs for the keys that are authorized for each of the
 top-level roles (including itself).  The keys belonging to the *root* role are
 intended to be very well-protected and used with the least frequency of all
-keys.  We propose that every PSF board member own a (strong) root key.  A
-majority of them can then constitute the quorum to revoke or endow trust in all
-top-level keys.  Alternatively, the system administrators of PyPI (instead of
-PSF board members) could be responsible for signing for the *root* role.
+keys.  It is RECOMMENDED that every PSF board member own a (strong) root key.
+A majority of them can then constitute the quorum to revoke or endow trust in
+all top-level keys.  Alternatively, the system administrators of PyPI (instead
+of PSF board members) could be responsible for signing for the *root* role.
 Therefore, the *root* role SHOULD require (t, n) keys, where n is the number of
 either all PyPI administrators or all PSF board members, and t > 1 (so that at
 least two members must sign the *root* role).
@@ -380,7 +398,7 @@ role keys MUST be online.
 
 As explained in the previous section, the *root*, and *targets* role keys MUST
 be offline for maximum security.  Developers keys will be offline in the sense
-that the private keys MUST NOT be stored on PyPI, though some of them may be
+that the private keys MUST NOT be stored on PyPI, though some of them MAY be
 online on the private infrastructure of the project.
 
 
