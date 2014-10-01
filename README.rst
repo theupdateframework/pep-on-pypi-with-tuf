@@ -94,18 +94,17 @@ Threat Model
 
 The threat model assumes the following:
 
-* Attackers can compromise at least one of a software update system’s trusted
-  keys.
+* Attackers can compromise at least one of PyPI's trusted keys.
 
-* Attackers that compromise multiple keys may do so at once or over a period of
-  time.
+* Attackers that compromise multiple keys may do so at once, or over a period
+  of time.
 
 * Attackers can respond to client requests.
 
-An attacker is successful if they can convince the updater to install (or leave
-installed) something other than the most up-to-date version of the software it
-is updating. If the attacker is preventing the installation of up- dates, they
-want the updater to not realize there is anything wrong.
+An attacker is successful if they can convince a client to install (or leave
+installed) something other than the most up-to-date version of the software the
+client is updating. If the attacker is preventing the installation of updates,
+they want clients to not realize there is anything wrong.
 
 
 Definitions
