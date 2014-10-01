@@ -3,8 +3,9 @@ Title: Surviving a Compromise of PyPI
 Version: $Revision$
 Last-Modified: $Date$
 Author: Trishank Karthik Kuppusamy <trishank@nyu.edu>,
-        Donald Stufft <donald@stufft.io>,
-        Justin Cappos <jcappos@nyu.edu>
+Donald Stufft <donald@stufft.io>, Justin Cappos <jcappos@nyu.edu>,
+Vladimir Diaz <vladimir.v.diaz@gmail.com>
+
 BDFL-Delegate: Nick Coghlan <ncoghlan@gmail.com>
 Discussions-To: DistUtils mailing list <distutils-sig@python.org>
 Status: Draft
@@ -86,6 +87,25 @@ existing software update systems. Software update systems are vulnerable to
 many known attacks, including those that can result in clients being
 compromised or crashed. TUF solves these problems by providing a flexible
 security framework that can be added to software updaters.
+
+
+Threat Model
+============
+
+The threat model assumes the following:
+
+* Attackers can compromise at least one of a software update system’s trusted
+  keys.
+
+* Attackers that compromise multiple keys may do so at once or over a period of
+  time.
+
+* Attackers can respond to client requests.
+
+An attacker is successful if they can convince the updater to install (or leave
+installed) something other than the most up-to-date version of the software it
+is updating. If the attacker is preventing the installation of up- dates, they
+want the updater to not realize there is anything wrong.
 
 
 Definitions
@@ -454,10 +474,10 @@ state of all known projects at a given time.  Each snapshot can safely coexist
 with any other snapshot, and deleted independently without affecting any other
 snapshot.
 
-The solution presented in this PEP is that every metadata or data file written
-to disk MUST include in its filename the `cryptographic hash`__ of the file.
-How would this help clients that use the TUF protocol to securely and
-consistently install or update a project from PyPI?
+The solution presented in this PEP is that every metadata or data file managed
+by PyPI and written to disk MUST include in its filename the `cryptographic
+hash`__ of the file.  How would this help clients that use the TUF protocol to
+securely and consistently install or update a project from PyPI?
 
 __ https://en.wikipedia.org/wiki/Cryptographic_hash_function
 
@@ -645,7 +665,9 @@ any attack other than a freeze attack, one must also compromise the *snapshot*
 key.
 
 Finally, a compromise of the PyPI infrastructure MAY introduce malicious
-updates to *bins* projects because the keys for these roles are online.
+updates to *bins* projects because the keys for these roles are online.  The
+maximum security model discussed in the appendix addresses this issue.  PEP XXX
+goes into more detail.
 
 
 In the Event of a Key Compromise
