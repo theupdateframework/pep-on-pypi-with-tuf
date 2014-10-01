@@ -16,7 +16,7 @@ Created: 27-Sep-2013
 Abstract
 ========
 
-This PEP describes how the Python Package Index (PyPI [1]_) may be integrated
+This PEP proposes how the Python Package Index (PyPI [1]_) may be integrated
 with The Update Framework [2]_ (TUF).  TUF was designed to be a flexible
 security add-on to a software updater or package manager.  The framework
 integrates best security practices such as separating responsibilities,
@@ -25,21 +25,25 @@ and revocation of expired or compromised signing keys.
 
 The proposed integration will render modern package managers such as pip [3]_
 more secure against various types of security attacks on PyPI and protect users
-against them.  Even in the worst case where an attacker manages to compromise
-PyPI itself, the damage is controlled in scope and limited in duration.
+against them.  Specifically, this PEP describes how PyPI processes should be
+adapted to generate and incorporate TUF metadata (i.e., the minimum security
+model).  The minimum security model supports verification of PyPI distributions
+that are signed with keys stored on PyPI.  Uploaded distributions are signed by
+PyPI and immediately available for download.
 
-Specifically, this PEP will describe how PyPI processes should be adapted to
-incorporate TUF metadata.  It will not prescribe how package managers such as
-pip should be adapted to install or update with TUF metadata projects from
-PyPI.  Package managers interested in adopting TUF on the client side may
-consult TUF's `library documentation`__ that exists for this purpose.
+This PEP does not prescribe how package managers such as pip should be adapted
+to install or update projects from PyPI with TUF metadata.   Package managers
+interested in adopting TUF on the client side may consult TUF's `library
+documentation`__, which exists for this purpose.  Support for project
+distributions that are signed by developers is also not proposed in this PEP,
+but is left as a possible future extension.  The maximum security model
+extension is outlined in the appendix.
 
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf/client#updaterpy
 
 
-
-Rationale
-=========
+Motivation
+==========
 
 In January 2013, the Python Software Foundation (PSF) announced [4]_ that the
 python.org wikis for Python, Jython, and the PSF were subjected to a security
@@ -746,8 +750,8 @@ of a package at a specific version, they can be handled by TUF with techniques
 like implicit key revocation and metadata mismatch detection [81].
 
 
-Appendix A: List of Repository Attacks Prevented by TUF
-=======================================================
+Appendix A: Repository Attacks Prevented by TUF
+===============================================
 
 * **Arbitrary software installation**: An attacker installs anything they want
   on the client system. That is, an attacker can provide arbitrary files in
@@ -794,8 +798,8 @@ Appendix A: List of Repository Attacks Prevented by TUF
   sign files).
 
 
-Appendix B: Extension to Minimum Security Model
-===============================================
+Appendix B: Extension to the Minimum Security Model
+===================================================
 
 The maximum security model and end-to-end signing have been intentionally
 excluded from this PEP.  Although both improve PyPI's ability to survive a
@@ -871,61 +875,6 @@ distribution.  The metadata is then uploaded to PyPI where it will be available
 for download by package managers such as pip (i.e., package managers that
 support TUF metadata).  The entire process is transparent to clients (using a
 package manager that supports TUF) who download distributions from PyPI.
-
-
-Appendix: Rejected Proposals
-============================
-
-Alternative Proposals for Producing Consistent Snapshots
---------------------------------------------------------
-
-The complete file snapshot (CFS) scheme uses file system directories to store
-efficient consistent snapshots over time.  In this scheme, every consistent
-snapshot will be stored in a separate directory, wherein files that are shared
-with previous consistent snapshots will be `hard links`__ instead of copies.
-
-__ https://en.wikipedia.org/wiki/Hard_link
-
-The `differential file`__ snapshot (DFS) scheme is a variant of the CFS scheme,
-wherein the next consistent snapshot directory will contain only the additions
-of new files and updates to existing files of the previous consistent snapshot.
-(The first consistent snapshot will contain a complete set of files known
-then.)  Deleted files will be marked as such in the next consistent snapshot
-directory.  This means that files will be resolved in this manner: First, set
-the current consistent snapshot directory to be the latest consistent snapshot
-directory.  Then, any requested file will be seeked in the current consistent
-snapshot directory.  If the file exists in the current consistent snapshot
-directory, then that file will be returned.  If it has been marked as deleted
-in the current consistent snapshot directory, then that file will be reported
-as missing.  Otherwise, the current consistent snapshot directory will be set
-to the preceding consistent snapshot directory and the previous few steps will
-be iterated until there is no preceding consistent snapshot to be considered,
-at which point the file will be reported as missing.
-
-__ http://dl.acm.org/citation.cfm?id=320484
-
-With the CFS scheme, the trade-off is the I/O costs of producing a consistent
-snapshot with the file system.  As of October 2013, we found that a fairly
-modern computer with a 7200RPM hard disk drive required at least three minutes
-to produce a consistent snapshot with the "cp -lr" command on the ext3__ file
-system.  Perhaps the I/O costs of this scheme may be ameliorated with advanced
-tools or file systems such as LVM__, ZFS__ or btrfs__.
-
-__ https://en.wikipedia.org/wiki/Ext3
-__ http://www.tldp.org/HOWTO/LVM-HOWTO/snapshots_backup.html
-__ https://en.wikipedia.org/wiki/ZFS
-__ https://en.wikipedia.org/wiki/Btrfs
-
-While the DFS scheme improves upon the CFS scheme in terms of producing faster
-consistent snapshots, there are at least two trade-offs.  The first is that a
-web server will need to be modified to perform the "daisy chain" resolution of
-a file.  The second is that every now and then, the differential snapshots will
-need to be "squashed" or merged together with the first consistent snapshot to
-produce a new first consistent snapshot with the latest and complete set of
-files.  Although the merge cost may be amortized over time, this scheme is not
-conceptually si
-
-
 
 
 References
