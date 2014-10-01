@@ -854,7 +854,7 @@ __ https://minilock.io/
 
 3. A two-phase approach, where the minimum security model is first implemented
 followed by the maximum security model, can simplify matters and give PyPI
-administrators time to review the feasiblity of end-to-end signing.   
+administrators time to review the feasibility of end-to-end signing.   
 
 
 Maximum Security Model
