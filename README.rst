@@ -17,13 +17,11 @@ Abstract
 ========
 
 This PEP describes how the Python Package Index (PyPI [1]_) may be integrated
-with The Update Framework [2]_ (TUF).  TUF was designed to be a plug-and-play
-security add-on to a software updater or package manager.  TUF provides
-end-to-end security like SSL, but for software updates instead of HTTPS
-connections.  The framework integrates best security practices such as
-separating responsibilities, adopting the many-man rule for signing packages,
-keeping signing keys offline, and revocation of expired or compromised signing
-keys.
+with The Update Framework [2]_ (TUF).  TUF was designed to be a flexible
+security add-on to a software updater or package manager.  The framework
+integrates best security practices such as separating responsibilities,
+adopting the many-man rule for signing packages, keeping signing keys offline,
+and revocation of expired or compromised signing keys.
 
 The proposed integration will render modern package managers such as pip [3]_
 more secure against various types of security attacks on PyPI and protect users
@@ -36,7 +34,9 @@ pip should be adapted to install or update with TUF metadata projects from
 PyPI.  Package managers interested in adopting TUF on the client side may
 consult TUF's `library documentation`__ that exists for this purpose.
 
-__ https://github.com/theupdateframework/tuf/tree/develop/tuf/client
+__ https://github.com/theupdateframework/tuf/tree/develop/tuf/client#updaterpy
+
+
 
 Rationale
 =========
@@ -76,8 +76,12 @@ installed, or even allow an attacker to execute arbitrary code.  In September
 2013, we showed how the latest version of pip (at the time) was susceptible to
 these attacks and how TUF could protect users against them [14]_.
 
-In order to protect PyPI against infrastructure compromises, we propose
-integrating PyPI with The Update Framework [2]_ (TUF).
+In order to protect PyPI against infrastructure compromises, this PEP proposes
+integrating PyPI with The Update Framework [2]_ (TUF).  TUF helps secure new or
+existing software update systems. Software update systems are vulnerable to
+many known attacks, including those that can result in clients being
+compromised or crashed. TUF solves these problems by providing a flexible
+security framework that can be added to software updaters.
 
 
 Definitions
@@ -138,45 +142,62 @@ also RECOMMENDED that the reader be familiar with the TUF specification [16]_.
 Overview of TUF
 ===============
 
-TUF helps secure new or existing software update systems. Software update
-systems are vulnerable to many known attacks, including those that can result
-in clients being compromised or crashed. TUF solves these problem by providing
-a flexible security framework that can be added to software updaters.
-
-At the highest level, TUF simply provides applications with a secure method of
+At the highest level, TUF provides applications with a secure method of
 obtaining files and knowing when new versions of files are available. On the
 surface, this all sounds simple. Securely obtaining updates just means:
 
 * Knowing when an update exists.
+
 * Downloading the latest version of an updated file.
 
 The problem is that this is only simple when there are no malicious parties
 involved. If an attacker is trying to interfere with these seemingly simple
 steps, there is plenty they can do.
 
-Let's assume you take the approach that most systems do (at least, the ones
-that even try to be secure). You download both the file you want and a
-cryptographic signature of the file. You already know which key you trust to
-make the signature. You check that the signature is correct and was made by
-this trusted key. All seems well, right? Wrong. You are still at risk in many
-ways, including:
+Suppose you take the approach that most systems do (at least, the ones that
+even try to be secure). You download both the file you want and a cryptographic
+signature of the file. You already know which key you trust to make the
+signature. You check that the signature is correct and was made by this trusted
+key. All seems well, right? Wrong. You are still at risk in many ways,
+including:
 
 * An attacker keeps giving you the same file, so you never realize there is an
-update.
-* An attacker gives you an older, insecure version of a file that you
-already have, so you download that one and blindly use it thinking it's newer.
+  update.
+
+* An attacker gives you an older, insecure version of a file that you already
+  have, so you download that one and blindly use it thinking it's newer.
+
 * An attacker gives you a newer version of a file you have but it's not the
-newest one. It's newer to you, but it may be insecure and exploitable by the
-attacker.
-* An attacker compromises the key used to sign these files and now you
-download a malicious file that is properly signed.
+  newest one. It's newer to you, but it may be insecure and exploitable by the
+  attacker.
 
-Appendix A provides a list of all the repository attacks prevented by TUF.
+* An attacker compromises the key used to sign these files and now you download
+  a malicious file that is properly signed.
+
+TUF is designed to address these attacks, and others, by adding signed metadata
+(text files that describe the repository's files ) to the repository and
+referencing the metadata files during the update procedure.  Repository files
+are verified against the information included in the metadata before they are
+handed to the software update system.  The framework also provides
+multi-signature trust, explicit and implicit revocation of cryptograhic keys,
+responsibility separation on the metadata, and minimizing key risk.  For a full
+list and outline of the repository attacks and software updater weaknesses
+addressed by TUF, see Appendix A.
 
 
+Integrating TUF with PyPI
+=========================
 
-What Repository Changes are Required on PyPI?
----------------------------------------------
+A software update system must complete two main tasks to integrate TUF. First,
+it must add the framework to the client side of the update system.  For
+example, TUF may be integrated with the pip package manager.  Second, the
+repository on the server side must be modified to provide signed TUF metadata.
+This PEP is concerned with the second part of the integration and the changes
+required on PyPI to support software updates with TUF.
+
+
+What Additional Repository Files are Required on PyPI?
+------------------------------------------------------
 
 In order for package managers like pip to download and verify packages with
 TUF, a few extra files are required to exist on PyPI. These extra repository
