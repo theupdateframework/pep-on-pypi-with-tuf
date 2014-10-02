@@ -450,23 +450,22 @@ immediately available for download.  Unfortunately, there will be problems when
 there are many readers and writers simultaneously accessing the same metadata
 and distributions.  An example is a mirror attempting to sync with PyPI.
 Suppose that PyPI has timestamped a *snapshot* at version 1.  A mirror is later
-in the middle of copying PyPI at this snapshot.  While the mirror is copying
-PyPI at this snapshot, PyPI timestamps a new snapshot at, say, version 2.
-Without accounting for consistency, the mirror would then find itself with a
-copy of PyPI in an inconsistent state, which is indistinguishable from
-arbitrary metadata or package attacks.  The problem would also apply when the
+in the middle of copying PyPI at this snapshot.  At the same time this is happening, PyPI timestamps a new snapshot at, say, version 2.
+{LV: need to fix this: "Without accounting for consistency" -- That is, there needs to be a way to ensure consistency when multiple users simultaneously access the same metadata or distributions {or something to that effect...}] , the mirror would then find itself with a
+copy of PyPI in an inconsistent state, which would be indistinguishable from
+arbitrary metadata or package attacks.  The problem would also apply [LV: change apply to 'occur'] when the
 mirror is substituted with a pip user.
 
 
 Consistent Snapshots
 --------------------
 
-There are problems of consistency on PyPI with or without TUF.  TUF requires
-its metadata to be consistent with the data, but how would the metadata be kept
+There are problems of [LV: change of to 'with'] consistency on PyPI with or without TUF.  TUF requires that
+its metadata be consistent with the data, but how would the metadata be kept
 consistent with projects that change all the time?  As a result, this proposal
 MUST address the problem of producing a consistent snapshot that captures the
-state of all known projects at a given time.  Each snapshot can safely coexist
-with any other snapshot, and deleted independently without affecting any other
+state of all known projects at a given time.  Each snapshot can [LV: change 'can' to 'should'] safely coexist
+with any other snapshot, and [LV: be able to be] deleted independently, without affecting any other
 snapshot.
 
 The solution presented in this PEP is that every metadata or data file managed
@@ -478,11 +477,11 @@ __ https://en.wikipedia.org/wiki/Cryptographic_hash_function
 
 The first step in the TUF protocol requires the client to download the latest
 *timestamp* metadata.  However, the client would not know in advance the hash
-of the *timestamp* metadata file from the latest snapshot.  Therefore, PyPI
+of the *timestamp* metadata file from [LV: ? change 'from' to 'associated with'] the latest snapshot.  Therefore, PyPI
 MUST redirect all HTTP GET requests for *timestamp* metadata to the *timestamp*
-metadata file from the latest snapshot.  Since the *timestamp* metadata is the
-root of a tree of cryptographic hashes pointing to every other metadata or
-target file that are meant to exist together for consistency, the client is
+metadata file from the latest snapshot. [LV: can the following sentence be split into two sentences? It would be easier for the reader to digest.] Since the *timestamp* metadata is the
+root of a tree of cryptographic hashes that points to every other metadata or
+target files that are meant to exist together for consistency, the client is
 then able to retrieve any file from this snapshot by deterministically
 including, in the request for the file, the hash of the file in the filename.
 Assuming infinite disk space and no `hash collisions`__, a client may safely
