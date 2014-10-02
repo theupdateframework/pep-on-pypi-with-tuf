@@ -54,15 +54,14 @@ However, the incident is a reminder that PyPI should take defensive steps to
 protect users as much as possible in the event of a compromise.  Attacks on
 software repositories happen all the time [5]_.  The PSF must accept the
 possibility of security breaches and prepare PyPI accordingly because it is a
-valuable resource used by thousands, if not millions, of people.
+valuable resource [LV: changed 'target' to 'resource'] used by thousands, if not millions, of people.
 
 Before the wiki attack, PyPI used MD5 hashes to tell package managers, such as
-pip, whether or not a package was corrupted in transit.  However, the absence
-of SSL made it hard for package managers to verify transport integrity to PyPI.
-It was therefore easy to launch a man-in-the-middle attack between pip and PyPI
-and change package content arbitrarily.  Users could be tricked into installing
-malicious packages.  After the wiki attack, several steps were proposed (some
-of which were implemented) to deliver a much higher level of security than was
+pip, whether or not a package was corrupted in transit.  However, the absence of
+SSL made it hard for package managers to verify transport integrity to PyPI.
+It was [LV: add? 'therefore'] easy to launch a man-in-the-middle attack between pip and PyPI and change
+package content arbitrarily.  This can be used to trick users into installing
+malicious packages. [LV: I would reorganize the sentence to: Users could be tricked into installing...] After the wiki attack, several steps were proposed (some of which were implemented) to deliver a much higher level of security than was
 previously the case: requiring SSL to communicate with PyPI [6]_, restricting
 project names [7]_, and migrating from MD5 to SHA-2 hashes [8]_.
 
@@ -71,21 +70,21 @@ possible through other avenues.  For example, a public mirror is trusted to
 honestly mirror PyPI, but some mirrors may misbehave due to malice or accident.
 Package managers such as pip are supposed to use signatures from PyPI to verify
 packages downloaded from a public mirror [9]_, but none are known to actually
-do so [10]_.  Therefore, it would be wise to add more security measures to
+do so [10]_.  Therefore, it is also [LV: change to "it would be wise"] wise to add more security measures to
 detect attacks from public mirrors or content delivery networks [11]_ (CDNs).
 
 Even though official mirrors are being deprecated on PyPI [12]_, there remain a
-wide variety of other attack vectors on package managers [13]_.  Attacks can
-crash client systems, cause obsolete packages to be installed, or even allow an
-attacker to execute arbitrary code.  In September 2013, we showed how the
-latest version of pip (at the time) was susceptible to such attacks and how TUF
-could protect users against them [14]_.
+wide variety of other attack vectors on package managers [13]_.  [LV: I would just remove (Among other
+things, these)] Attacks can crash client systems, cause obsolete packages to be
+installed, or even allow an attacker to execute arbitrary code.  In September
+2013, we showed how the latest version of pip (at the time) was susceptible to
+such attacks and how TUF could protect users against them [14]_.
 
-With the intent to protect PyPI against infrastructure compromises, this PEP
-proposes integrating PyPI with The Update Framework [2]_ (TUF).  TUF helps
-secure new or existing software update systems. Software update systems are
-vulnerable to many known attacks, including those that can result in clients
-being compromised or crashed. TUF solves these problems by providing a flexible
+[LV: With the intent (remove In order)] to protect PyPI against infrastructure compromises, this PEP proposes
+integrating PyPI with The Update Framework [2]_ (TUF).  TUF helps secure new or
+existing software update systems. Software update systems are vulnerable to
+many known attacks, including those that can result in clients being
+compromised or crashed. TUF solves these problems by providing a flexible
 security framework that can be added to software updaters.
 
 
@@ -104,7 +103,7 @@ The threat model assumes the following:
 An attacker is successful if they can convince a client to install (or leave
 installed) something other than the most up-to-date version of the software the
 client is updating. If the attacker is preventing the installation of updates,
-they want clients to not realize there is anything wrong.
+it wants clients to not realize there is anything wrong.
 
 
 Definitions
@@ -149,10 +148,10 @@ also RECOMMENDED that the reader be familiar with the TUF specification [16]_.
 
 * Online key: A key that MUST be stored on the PyPI server infrastructure.
   This is usually to allow automated signing with the key.  However, an
-  attacker who compromises PyPI infrastructure will be able to read these keys.
+  attacker who compromises [LV: insert 'the'] PyPI infrastructure will be able to read these keys.
 
-* Offline key: A key that MUST be stored off the PyPI infrastructure.  This
-  prevents automated signing with the key.  An attacker who compromises PyPI
+* Offline key: A key that MUST be stored off [LV: replace 'off' with 'independent of'] the PyPI infrastructure.  This
+  prevents automated signing with the key.  An attacker who compromises [LV: the] PyPI
   infrastructure will not be able to immediately read these keys.
 
 * Threshold signature scheme: A role can increase its resilience to key
@@ -167,17 +166,17 @@ Overview of TUF
 
 At the highest level, TUF provides applications with a secure method of
 obtaining files and knowing when new versions of files are available. On the
-surface, this all sounds simple. Securely obtaining updates just means:
+surface, this all sounds simple. Securely obtaining updates just means: [LV: I would change this last phrase to: 'The basic steps for updating applications are:]
 
 * Knowing when an update exists.
 
 * Downloading the latest version of an updated file.
 
-The problem is that this is only simple when there are no malicious parties
+The problem is that updating applications is only simple when there are no malicious parties
 involved. If an attacker is trying to interfere with these seemingly simple
 steps, there is plenty they can do.
 
-Suppose you take the approach that most systems do (at least, the ones that
+Let's assume that you take the approach that most systems do (at least the ones that
 even try to be secure). You download both the file you want and a cryptographic
 signature of the file. You already know which key you trust to make the
 signature. You check that the signature is correct and was made by this trusted
@@ -198,12 +197,12 @@ including:
   a malicious file that is properly signed.
 
 TUF is designed to address these attacks, and others, by adding signed metadata
-(text files that describe the repository's files ) to the repository and
+(text files that describe the repository's files) to the repository and by
 referencing the metadata files during the update procedure.  Repository files
 are verified against the information included in the metadata before they are
-handed to the software update system.  The framework also provides
+handed off to the software update system.  The framework also provides
 multi-signature trust, explicit and implicit revocation of cryptograhic keys,
-responsibility separation on the metadata, and minimizing key risk.  For a full
+responsibility separation on the metadata, and minimizing [LV: change to minimizes] key risk.  For a full
 list and outline of the repository attacks and software updater weaknesses
 addressed by TUF, see Appendix A.
 
@@ -211,7 +210,7 @@ addressed by TUF, see Appendix A.
 Integrating TUF with PyPI
 =========================
 
-A software update system must complete two main tasks to integrate TUF. First,
+A software update system must complete two main tasks to integrate [LV: with] TUF. First,
 it must add the framework to the client side of the update system.  For
 example, TUF may be integrated with the pip package manager.  Second, the
 repository on the server side must be modified to provide signed TUF metadata.
@@ -223,10 +222,9 @@ What Additional Repository Files are Required on PyPI?
 ------------------------------------------------------
 
 In order for package managers like pip to download and verify packages with
-TUF, a few extra files are required to exist on PyPI. These extra repository
-files are called TUF metadata. TUF metadata contains information like which
-keys are trusted, the cryptographic hashes of files, signatures on the
-metadata, metadata version numbers, and the date after which the metadata
+TUF, a few extra files must exist on PyPI. These extra repository
+files are called TUF metadata. TUF metadata contains information such as which
+keys are trusted [LV: change to 'trustable'], the cryptographic hashes of files, signatures on [LV: change on to 'to'] the metadata, metadata version numbers, and the date after which the metadata
 should be considered expired.
 
 When a package manager wants to check for updates, it asks TUF to do the work.
@@ -449,21 +447,17 @@ online on the private infrastructure of the project.
 How Should Metadata be Generated?
 =================================
 
-Project developers expect that the distributions they upload to PyPI to be
+Project developers expect the distributions they upload to PyPI to be
 immediately available for download.  Unfortunately, there will be problems when
 there are many readers and writers simultaneously accessing the same metadata
-and distributions.  There are problems of consistency on PyPI without TUF, but
-the problem is more severe with signed metadata that is verified.
-
-Suppose that PyPI has timestamped a *snapshot* (indicates the latest version of
-the repository's metadata files) at version 1.  A client later requests this
-snapshot from PyPI.  While the client is busy downloading this snapshot, PyPI
-timestamps (references the latest version of snapshot)  a new snapshot at, say,
-version 2.  Without accounting for consistency, the client would then find
-itself with a copy of *snapshot* that is not in agreement with what is
-available on PyPI, which is indistinguishable from arbitrary metadata or
-package attacks.  The problem would also apply to mirrors attempting to sync
-with PyPI.
+and distributions.  An example is a mirror attempting to sync with PyPI.
+Suppose that PyPI has timestamped a *snapshot* at version 1.  A mirror is later
+in the middle of copying PyPI at this snapshot.  While the mirror is copying
+PyPI at this snapshot, PyPI timestamps a new snapshot at, say, version 2.
+Without accounting for consistency, the mirror would then find itself with a
+copy of PyPI in an inconsistent state, which is indistinguishable from
+arbitrary metadata or package attacks.  The problem would also apply when the
+mirror is substituted with a pip user.
 
 
 Consistent Snapshots
@@ -743,17 +737,16 @@ When a repository compromise has been detected, the integrity of three types of
 information must be validated:
 
 1. If the online keys of the repository have been compromised, they can be
-   revoked by having the *targets* role sign new metadata delegating to a new
-   key.
+revoked by having the *targets* role sign new metadata delegating to a new key.
 
 2. If the role metadata on the repository has been changed, this would impact
-   the metadata that is signed by online keys.  Any role information created
-   since the last period should be discarded. As a result, developers of new
-   projects will need to re-register their projects.
+the metadata that is signed by online keys.  Any role information created since
+the last period should be discarded. As a result, developers of new projects
+will need to re-register their projects.
 
 3. If the packages themselves may have been tampered with, they can be
-   validated using the stored hash information for packages that existed at the
-   time of the last period.
+validated using the stored hash information for packages that existed at the
+time of the last period.
 
 In order to safely restore snapshots in the event of a compromise, PyPI SHOULD
 maintain a small number of its own mirrors to copy PyPI snapshots according to
