@@ -54,14 +54,15 @@ However, the incident is a reminder that PyPI should take defensive steps to
 protect users as much as possible in the event of a compromise.  Attacks on
 software repositories happen all the time [5]_.  The PSF must accept the
 possibility of security breaches and prepare PyPI accordingly because it is a
-valuable resource [LV: changed 'target' to 'resource'] used by thousands, if not millions, of people.
+valuable resource used by thousands, if not millions, of people.
 
 Before the wiki attack, PyPI used MD5 hashes to tell package managers, such as
-pip, whether or not a package was corrupted in transit.  However, the absence of
-SSL made it hard for package managers to verify transport integrity to PyPI.
-It was [LV: add? 'therefore'] easy to launch a man-in-the-middle attack between pip and PyPI and change
-package content arbitrarily.  This can be used to trick users into installing
-malicious packages. [LV: I would reorganize the sentence to: Users could be tricked into installing...] After the wiki attack, several steps were proposed (some of which were implemented) to deliver a much higher level of security than was
+pip, whether or not a package was corrupted in transit.  However, the absence
+of SSL made it hard for package managers to verify transport integrity to PyPI.
+It was therefore easy to launch a man-in-the-middle attack between pip and PyPI
+and change package content arbitrarily.  Users could be tricked into installing
+malicious packages.  After the wiki attack, several steps were proposed (some
+of which were implemented) to deliver a much higher level of security than was
 previously the case: requiring SSL to communicate with PyPI [6]_, restricting
 project names [7]_, and migrating from MD5 to SHA-2 hashes [8]_.
 
@@ -70,21 +71,21 @@ possible through other avenues.  For example, a public mirror is trusted to
 honestly mirror PyPI, but some mirrors may misbehave due to malice or accident.
 Package managers such as pip are supposed to use signatures from PyPI to verify
 packages downloaded from a public mirror [9]_, but none are known to actually
-do so [10]_.  Therefore, it is also [LV: change to "it would be wise"] wise to add more security measures to
+do so [10]_.  Therefore, it would be wise to add more security measures to
 detect attacks from public mirrors or content delivery networks [11]_ (CDNs).
 
 Even though official mirrors are being deprecated on PyPI [12]_, there remain a
-wide variety of other attack vectors on package managers [13]_.  [LV: I would just remove (Among other
-things, these)] Attacks can crash client systems, cause obsolete packages to be
-installed, or even allow an attacker to execute arbitrary code.  In September
-2013, we showed how the latest version of pip (at the time) was susceptible to
-such attacks and how TUF could protect users against them [14]_.
+wide variety of other attack vectors on package managers [13]_.  Attacks can
+crash client systems, cause obsolete packages to be installed, or even allow an
+attacker to execute arbitrary code.  In September 2013, we showed how the
+latest version of pip (at the time) was susceptible to such attacks and how TUF
+could protect users against them [14]_.
 
-[LV: With the intent (remove In order)] to protect PyPI against infrastructure compromises, this PEP proposes
-integrating PyPI with The Update Framework [2]_ (TUF).  TUF helps secure new or
-existing software update systems. Software update systems are vulnerable to
-many known attacks, including those that can result in clients being
-compromised or crashed. TUF solves these problems by providing a flexible
+With the intent to protect PyPI against infrastructure compromises, this PEP
+proposes integrating PyPI with The Update Framework [2]_ (TUF).  TUF helps
+secure new or existing software update systems. Software update systems are
+vulnerable to many known attacks, including those that can result in clients
+being compromised or crashed. TUF solves these problems by providing a flexible
 security framework that can be added to software updaters.
 
 
