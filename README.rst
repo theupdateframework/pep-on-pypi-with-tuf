@@ -141,6 +141,8 @@ also RECOMMENDED that the reader be familiar with the TUF specification [16]_.
   to the different meanings of the term "release" as employed by PEP 426 [17]_
   and the TUF specification [16]_, we rename the *release* role as the
   *snapshot* role.
+  
+* Delegated targets --- fill in 
 
 * Developer: Either the owner or maintainer of a project who is allowed to
   update the TUF metadata as well as distribution metadata and data for the
@@ -279,24 +281,24 @@ How Should TUF Metadata be Signed?
 ----------------------------------
 
 The top-level *root* role signs for the keys of the top-level *timestamp*,
-*snapshot*, *targets* and *root* roles.  The *timestamp* role signs for every
+*snapshot*, *targets*, and *root* roles.  The *timestamp* role signs for every
 new snapshot of the repository metadata.  The *snapshot* role signs for *root*,
-*targets* and all delegated targets metadata.  The *bins* role signs for all
+*targets*, and all delegated targets metadata.  The *bins* role signs for all
 distributions belonging to registered PyPI projects.
 
-The metadata files that change most frequently will be *timestamp*, *snapshot*
+The metadata files that will change most frequently are *timestamp*, *snapshot*
 and delegated targets (*bins* projects) metadata.  The *timestamp* and
-*snapshot* metadata MUST be updated whenever *root*, *targets* or delegated
+*snapshot* metadata MUST be updated whenever *root*, *targets*, or delegated
 targets metadata are updated.  Observe, though, that *root* and *targets*
 metadata are much less likely to be updated as often as delegated targets
 metadata.  Therefore, *timestamp* and *snapshot* metadata will most likely be
-updated frequently (possibly every minute) due to delegated targets metadata
-being updated frequently in order to drive continuous delivery of projects.
-Continuous delivery is a set of processes with which PyPI produces consistent
-snapshots that can safely coexist and be deleted independently [18]_.
+updated frequently (possibly every minute) due to delegated targets' metadata
+being updated frequently in order to drive [LV: should 'drive' be 'support'? continuous delivery of projects.
+Continuous delivery is a set of processes that PyPI uses to produce [LV: check < this - I edited it] consistent
+snapshots that can safely coexist and be deleted independently [18]_. [LV: do you need to say what these are independent of?]
 
-Every year, PyPI administrators are going to sign for *root* role keys.  After
-that, automation will continuously sign for a timestamped, snapshot of all
+Every year, PyPI administrators are going to sign for *root* role keys. [LV: Subsequently, this will be automated and ?PyPI ...(if < makes sense, then delete > After
+that, automation) - if not, we will need to chat] will continuously sign for a timestamped, snapshot of all
 projects.  There is a `repository management`__ tool available that can handle
 signing metadata files, generating cryptographic keys, and managing a TUF
 repository.
@@ -311,8 +313,8 @@ The minimum security model (this PEP) requires no action from a developer and
 protects against malicious CDNs [19]_ and public mirrors.  To support
 continuous delivery of uploaded packages, PyPI signs for projects with an
 online key.  This level of security prevents projects from being accidentally
-or deliberately tampered by a mirror or a CDN because the mirror or CDN will
-not have any of the keys required to sign for projects.  It also does not
+or deliberately tampered with by a mirror or a CDN because the mirror or CDN will
+not have any of the keys required to sign for projects.  [LV: However,] It does not
 protect projects from attackers who have compromised PyPI, since attackers can
 manipulate TUF metadata using the keys stored online.   An extension to this
 PEP, discussed in Appendix B, offers the maximum security model and allows
@@ -322,7 +324,7 @@ therefore, projects are safe from PyPI compromises.
 This PEP proposes that the *bins* role (and its delegated roles) sign for all
 PyPI projects with an online key.  The *targets* role, which only signs with an
 offline key, MUST delegate all PyPI projects to the *bins* role.  This means
-that when package manager such as pip (with TUF) downloads a distribution from
+that when a package manager such as pip ([LV: should with be using?] with TUF) downloads a distribution from
 a project on PyPI, it will consult the *bins* role about the TUF metadata for
 the project.  If none of bin roles delegated by *bins* specify the project's
 distribution, then the project is considered to be non-existent on PyPI.
@@ -331,10 +333,10 @@ distribution, then the project is considered to be non-existent on PyPI.
 Metadata Expiry Times
 ---------------------
 
-The *root* and *targets* role metadata SHOULD expire in a year, because these
+The *root* and *targets* role metadata SHOULD expire in one year, because these
 two metadata files are expected to change very rarely.
 
-The *timestamp*, *snapshot*, and *bins* metadata SHOULD expire in a day because
+The *timestamp*, *snapshot*, and *bins* metadata SHOULD expire in one day because
 a CDN or mirror SHOULD synchronize itself with PyPI every day.  Furthermore,
 this generous time frame also takes into account client clocks that are highly
 skewed or adrift.
@@ -348,8 +350,8 @@ grow correspondingly.  For example, consider the *bins* role.  In August 2013,
 it was found that the size of the *bins* metadata was about 42MB if the *bins*
 role itself signed for about 220K PyPI targets (which are simple indices and
 distributions).  This PEP does not delve into the details, but TUF features a
-so-called "`lazy bin walk`__" scheme that splits a large targets or delegated
-targets metadata file into many small ones.  This allows a TUF client updater
+so-called "`lazy bin walk`__" scheme that splits a large target or a delegated
+targets' metadata file [LV: check < edits] into many small ones.  This allows a TUF client updater
 to intelligently download only a small number of TUF metadata files in order to
 update any project signed for by the *bins* role.  For example, applying this
 scheme to the previous repository resulted in pip downloading between 1.3KB and
@@ -357,21 +359,18 @@ scheme to the previous repository resulted in pip downloading between 1.3KB and
 
 __ https://github.com/theupdateframework/tuf/issues/39
 
-From our findings as of the time of writing, PyPI SHOULD split all targets in
-the *bins* role by delegating it to 1024 delegated targets roles, each of which
-would sign for PyPI targets whose hashes fall into that "bin" or delegated
-targets role (see Figure 1).  We found that 1024 bins would result in the
-*bins* metadata and each of its bins delegated targets metadata to be about the
-same size (40-50KB) for about 220K PyPI targets (simple indices and
-distributions).
+Based on our findings as of the time of writing, PyPI SHOULD split all targets in
+the *bins* role by delegating it [LV: not clear what 'it' refers to] to 1024 delegated targets roles, each of which would sign for PyPI targets whose hashes fall into that "bin" or delegated
+targets role (see Figure 1).  [LV: The following sentence has one or more problems.] We found that 1024 bins would result in the *bins* metadata and each of its bins delegated targets metadata to be about the
+same size (40-50KB) for about 220K PyPI targets (simple indices and distributions).
 
 It is possible to make TUF metadata more compact by representing it in a binary
 format as opposed to the JSON text format.  Nevertheless, we believe that a
 sufficiently large number of projects and distributions will induce scalability
-challenges at some point, and therefore the *bins* role will then still need
+challenges at some point, and therefore the *bins* role will still need
 delegations in order to address the problem.  Furthermore, the JSON format is
 an open and well-known standard for data interchange.  Due to the large number
-of delegated target metadata files, compressed versions of *snapshot* metadata
+of delegated targets' metadata files, compressed versions of *snapshot* metadata
 SHOULD also be made available.
 
 
