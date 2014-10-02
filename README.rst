@@ -377,15 +377,15 @@ SHOULD also be made available.
 PyPI and Key Requirements
 =========================
 
-In this section, the kinds of keys required to sign for TUF roles on PyPI is
+In this section, the kinds of keys required to sign for TUF roles on PyPI are
 examined.  TUF is agnostic with respect to choices of digital signature
 algorithms.  For the purpose of discussion, it is assumed that most digital
 signatures will be produced with the well-tested and tried RSA algorithm [20]_.
 Nevertheless, we do NOT recommend any particular digital signature algorithm in
-this PEP because there are a few important constraints: firstly, cryptography
-changes over time; secondly, package managers such as pip may wish to perform
+this PEP because there are a few important constraints: first, cryptography
+changes over time; second, package managers such as pip may wish to perform
 signature verification in Python, without resorting to a compiled C library, in
-order to be able to run on as many systems as Python supports; finally, TUF
+order to be able to run on as many systems as Python supports; and third, TUF
 recommends diversity of keys for certain applications.
 
 
@@ -395,26 +395,26 @@ Number Of Keys Recommended
 The *timestamp*, *snapshot*, and *bins* roles will need to support continuous
 delivery.  Even though their respective keys will then need to be online, this
 PEP requires that the keys be independent of each other.  Different keys for
-online roles allows for each of the keys to be placed on separate servers if
+online roles allow for each of the keys to be placed on separate servers if
 need be, and prevents side channel attacks that compromise one key from
 automatically compromising the rest of the keys.  Therefore, each of the
 *timestamp*, *snapshot*, and *bins* roles MUST require (1, 1) keys.
 
 The *bins* role MAY delegate targets in an automated manner to a number of
-roles called "bins", as we discussed in the previous section.  Each of the
-"bin" roles SHOULD share the same key as the *bins* role, due
-simultaneously to space efficiency of metadata and because there is no security
-advantage in requiring separate keys.
+roles called "bins", as discussed in the previous section.  Each of the
+"bin" roles SHOULD share the same key as the *bins* role, [LV: this is an awkward phrast "due
+simultaneously to space efficiency of metadata"] and because there is no security
+advantage to requiring separate keys.
 
 The *root* role is critical for security and should very rarely be used.  It is
-primarily used for key revocation, and it is the root of trust for all of PyPI.
+primarily used for key revocation, and it is the root [LV: to not confuse this 'root' with the root role, could this root be changed to 'locus'?] of trust for all of PyPI.
 The *root* role signs for the keys that are authorized for each of the
 top-level roles (including itself).  The keys belonging to the *root* role are
 intended to be very well-protected and used with the least frequency of all
 keys.  It is RECOMMENDED that every PSF board member own a (strong) root key.
-A majority of them can then constitute the quorum to revoke or endow trust in
-all top-level keys.  Alternatively, the system administrators of PyPI (instead
-of PSF board members) could be responsible for signing for the *root* role.
+A majority of them can then constitute a quorum to revoke or endow trust in
+all top-level keys.  Alternatively, the system administrators of PyPI [LV: you don't need this: (instead
+of PSF board members)] could be given responsibility for signing for the *root* role.
 Therefore, the *root* role SHOULD require (t, n) keys, where n is the number of
 either all PyPI administrators or all PSF board members, and t > 1 (so that at
 least two members must sign the *root* role).
@@ -423,12 +423,11 @@ The *targets* role will be used only to sign for the static delegation of all
 targets to the *bins* role.  Since these target delegations must be secured
 against attacks in the event of a compromise, the keys for the *targets* role
 MUST be offline and independent from other keys.  For simplicity of key
-management without sacrificing security, it is RECOMMENDED that the keys of the
+management, without sacrificing security, it is RECOMMENDED that the keys of the
 *targets* role be permanently discarded as soon as they have been created and
 used to sign for the role.  Therefore, the *targets* role SHOULD require (1, 1)
-keys.  Again, this is because the keys are going to be permanently discarded,
-and more offline keys will not help against key recovery attacks [21]_ unless
-diversity of keys is maintained.
+keys.  Again, this is because the keys are going to be permanently discarded 
+and more offline keys will not help against [LV: ? will not help against - could this be "will not help resist?"] key recovery attacks [21]_ unless diversity of keys is maintained.
 
 
 Online and Offline Keys Recommended for Each Role
@@ -438,9 +437,9 @@ In order to support continuous delivery, the *timestamp*, *snapshot*, *bins*
 role keys MUST be online.
 
 As explained in the previous section, the *root*, and *targets* role keys MUST
-be offline for maximum security.  Developers keys will be offline in the sense
-that the private keys MUST NOT be stored on PyPI, though some of them MAY be
-online on the private infrastructure of the project.
+be offline for maximum security.  Developers' keys will be offline in the sense
+that the [LV: ?their] private keys MUST NOT be stored on PyPI, though some of them MAY be
+online in the private infrastructure of the project.
 
 
 How Should Metadata be Generated?
