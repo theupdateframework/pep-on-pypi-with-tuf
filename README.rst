@@ -743,16 +743,17 @@ When a repository compromise has been detected, the integrity of three types of
 information must be validated:
 
 1. If the online keys of the repository have been compromised, they can be
-revoked by having the *targets* role sign new metadata delegating to a new key.
+   revoked by having the *targets* role sign new metadata delegating to a new
+   key.
 
 2. If the role metadata on the repository has been changed, this would impact
-the metadata that is signed by online keys.  Any role information created since
-the last period should be discarded. As a result, developers of new projects
-will need to re-register their projects.
+   the metadata that is signed by online keys.  Any role information created
+   since the last period should be discarded. As a result, developers of new
+   projects will need to re-register their projects.
 
 3. If the packages themselves may have been tampered with, they can be
-validated using the stored hash information for packages that existed at the
-time of the last period.
+   validated using the stored hash information for packages that existed at the
+   time of the last period.
 
 In order to safely restore snapshots in the event of a compromise, PyPI SHOULD
 maintain a small number of its own mirrors to copy PyPI snapshots according to
