@@ -29,8 +29,8 @@ more secure against various types of security attacks on PyPI and protect users
 against them.  Specifically, this PEP describes how PyPI processes should be
 adapted to generate and incorporate TUF metadata (i.e., the minimum security
 model).  The minimum security model supports verification of PyPI distributions
-that are signed with keys stored on PyPI.  Uploaded distributions are signed by
-PyPI and immediately available for download.
+that are signed with keys stored on PyPI.  Distributions uploaded by developers
+are signed by PyPI and immediately available for download.
 
 This PEP does not prescribe how package managers such as pip should be adapted
 to install or update projects from PyPI with TUF metadata.   Package managers
@@ -349,7 +349,7 @@ Due to the growing number of projects and distributions, TUF metadata will also
 grow correspondingly.  For example, consider the *bins* role.  In August 2013,
 it was found that the size of the *bins* metadata was about 42MB if the *bins*
 role itself signed for about 220K PyPI targets (which are simple indices and
-distributions).  We will not delve into details in this PEP, but TUF features a
+distributions).  This PEP does not delve into the details, but TUF features a
 so-called "`lazy bin walk`__" scheme that splits a large targets or delegated
 targets metadata file into many small ones.  This allows a TUF client updater
 to intelligently download only a small number of TUF metadata files in order to
@@ -382,7 +382,7 @@ PyPI and Key Requirements
 
 In this section, the kinds of keys required to sign for TUF roles on PyPI is
 examined.  TUF is agnostic with respect to choices of digital signature
-algorithms.  For the purpose of discussion, we will assume that most digital
+algorithms.  For the purpose of discussion, it is assumed that most digital
 signatures will be produced with the well-tested and tried RSA algorithm [20]_.
 Nevertheless, we do NOT recommend any particular digital signature algorithm in
 this PEP because there are a few important constraints: firstly, cryptography
@@ -496,7 +496,7 @@ __ https://en.wikipedia.org/wiki/Collision_(computer_science)
 
 In this simple but effective manner, PyPI is able to capture a consistent
 snapshot of all projects and the associated metadata at a given time.  The next
-subsection will explicate the implementation details of this idea.
+subsection explicates the implementation details of this idea.
 
 This PEP does not prohibit using advanced file systems or tools to produce
 consistent snapshots (such solutions are mentioned in the Appendix). There are
@@ -526,7 +526,7 @@ __ http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest
 __ https://en.wikipedia.org/wiki/SHA-2
 
 When a project uploads a new transaction, a project transaction process MUST
-add all new targets and relevant delegated *bins* metadata.  (We will see later
+add all new targets and relevant delegated *bins* metadata.  (It is shown later
 in this section why the *bins* role will delegate targets to a number of
 delegated *bins* roles.)  Finally, the project transaction process MUST inform
 the snapshot process about new delegated *bins* metadata.
@@ -876,7 +876,7 @@ but not in the second without also compromising a developer's key.
 .. image:: figure2.png
 
 Figure 2: An overview of the metadata layout in the maximum security model.
-The maximum Security model supports continuous delivery and survivable key
+The maximum security model supports continuous delivery and survivable key
 compromise.
 
 
@@ -886,16 +886,16 @@ End-to-End Signing
 End-to-End signing allows both PyPI and developers to sign for the metadata
 downloaded by clients.  PyPI is trusted to make uploaded projects available to
 clients (they sign the metadata for this part of the process), and developers
-can sign the distributions they upload.
+can sign the distributions that they upload.
 
-PEP XXX will discuss the tools available to developers who sign the
-distributions they upload to PyPI.  In summary, developers will generate
-cryptographic keys and sign metadata in some automated fashion, where the
-metadata includes the information required to verify the authenticity of the
-distribution.  The metadata is then uploaded to PyPI where it will be available
-for download by package managers such as pip (i.e., package managers that
-support TUF metadata).  The entire process is transparent to clients (using a
-package manager that supports TUF) who download distributions from PyPI.
+PEP XXX discusses the tools available to developers who sign the distributions
+that they upload to PyPI.  In summary, developers generate cryptographic keys
+and sign metadata in some automated fashion, where the metadata includes the
+information required to verify the authenticity of the distribution.  The
+metadata is then uploaded to PyPI where it will be available for download by
+package managers such as pip (i.e., package managers that support TUF
+metadata).  The entire process is transparent to clients (using a package
+manager that supports TUF) who download distributions from PyPI.
 
 
 References
