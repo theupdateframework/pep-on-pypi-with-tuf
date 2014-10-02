@@ -246,15 +246,15 @@ PyPI and TUF Metadata
 =====================
 
 TUF metadata provides information that clients can use to make update
-decisions.  For example, a targets metadata file can list the available
+decisions.  For example, a targets metadata file can [LV: is it 'can' or 'will'? If you think it's 'can,' then it probably should be 'may'] list the available
 packages on PyPI and include their signatures, cryptographic hashes, and file
 sizes.  Different metadata files provide different information.  The various
-metadata files are signed by different roles as are indicated by the *root*
+metadata files are signed by different roles, which are indicated by the *root*
 role.  The concept of roles allows TUF to delegate responsibilities to multiple
-roles and minimize the impact of a compromised role.
+roles and minimizes the impact of a compromised role.
 
-TUF requires four top-level roles.  They are *root*, *timestamp*, *snapshot*
-and *targets*.  The *root* role specifies the keys of the top-level roles
+TUF requires four top-level roles.  They are *root*, *timestamp*, *snapshot*,
+and *targets*.  The *root* role specifies the keys of the top-level roles [LV: < prior phrase doesn't seem to make sense. I can't figure it out]
 (including itself).  The *timestamp* role references the latest *snapshot* and
 can signify when a new snapshot of the repository is available.  The *snapshot*
 role indicates the latest version of all the TUF metadata files (other than
@@ -264,9 +264,9 @@ directories).  Each top-level role will serve its responsibilities without
 exception.
 
 Figure 1 provides an overview of the roles available on PyPI, which includes
-the top-level roles and the roles delegated by *targets*.  The figure also
+the top-level roles and the roles delegated by [LV: I think 'by' should be 'to'] *targets*.  The figure also
 indicates the types of keys used to sign each role and which roles are trusted
-to sign for the targets, or files, available on PyPI.  The next two sections
+to sign for targets, or files, available on PyPI.  The next two sections
 cover the details of signing repository files and the types of keys used for
 each role.
 
