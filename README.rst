@@ -277,8 +277,8 @@ each role.
 Figure 1: An overview of the role metadata available on PyPI.
 
 
-How Should TUF Metadata be Signed?
-----------------------------------
+Roles and Responsibilities 
+--------------------------
 
 The top-level *root* role signs for the keys of the top-level *timestamp*,
 *snapshot*, *targets* and *root* roles.  The *timestamp* role signs for every
@@ -286,16 +286,20 @@ new snapshot of the repository metadata.  The *snapshot* role signs for *root*,
 *targets* and all delegated targets metadata.  The *bins* role signs for all
 distributions belonging to registered PyPI projects.
 
-The metadata files that change most frequently will be *timestamp*, *snapshot*
-and delegated targets (*bins* projects) metadata.  The *timestamp* and
-*snapshot* metadata MUST be updated whenever *root*, *targets* or delegated
-targets metadata are updated.  Observe, though, that *root* and *targets*
-metadata are much less likely to be updated as often as delegated targets
-metadata.  Therefore, *timestamp* and *snapshot* metadata will most likely be
-updated frequently (possibly every minute) due to delegated targets metadata
-being updated frequently in order to drive continuous delivery of projects.
+The roles that change most frequently will be *timestamp*, *snapshot* and
+delegated targets (*bins* projects) metadata.  The *timestamp* and *snapshot*
+metadata MUST be updated whenever *root*, *targets* or delegated targets
+metadata are updated.  Observe, though, that *root* and *targets* metadata are
+much less likely to be updated as often as delegated targets metadata.
+Therefore, *timestamp* and *snapshot* metadata will most likely be updated
+frequently (possibly every minute) due to delegated targets metadata being
+updated frequently in order to drive continuous delivery of projects.
 Continuous delivery is a set of processes with which PyPI produces consistent
 snapshots that can safely coexist and be deleted independently [18]_.
+
+
+Repository Management and Signing Repository Metadata
+-----------------------------------------------------
 
 Every year, PyPI administrators are going to sign for *root* role keys.  After
 that, automation will continuously sign for a timestamped, snapshot of all
@@ -461,8 +465,8 @@ snapshot from PyPI.  While the client is busy downloading this snapshot, PyPI
 timestamps (references the latest version of snapshot)  a new snapshot at, say,
 version 2.  Without accounting for consistency, the client would then find
 itself with a copy of *snapshot* that is not in agreement with what is
-available on PyPI, which is indistinguishable from arbitrary metadata or
-package attacks.  The problem would also apply to mirrors attempting to sync
+available on PyPI, which is indistinguishable from arbitrary metadata injected
+by an attacker.  The problem would also apply to mirrors attempting to sync
 with PyPI.
 
 
@@ -676,8 +680,9 @@ goes into more detail.
 In the Event of a Key Compromise
 --------------------------------
 
-A key compromise means that the key as well as PyPI infrastructure has been
-compromised and used to sign new metadata on PyPI.
+A key compromise means that a threshold of keys (belonging to the metadata
+roles on PyPI), as well as PyPI infrastructure, has been compromised and used
+to sign new metadata on PyPI.
 
 If a threshold number of *timestamp*, *snapshot*, or *bins* keys have
 been compromised, then PyPI MUST take the following steps:
