@@ -449,17 +449,21 @@ online on the private infrastructure of the project.
 How Should Metadata be Generated?
 =================================
 
-Project developers expect the distributions they upload to PyPI to be
+Project developers expect that the distributions they upload to PyPI to be
 immediately available for download.  Unfortunately, there will be problems when
 there are many readers and writers simultaneously accessing the same metadata
-and distributions.  An example is a mirror attempting to sync with PyPI.
-Suppose that PyPI has timestamped a *snapshot* at version 1.  A mirror is later
-in the middle of copying PyPI at this snapshot.  While the mirror is copying
-PyPI at this snapshot, PyPI timestamps a new snapshot at, say, version 2.
-Without accounting for consistency, the mirror would then find itself with a
-copy of PyPI in an inconsistent state, which is indistinguishable from
-arbitrary metadata or package attacks.  The problem would also apply when the
-mirror is substituted with a pip user.
+and distributions.  There are problems of consistency on PyPI without TUF, but
+the problem is more severe with signed metadata that is verified.
+
+Suppose that PyPI has timestamped a *snapshot* (indicates the latest version of
+the repository's metadata files) at version 1.  A client later requests this
+snapshot from PyPI.  While the client is busy downloading this snapshot, PyPI
+timestamps (references the latest version of snapshot)  a new snapshot at, say,
+version 2.  Without accounting for consistency, the client would then find
+itself with a copy of *snapshot* that is not in agreement with what is
+available on PyPI, which is indistinguishable from arbitrary metadata or
+package attacks.  The problem would also apply to mirrors attempting to sync
+with PyPI.
 
 
 Consistent Snapshots
