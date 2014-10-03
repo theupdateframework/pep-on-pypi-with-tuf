@@ -745,16 +745,17 @@ When a repository compromise has been detected, the integrity of three types of
 information must be validated:
 
 1. If the online keys of the repository have been compromised, they can be
-revoked by having the *targets* role sign new metadata delegating to a new key.
+   revoked by having the *targets* role sign new metadata delegating to a new
+   key.
 
 2. If the role metadata on the repository has been changed, this would impact
-the metadata that is signed by online keys.  Any role information created since
-the last period should be discarded. As a result, developers of new projects
-will need to re-register their projects.
+   the metadata that is signed by online keys.  Any role information created
+   since the last period should be discarded. As a result, developers of new
+   projects will need to re-register their projects.
 
 3. If the packages themselves may have been tampered with, they can be
-validated using the stored hash information for packages that existed at the
-time of the last period.
+   validated using the stored hash information for packages that existed at the
+   time of the last period.
 
 In order to safely restore snapshots in the event of a compromise, PyPI SHOULD
 maintain a small number of its own mirrors to copy PyPI snapshots according to
@@ -840,27 +841,27 @@ There are several reasons for not initially supporting the features discussed
 in this section:
 
 1. A build farm (distribution wheels on supported platforms are generated on
-PyPI infrastructure for each project) may possibly complicate matters.  PyPI
-wants to support a build farm in the future.  Unfortunately, if wheels are
-auto-generated externally, developer signatures for these wheels are unlikely.
-However, there might still be a benefit to generating wheels from source
-distributions that *are* signed by developers (provided reproducible wheels are
-possible).  Another possibility is to optionally delegate trust of these wheels
-to an online role.
+   PyPI infrastructure for each project) may possibly complicate matters.  PyPI
+   wants to support a build farm in the future.  Unfortunately, if wheels are
+   auto-generated externally, developer signatures for these wheels are
+   unlikely.  However, there might still be a benefit to generating wheels from
+   source distributions that *are* signed by developers (provided reproducible
+   wheels are possible).  Another possibility is to optionally delegate trust
+   of these wheels to an online role.
 
 2. An easy-to-use key management solution is needed for developers.
-`miniLock`__ is one likely candidate for management and generation of keys.
-Although developer signatures can be left as an option, this approach may be
-insufficient due to the great number of unsigned dependencies that can occur
-for a signed distribution requested by a client.  Requiring developers to
-manually sign distributions and manage keys is expected to render key signing
-an unused feature.
+   `miniLock`__ is one likely candidate for management and generation of keys.
+   Although developer signatures can be left as an option, this approach may be
+   insufficient due to the great number of unsigned dependencies that can occur
+   for a signed distribution requested by a client.  Requiring developers to
+   manually sign distributions and manage keys is expected to render key
+   signing an unused feature.
 
 __ https://minilock.io/
 
 3. A two-phase approach, where the minimum security model is first implemented
-followed by the maximum security model, can simplify matters and give PyPI
-administrators time to review the feasibility of end-to-end signing.   
+   followed by the maximum security model, can simplify matters and give PyPI
+   administrators time to review the feasibility of end-to-end signing.   
 
 
 Maximum Security Model
