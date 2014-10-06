@@ -77,9 +77,13 @@ detect attacks from public mirrors or content delivery networks [11]_ (CDNs).
 Even though official mirrors are being deprecated on PyPI [12]_, there remain a
 wide variety of other attack vectors on package managers [13]_.  These ttacks
 can crash client systems, cause obsolete packages to be installed, or even
-allow an attacker to execute arbitrary code.  In September 2013, we showed how
-the latest version of pip (at the time) was susceptible to such attacks and how
-TUF could protect users against them [14]_.
+allow an attacker to execute arbitrary code.  In `September 2013`__, it was
+shown how the latest version of pip (at the time) was susceptible to such
+attacks and how TUF could protect users against them [14]_.  Specifically,
+testing was done to see how pip would response to these attacks with and
+without TUF.
+
+__ https://mail.python.org/pipermail/distutils-sig/2013-September/022755.html
 
 With the intent to protect PyPI against infrastructure compromises, this PEP
 proposes integrating PyPI with The Update Framework [2]_ (TUF).  TUF helps
@@ -677,9 +681,11 @@ attack, or metadata inconsistency attacks.
 +-----------------+-------------------+----------------+--------------------------------+
 
 Table 1: Attacks possible by compromising certain combinations of role keys.
-In September 2013, it was shown how the latest version (at the time) of pip was
+In `September 2013`__, it was shown how the latest version (at the time) of pip was
 susceptible to these attacks  and how TUF could protect users against them
 [14]_.
+
+__ https://mail.python.org/pipermail/distutils-sig/2013-September/022755.html
 
 Note that compromising *targets* or any delegated role (except for project
 targets metadata) does not immediately allow an attacker to serve malicious
