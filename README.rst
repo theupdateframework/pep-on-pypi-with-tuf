@@ -155,12 +155,12 @@ Terms used in this PEP are defined as follows:
   update the TUF metadata as well as distribution metadata and data for the
   project.
 
-* Online key: A cryptographic private key that MUST be stored on the PyPI
+* Online key: A private cryptographic key that MUST be stored on the PyPI
   server infrastructure.  This is usually to allow automated signing with the
   key.  However, an attacker who compromises the PyPI infrastructure will be
   able to read these keys.
 
-* Offline key: A cryptographic private key that MUST be stored independent of
+* Offline key: A private cryptographic key that MUST be stored independent of
   the PyPI infrastructure.  This prevents automated signing with the key.  An
   attacker who compromises the PyPI infrastructure will not be able to
   immediately read these keys.
@@ -266,14 +266,14 @@ The concept of roles allows TUF to delegate responsibilities to multiple roles
 and minimizes the impact of a compromised role.
 
 TUF requires four top-level roles.  These are *root*, *timestamp*, *snapshot*,
-and *targets*.  The *root* role specifies the public keys of the top-level
-roles (including its own).  The *timestamp* role references the latest
-*snapshot* and can signify when a new snapshot of the repository is available.
-The *snapshot* role indicates the latest version of all the TUF metadata files
-(other than *timestamp*).  The *targets* role lists the available target files
-(in our case, it will be all files on PyPI under the /simple and /packages
-directories).  Each top-level role will serve its responsibilities without
-exception.
+and *targets*.  The *root* role specifies the public cryptographic keys of the
+top-level roles (including its own).  The *timestamp* role references the
+latest *snapshot* and can signify when a new snapshot of the repository is
+available.  The *snapshot* role indicates the latest version of all the TUF
+metadata files (other than *timestamp*).  The *targets* role lists the
+available target files (in our case, it will be all files on PyPI under the
+/simple and /packages directories).  Each top-level role will serve its
+responsibilities without exception.
 
 Figure 1 provides an overview of the roles available within PyPI, which
 includes the top-level roles and the roles delegated by *targets*.  The figure
@@ -319,7 +319,7 @@ Minimum Security Model
 
 There are two security models to consider when integrating TUF with PyPI.  The
 one proposed in this PEP is the minimum security model, which supports
-verification of PyPI distributions that are signed with cryptographic private
+verification of PyPI distributions that are signed with private cryptographic
 keys stored on PyPI.  Distributions uploaded by developers are signed by PyPI
 and immediately available for download.  A possible future extension to this
 PEP, discussed in Appendix B, proposes the maximum security model and allows a
@@ -382,7 +382,7 @@ for about 220K PyPI targets (simple indices and distributions).
 
 It is possible to make TUF metadata more compact by representing it in a binary
 format as opposed to the JSON text format.  Nevertheless, we believe that a
-sufficiently large number of projects and distributions will raise scalability
+sufficiently large number of projects and distributions will cause scalability
 challenges at some point, and therefore the *bins* role will still need
 delegations in order to address the problem.  Furthermore, the JSON format is
 an open and well-known standard for data interchange.  Due to the large number
@@ -408,13 +408,13 @@ recommends diversity of keys for certain applications.
 Number Of Keys Recommended
 --------------------------
 
-The *timestamp*, *snapshot*, and *bins* roles will need to support continuous
-delivery.  Even though their respective keys will then need to be online, this
-PEP requires that the keys be independent of each other.  Different keys for
-online roles allow for each of the keys to be placed on separate servers if
-need be, and prevents side channel attacks that compromise one key from
-automatically compromising the rest of the keys.  Therefore, each of the
-*timestamp*, *snapshot*, and *bins* roles MUST require (1, 1) keys.
+The *timestamp*, *snapshot*, and *bins* roles require continuous delivery.
+Even though their respective keys MUST be online, this PEP requires that the
+keys be independent of each other.  Different keys for online roles allow for
+each of the keys to be placed on separate servers if need be, and prevents side
+channel attacks that compromise one key from automatically compromising the
+rest of the keys.  Therefore, each of the *timestamp*, *snapshot*, and *bins*
+roles MUST require (1, 1) keys.
 
 The *bins* role MAY delegate targets in an automated manner to a number of
 roles called "bins", as discussed in the previous section.  Each of the "bin"
@@ -424,7 +424,7 @@ and because there is no security advantage to requiring separate keys.
 The *root* role is critical for security and should very rarely be used.  It is
 primarily used for key revocation, and it is the locus of trust for all of
 PyPI.  The *root* role signs for the keys that are authorized for each of the
-top-level roles (including itself).  The keys belonging to the *root* role are
+top-level roles (including itself).  Keys belonging to the *root* role are
 intended to be very well-protected and used with the least frequency of all
 keys.  It is RECOMMENDED that every PSF board member own a (strong) root key.
 A majority of them can then constitute a quorum to revoke or endow trust in all
@@ -484,12 +484,12 @@ Consistent Snapshots
 --------------------
 
 There are problems with consistency on PyPI with or without TUF.  TUF requires
-that its metadata be consistent with the data, but how would the metadata be
-kept consistent with projects that change all the time?  As a result, this
-proposal MUST address the problem of producing a consistent snapshot that
-captures the state of all known projects at a given time.  Each snapshot should
-safely coexist with any other snapshot, and be able to be deleted
-independently, without affecting any other snapshot.
+that its metadata be consistent with the repository files, but how would the
+metadata be kept consistent with projects that change all the time?  As a
+result, this proposal MUST address the problem of producing a consistent
+snapshot that captures the state of all known projects at a given time.  Each
+snapshot should safely coexist with any other snapshot, and be able to be
+deleted independently, without affecting any other snapshot.
 
 The solution presented in this PEP is that every metadata or data file managed
 by PyPI and written to disk MUST include in its filename the `cryptographic
@@ -515,13 +515,13 @@ __ https://en.wikipedia.org/wiki/Collision_(computer_science)
 
 In this simple but effective manner, PyPI is able to capture a consistent
 snapshot of all projects and the associated metadata at a given time.  The next
-subsection explicates the implementation details of this idea.
+subsection provides implementation details of this idea.
 
 This PEP does not prohibit using advanced file systems or tools to produce
 consistent snapshots (such solutions are mentioned in the Appendix). There are
-two important reasons for why the PEP chose this simple solution.  Firstly, the
-solution does not mandate that PyPI use any particular file system or tool.
-Secondly, the generic file-system based approach allows mirrors to use extant
+two important reasons for why this PEP proposed the simple solution.  First,
+the solution does not mandate that PyPI use any particular file system or tool.
+Second, the generic file-system based approach allows mirrors to use extant
 file transfer tools such as rsync to efficiently transfer consistent snapshots
 from PyPI. 
 
@@ -533,8 +533,8 @@ Given a project, PyPI is responsible for updating the *bins* metadata (roles
 delegated by the *bins* role and signed with an online key).  Every project
 MUST upload its release in a single transaction.  The uploaded set of files is
 called the "project transaction".  How PyPI MAY validate the files in a project
-transaction will be discussed soon.  For now, focus is placed on how PyPI will
-respond to a project transaction.
+transaction is discussed in a later section.  For now, the focus is on how PyPI
+will respond to a project transaction.
 
 Every metadata and target file MUST include in its filename the `hex digest`__
 of its `SHA-256`__ hash.  For this PEP, it is RECOMMENDED that PyPI adopt a
@@ -544,22 +544,21 @@ filename without a copy of the hash, and digest is the hex digest of the hash.
 __ http://docs.python.org/2/library/hashlib.html#hashlib.hash.hexdigest
 __ https://en.wikipedia.org/wiki/SHA-2
 
-When a project uploads a new transaction, a project transaction process MUST
+When a project uploads a new transaction, the project transaction process MUST
 add all new targets and relevant delegated *bins* metadata.  (It is shown later
 in this section why the *bins* role will delegate targets to a number of
 delegated *bins* roles.)  Finally, the project transaction process MUST inform
 the snapshot process about new delegated *bins* metadata.
 
-Project transaction processes SHOULD be automated.  Project transaction
-processes MUST also be applied atomically: either all metadata and targets, or
-none of them, are added.  The project transaction and snapshot processes SHOULD
-work concurrently.  Finally, project transaction processes SHOULD keep in
-memory the latest *bins* metadata so that they will be correctly updated in new
-consistent snapshots.
+Project transaction processes SHOULD be automated and MUST also be applied
+atomically: either all metadata and targets -- or none of them -- are added.
+The project transaction and snapshot processes SHOULD work concurrently.
+Finally, project transaction processes SHOULD keep in memory the latest *bins*
+metadata so that they will be correctly updated in new consistent snapshots.
 
 All project transactions MAY be placed in a single queue and processed
 serially.  Alternatively, the queue MAY be processed concurrently in order of
-appearance provided that the following rules are observed:
+appearance, provided that the following rules are observed:
 
 1. No pair of project transaction processes must concurrently work on the same
    project.
@@ -581,9 +580,9 @@ delegated roles.  Every minute or so, the snapshot process will sign for this
 latest working set.  (Recall that project transaction processes continuously
 inform the snapshot process about the latest delegated metadata in a
 concurrency-safe manner.  The snapshot process will actually sign for a copy of
-the latest working set while the actual latest working set in memory will be
-updated with information continuously communicated by project transaction
-processes.)  Next, the snapshot process MUST generate and sign new *timestamp*
+the latest working set while the latest working set in memory will be updated
+with information that is continuously communicated by the project transaction
+processes.)  The snapshot process MUST generate and sign new *timestamp*
 metadata that will vouch for the *snapshot* metadata generated in the previous
 step.  Finally, the snapshot process MUST add new *timestamp* and *snapshot*
 metadata representing the latest snapshot.
@@ -595,11 +594,11 @@ disk space to produce a new consistent snapshot.  In that case, PyPI MAY then
 use something like a "mark-and-sweep" algorithm to delete sufficiently old
 consistent snapshots: in order to preserve the latest consistent snapshot, PyPI
 would walk objects beginning from the root (*timestamp*) of the latest
-consistent snapshot, mark all visited objects, and delete all unmarked
-objects.  The last few consistent snapshots may be preserved in a similar
-fashion.  Deleting a consistent snapshot will cause clients to see nothing
-thereafter but HTTP 404 responses to any request for a file in that consistent
-snapshot.  Clients SHOULD then retry their requests with the latest consistent
+consistent snapshot, mark all visited objects, and delete all unmarked objects.
+The last few consistent snapshots may be preserved in a similar fashion.
+Deleting a consistent snapshot will cause clients to see nothing except HTTP
+404 responses to any request for a file within that consistent snapshot.
+Clients SHOULD then retry (as before) their requests with the latest consistent
 snapshot.
 
 All clients, such as pip using the TUF protocol, MUST be modified to download
@@ -678,8 +677,9 @@ serve malicious updates.  The attacker must also compromise the *timestamp* and
 *snapshot* roles (which are both online and therefore more likely to be
 compromised).  This means that in order to launch any attack, one must be not
 only be able to act as a man-in-the-middle but also compromise the *timestamp*
-key (or the *root* keys and sign a new *timestamp* key).  To launch any attack
-other than a freeze attack, one must also compromise the *snapshot* key.
+key (or compromise the *root* keys and sign a new *timestamp* key).  To launch
+any attack other than a freeze attack, one must also compromise the *snapshot*
+key.
 
 Finally, a compromise of the PyPI infrastructure MAY introduce malicious
 updates to *bins* projects because the keys for these roles are online.  The
@@ -691,8 +691,8 @@ In the Event of a Key Compromise
 --------------------------------
 
 A key compromise means that a threshold of keys (belonging to the metadata
-roles on PyPI), as well as PyPI infrastructure, has been compromised and used
-to sign new metadata on PyPI.
+roles on PyPI), as well as the PyPI infrastructure, have been compromised and
+used to sign new metadata on PyPI.
 
 If a threshold number of *timestamp*, *snapshot*, or *bins* keys have
 been compromised, then PyPI MUST take the following steps:
@@ -720,26 +720,26 @@ been compromised, then PyPI MUST take the following steps:
 
 5. A new timestamped consistent snapshot MUST be issued.
 
-This would preemptively protect all of these roles even though only one of them
-may have been compromised.
+Following these steps would preemptively protect all of these roles even though
+only one of them may have been compromised.
 
-If a threshold number of the *root* keys have been compromised, then PyPI MUST
+If a threshold number of *root* keys have been compromised, then PyPI MUST
 take the steps taken when the *targets* role has been compromised as well as
 replace all of the *root* keys.
 
 It is also RECOMMENDED that PyPI sufficiently document compromises with
 security bulletins.  These security bulletins will be most informative when
 users of pip-with-TUF are unable to install or update a project because the
-keys for the *timestamp*, *snapshot* or *root* roles are no longer
-valid.  They could then visit the PyPI web site to consult security bulletins
-that would help to explain why they are no longer able to install or update,
-and then take action accordingly.  When a threshold number of *root* keys have
-not been revoked due to a compromise, then new *root* metadata may be safely
-updated because a threshold number of existing *root* keys will be used to sign
-for the integrity of the new *root* metadata so that TUF clients will be able
-to verify the integrity of the new *root* metadata with a threshold number of
-previously known *root* keys.  This will be the common case.  Otherwise, in the
-worst case where a threshold number of *root* keys have been revoked due to a
+keys for the *timestamp*, *snapshot* or *root* roles are no longer valid.  They
+could then visit the PyPI web site to consult security bulletins that would
+help to explain why they are no longer able to install or update, and then take
+action accordingly.  When a threshold number of *root* keys have not been
+revoked due to a compromise, then new *root* metadata may be safely updated
+because a threshold number of existing *root* keys will be used to sign for the
+integrity of the new *root* metadata so that TUF clients will be able to verify
+the integrity of the new *root* metadata with a threshold number of previously
+known *root* keys.  This will be the common case.  Otherwise, in the worst
+case, where a threshold number of *root* keys have been revoked due to a
 compromise, an end-user may choose to update new *root* metadata with
 `out-of-band`__ mechanisms.
 
