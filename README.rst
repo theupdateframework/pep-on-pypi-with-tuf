@@ -227,7 +227,7 @@ addressed by TUF, see Appendix A.
 Integrating TUF with PyPI
 =========================
 
-A software update system must complete two main tasks to integrate with] TUF.
+A software update system must complete two main tasks to integrate with TUF.
 First, it must add the framework to the client side of the update system.  For
 example, TUF may be integrated with the pip package manager.  Second, the
 repository on the server side must be modified to provide signed TUF metadata.
