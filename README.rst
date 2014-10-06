@@ -865,9 +865,10 @@ The maximum security model and end-to-end signing have been intentionally
 excluded from this PEP.  Although both improve PyPI's ability to survive a
 repository compromise and allow developers to sign their distributions, they
 have been postponed for review as a potential future extension to PEP 458.  PEP
-XXX, which discusses the extension in detail, is available for review to those
-developers interested in the end-to-end signing option.  The maximum security
-model and end-to-end signing are briefly covered in subsections that follow.
+XXX [VD: Link to PEP once it is completed], which discusses the extension in
+detail, is available for review to those developers interested in the
+end-to-end signing option.  The maximum security model and end-to-end signing
+are briefly covered in subsections that follow.
 
 There are several reasons for not initially supporting the features discussed
 in this section:
