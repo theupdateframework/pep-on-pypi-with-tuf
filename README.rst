@@ -75,7 +75,7 @@ do so [10]_.  Therefore, it would be wise to add more security measures to
 detect attacks from public mirrors or content delivery networks [11]_ (CDNs).
 
 Even though official mirrors are being deprecated on PyPI [12]_, there remain a
-wide variety of other attack vectors on package managers [13]_.  These ttacks
+wide variety of other attack vectors on package managers [13]_.  These attacks
 can crash client systems, cause obsolete packages to be installed, or even
 allow an attacker to execute arbitrary code.  In `September 2013`__, it was
 shown that the latest version of pip (at the time) was susceptible to such
@@ -219,9 +219,9 @@ referencing the metadata files during the update procedure.  Repository files
 are verified against the information included in the metadata before they are
 handed off to the software update system.  The framework also provides
 multi-signature trust, explicit and implicit revocation of cryptograhic keys,
-responsibility separation of the metadata, and minimizes minimizes key risk.
-For a full list and outline of the repository attacks and software updater
-weaknesses addressed by TUF, see Appendix A.
+responsibility separation of the metadata, and minimizes key risk.  For a full
+list and outline of the repository attacks and software updater weaknesses
+addressed by TUF, see Appendix A.
 
 
 Integrating TUF with PyPI
