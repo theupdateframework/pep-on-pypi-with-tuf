@@ -845,10 +845,10 @@ Appendix B: Extension to the Minimum Security Model
 The maximum security model and end-to-end signing have been intentionally
 excluded from this PEP.  Although both improve PyPI's ability to survive a
 repository compromise and allow developers to sign their distributions, they
-have been postponed as a potential future extension to PEP 458.  PEP XXX, which
+have been postponed for review as a potential future extension to PEP 458.  PEP XXX, which
 discusses the extension in detail, is available for review to those developers
 interested in the end-to-end signing option.  The maximum security model and
-end-to-end signing are briefly covered in the subsections that follow.
+end-to-end signing are briefly covered in subsections that follow.
 
 There are several reasons for not initially supporting the features discussed
 in this section:
@@ -858,7 +858,7 @@ in this section:
    wants to support a build farm in the future.  Unfortunately, if wheels are
    auto-generated externally, developer signatures for these wheels are
    unlikely.  However, there might still be a benefit to generating wheels from
-   source distributions that *are* signed by developers (provided reproducible
+   source distributions that *are* signed by developers (provided that reproducible
    wheels are possible).  Another possibility is to optionally delegate trust
    of these wheels to an online role.
 
@@ -872,7 +872,7 @@ in this section:
 
 __ https://minilock.io/
 
-3. A two-phase approach, where the minimum security model is first implemented
+3. A two-phase approach, where the minimum security model is implemented first,
    followed by the maximum security model, can simplify matters and give PyPI
    administrators time to review the feasibility of end-to-end signing.   
 
@@ -884,14 +884,14 @@ The maximum security model relies on developers signing their projects and
 uploading signed metadata to PyPI.  If the PyPI infrastructure were to be
 compromised, attackers would be unable to serve malicious versions of claimed
 projects without access to the project's developer key.  Figure 2 depicts the
-changes made to figure 1, namely that developer roles are now supported, and
+changes made to figure 1, namely that developer roles are now supported and
 that three new targets roles exist: *claimed*, *recently-claimed*, and
 *unclaimed*.  The *bins* role has been renamed *unclaimed* and can contain any
-projects that have not been added to *claimed*.  The strength of this model over
-the minimum security model is in the offline keys provided by developers.  Although
-the minimum securuity model supports continuous delivery, all of the projects
-are signed by an online key.  An attacker can corrupt package in the first,
-but not in the second without also compromising a developer's key.
+projects that have not been added to *claimed*.  The strength of this model (over
+the minimum security model) is in the offline keys provided by developers.  Although
+the minimum security model supports continuous delivery, all of the projects
+are signed by an online key.  An attacker can corrupt packages in the first,
+but not in the second without also compromising a developer's key. [[LV: what are first / second here?]
 
 .. image:: figure2.png
 
