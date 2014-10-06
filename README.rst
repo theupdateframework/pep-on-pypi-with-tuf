@@ -78,10 +78,12 @@ Even though official mirrors are being deprecated on PyPI [12]_, there remain a
 wide variety of other attack vectors on package managers [13]_.  These ttacks
 can crash client systems, cause obsolete packages to be installed, or even
 allow an attacker to execute arbitrary code.  In `September 2013`__, it was
-shown how the latest version of pip (at the time) was susceptible to such
+shown that the latest version of pip (at the time) was susceptible to such
 attacks and how TUF could protect users against them [14]_.  Specifically,
 testing was done to see how pip would response to these attacks with and
-without TUF.
+without TUF.  Attacks tested included replay and freeze, arbitrary packages,
+slow retrieval, endless data, and how pip would respond if PyPI were
+compromised. 
 
 __ https://mail.python.org/pipermail/distutils-sig/2013-September/022755.html
 
@@ -681,8 +683,8 @@ attack, or metadata inconsistency attacks.
 +-----------------+-------------------+----------------+--------------------------------+
 
 Table 1: Attacks possible by compromising certain combinations of role keys.
-In `September 2013`__, it was shown how the latest version (at the time) of pip was
-susceptible to these attacks  and how TUF could protect users against them
+In `September 2013`__, it was shown how the latest version (at the time) of pip
+was susceptible to these attacks  and how TUF could protect users against them
 [14]_.
 
 __ https://mail.python.org/pipermail/distutils-sig/2013-September/022755.html
