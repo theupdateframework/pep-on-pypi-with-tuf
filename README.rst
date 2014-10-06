@@ -693,7 +693,9 @@ attack other than a freeze attack, one must also compromise the *snapshot* key.
 Finally, a compromise of the PyPI infrastructure MAY introduce malicious
 updates to *bins* projects because the keys for these roles are online.  The
 maximum security model discussed in the appendix addresses this issue.  PEP XXX
-goes into more detail.
+[VD: Link to PEP once it is completed] also covers on the maximum security
+model and goes into more detail on generating developer keys and signing
+uploaded distributions.
 
 
 In the Event of a Key Compromise
@@ -854,10 +856,10 @@ Appendix B: Extension to the Minimum Security Model
 The maximum security model and end-to-end signing have been intentionally
 excluded from this PEP.  Although both improve PyPI's ability to survive a
 repository compromise and allow developers to sign their distributions, they
-have been postponed for review as a potential future extension to PEP 458.  PEP XXX, which
-discusses the extension in detail, is available for review to those developers
-interested in the end-to-end signing option.  The maximum security model and
-end-to-end signing are briefly covered in subsections that follow.
+have been postponed for review as a potential future extension to PEP 458.  PEP
+XXX, which discusses the extension in detail, is available for review to those
+developers interested in the end-to-end signing option.  The maximum security
+model and end-to-end signing are briefly covered in subsections that follow.
 
 There are several reasons for not initially supporting the features discussed
 in this section:
@@ -918,14 +920,15 @@ downloaded by clients.  PyPI is trusted to make uploaded projects available to
 clients (they sign the metadata for this part of the process), and developers
 can sign the distributions that they upload.
 
-PEP XXX discusses the tools available to developers who sign the distributions
-that they upload to PyPI.  In summary, developers generate cryptographic keys
-and sign metadata in some automated fashion, where the metadata includes the
-information required to verify the authenticity of the distribution.  The
-metadata is then uploaded to PyPI where it will be available for download by
-package managers such as pip (i.e., package managers that support TUF
-metadata).  The entire process is transparent to clients (using a package
-manager that supports TUF) who download distributions from PyPI.
+PEP XXX [VD: Link to PEP once it is completed] discusses the tools available to
+developers who sign the distributions that they upload to PyPI.  In summary,
+developers generate cryptographic keys and sign metadata in some automated
+fashion, where the metadata includes the information required to verify the
+authenticity of the distribution.  The metadata is then uploaded to PyPI where
+it will be available for download by package managers such as pip (i.e.,
+package managers that support TUF metadata).  The entire process is transparent
+to clients (using a package manager that supports TUF) who download
+distributions from PyPI.
 
 
 References
