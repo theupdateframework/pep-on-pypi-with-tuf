@@ -532,12 +532,11 @@ snapshot of all projects and the associated metadata at a given time.  The next
 subsection provides implementation details of this idea.
 
 This PEP does not prohibit using advanced file systems or tools to produce
-consistent snapshots (such solutions are mentioned in the Appendix). There are
-two important reasons for why this PEP proposed the simple solution.  First,
-the solution does not mandate that PyPI use any particular file system or tool.
-Second, the generic file-system based approach allows mirrors to use extant
-file transfer tools such as rsync to efficiently transfer consistent snapshots
-from PyPI. 
+consistent snapshots. There are two important reasons for why this PEP proposes
+the simple solution.  First, the solution does not mandate that PyPI use any
+particular file system or tool.  Second, the generic file-system based approach
+allows mirrors to use extant file transfer tools such as rsync to efficiently
+transfer consistent snapshots from PyPI. 
 
 
 Producing Consistent Snapshots
@@ -635,7 +634,7 @@ Key Compromise Analysis
 
 This PEP has covered the minimum security model, the TUF roles that should be
 added to support continuous delivery of distributions, and how to generate and
-sign the metadata of each role).  The remaining sections discuss how PyPI
+sign the metadata of each role.  The remaining sections discuss how PyPI
 SHOULD audit repository metadata, and the methods PyPI can use to detect and
 recover from a PyPI compromise.
 
@@ -696,7 +695,7 @@ Note that compromising *targets* or any delegated role (except for project
 targets metadata) does not immediately allow an attacker to serve malicious
 updates.  The attacker must also compromise the *timestamp* and *snapshot*
 roles (which are both online and therefore more likely to be compromised).
-This means that in order to launch any attack, one must be not only be able to
+This means that in order to launch any attack, one must not only be able to
 act as a man-in-the-middle but also compromise the *timestamp* key (or
 compromise the *root* keys and sign a new *timestamp* key).  To launch any
 attack other than a freeze attack, one must also compromise the *snapshot* key.
@@ -704,9 +703,9 @@ attack other than a freeze attack, one must also compromise the *snapshot* key.
 Finally, a compromise of the PyPI infrastructure MAY introduce malicious
 updates to *bins* projects because the keys for these roles are online.  The
 maximum security model discussed in the appendix addresses this issue.  PEP XXX
-[VD: Link to PEP once it is completed] also covers on the maximum security
-model and goes into more detail on generating developer keys and signing
-uploaded distributions.
+[VD: Link to PEP once it is completed] also covers the maximum security model
+and goes into more detail on generating developer keys and signing uploaded
+distributions.
 
 
 In the Event of a Key Compromise
@@ -738,16 +737,16 @@ been compromised, then PyPI MUST take the following steps:
    MUST be regenerated.
 
 4. The *bins* metadata MUST have their version numbers incremented, expiry
-   times suitably extended and signatures renewed.
+   times suitably extended, and signatures renewed.
 
 5. A new timestamped consistent snapshot MUST be issued.
 
 Following these steps would preemptively protect all of these roles even though
 only one of them may have been compromised.
 
-If a threshold number of *root* keys have been compromised, then PyPI MUST
-take the steps taken when the *targets* role has been compromised as well as
-replace all of the *root* keys.
+If a threshold number of *root* keys have been compromised, then PyPI MUST take
+the steps taken when the *targets* role has been compromised.  All of the
+*root* keys must also be replaced.
 
 It is also RECOMMENDED that PyPI sufficiently document compromises with
 security bulletins.  These security bulletins will be most informative when
@@ -895,9 +894,9 @@ in this section:
 
 __ https://minilock.io/
 
-3. A two-phase approach, where the minimum security model is implemented first,
+3. A two-phase approach, where the minimum security model is implemented first
    followed by the maximum security model, can simplify matters and give PyPI
-   administrators time to review the feasibility of end-to-end signing.   
+   administrators time to review the feasibility of end-to-end signing.
 
 
 Maximum Security Model
@@ -933,14 +932,14 @@ clients (they sign the metadata for this part of the process), and developers
 can sign the distributions that they upload.
 
 PEP XXX [VD: Link to PEP once it is completed] discusses the tools available to
-developers who sign the distributions that they upload to PyPI.  In summary,
-developers generate cryptographic keys and sign metadata in some automated
-fashion, where the metadata includes the information required to verify the
-authenticity of the distribution.  The metadata is then uploaded to PyPI where
-it will be available for download by package managers such as pip (i.e.,
-package managers that support TUF metadata).  The entire process is transparent
-to clients (using a package manager that supports TUF) who download
-distributions from PyPI.
+developers who sign the distributions that they upload to PyPI.  To summarize
+PEP XXX, developers generate cryptographic keys and sign metadata in some
+automated fashion, where the metadata includes the information required to
+verify the authenticity of the distribution.  The metadata is then uploaded to
+PyPI by the client, where it will be available for download by package managers
+such as pip (i.e., package managers that support TUF metadata).  The entire
+process is transparent to clients (using a package manager that supports TUF)
+who download distributions from PyPI.
 
 
 References
