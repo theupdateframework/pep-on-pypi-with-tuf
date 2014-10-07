@@ -1,4 +1,3 @@
-PEP: 458
 Title: Surviving a Compromise of PyPI
 Version: $Revision$
 Last-Modified: $Date$
@@ -22,24 +21,34 @@ with The Update Framework [2]_ (TUF).  TUF was designed to be a flexible
 security add-on to a software updater or package manager.  The framework
 integrates best security practices such as separating role responsibilities,
 adopting the many-man rule for signing packages, keeping signing keys offline,
-and revocation of expired or compromised signing keys.
+and revocation of expired or compromised signing keys.  For example, attackers
+would have to steal multiple signing keys stored independently to compromise
+a role responsible for specifying a repository's available files.  Another role
+responsible for indicating the latest snapshot of the repository may have to be
+similarly compromised, and independent of the first compromised role.
 
 The proposed integration will allow modern package managers such as pip [3]_ to
 be more secure against various types of security attacks on PyPI and protect
 users from such attacks.  Specifically, this PEP describes how PyPI processes
 should be adapted to generate and incorporate TUF metadata (i.e., the minimum
 security model).  The minimum security model supports verification of PyPI
-distributions that are signed with keys stored on PyPI.  Distributions uploaded
-by developers are signed by PyPI and immediately available for download.
+distributions that are signed with keys stored on PyPI: distributions uploaded
+by developers are signed by PyPI, require no action from developers (other
+than uploading distribution), and are immediately available for download.  The
+minimum security model also minimizes PyPI administrative responsibilities by
+automating much of the signing process.
 
 This PEP does not prescribe how package managers such as pip should be adapted
 to install or update projects from PyPI with TUF metadata.   Package managers
 interested in adopting TUF on the client side may consult TUF's `library
 documentation`__, which exists for this purpose.  Support for project
 distributions that are signed by developers (maximum security model) is also
-not proposed in this PEP, but is left as a possible future extension.  The
-maximum security model extension is outlined in the appendix and covered in
-detail in PEP XXX [VD: Link to PEP once it is completed].
+not discussed in this PEP, but is outlined in the appendix as a possible future
+extension, and covered in detail in PEP XXX [VD: Link to PEP once it is
+completed].  The maximum security model requires more PyPI administrative work,
+but none by clients.
+
+[VD: Must also mention build farm, miniLock, and other out-of-scope features]
 
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf/client#updaterpy
 
@@ -102,16 +111,18 @@ Threat Model
 
 The threat model assumes the following:
 
-* An attack can compromise at least one of PyPI's trusted keys.
+* Offline keys are safe and securely stored.
 
-* An attack that compromises multiple keys may do so at once, or over a period
+* Attackers can compromise at least one of PyPI's trusted keys stored online.
+
+* Attackers that compromise multiple keys may do so at once, or over a period
   of time.
 
-* An attack can respond to client requests.
+* Attackers can respond to client requests.
 
-An attack is considered successful if it can cause a client to install (or
+An attacker is considered successful if it can cause a client to install (or
 leave installed) something other than the most up-to-date version of the
-software the client is updating. If the attack is preventing the installation
+software the client is updating. If the attacker is preventing the installation
 of updates, it wants clients to not realize there is anything wrong.
 
 
@@ -189,31 +200,32 @@ surface, this all sounds simple. The basic steps for updating applications are:
 
 * Knowing when an update exists.
 
-* Downloading the latest version of an updated file.
+* Downloading a correct copy of the latest version of an updated file.
 
 The problem is that updating applications is only simple when there are no
 malicious activities in the picture. If an attacker is trying to interfere with
 these seemingly simple steps, there is plenty they can do.
 
-Let's assume that you take the approach of most systems (at least the ones that
-even try to be secure). You download both the file you want and a cryptographic
-signature of the file. You already know which key you trust to make the
-signature. You check that the signature is correct and was made by this trusted
-key. All seems well, right? Wrong. You are still at risk in many ways,
-including:
+Assume a software updater takes the approach of most systems (at least the ones
+that try to be secure). It downloads both the file it wants and a cryptographic
+signature of the file. The software updater already knows which key it trusts
+to make the signature. It checks that the signature is correct and was made by
+this trusted key. Unfortunately, the software updater is still at risk in many
+ways, including:
 
-* An attacker keeps giving you the same file, so you never realize there is an
-  update.
+* An attacker keeps giving the software updater the same update file, so it
+  never realizes there is an update.
 
-* An attacker gives you an older, insecure version of a file that you already
-  have, so you download that one and blindly use it thinking it's newer.
+* An attacker gives the software updater an older, insecure version of a file
+  that it already has, so it downloads that one and blindly uses it thinking it
+  is newer.
 
-* An attacker gives you a newer version of a file you have but it's not the
-  newest one. It's newer to you, but it may be insecure and exploitable by the
-  attacker.
+* An attacker gives the software updater a newer version of a file it has but
+  it is not the newest one.  The file is newer to the software updater, but it
+  may be insecure and exploitable by the attacker.
 
-* An attacker compromises the key used to sign these files and now you download
-  a malicious file that is properly signed.
+* An attacker compromises the key used to sign these files and now the software
+  updater downloads a malicious file that is properly signed.
 
 TUF is designed to address these attacks, and others, by adding signed metadata
 (text files that describe the repository's files) to the repository and
