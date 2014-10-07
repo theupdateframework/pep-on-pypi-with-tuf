@@ -44,11 +44,12 @@ interested in adopting TUF on the client side may consult TUF's `library
 documentation`__, which exists for this purpose.  Support for project
 distributions that are signed by developers (maximum security model) is also
 not discussed in this PEP, but is outlined in the appendix as a possible future
-extension, and covered in detail in PEP XXX [VD: Link to PEP once it is
-completed].  The maximum security model requires more PyPI administrative work,
-but none by clients.
-
-[VD: Must also mention build farm, miniLock, and other out-of-scope features]
+extension and covered in detail in PEP XXX [VD: Link to PEP once it is
+completed].  The PEP XXX extension focuses on the maximum security model, which
+requires more PyPI administrative work (none by clients), but it also proposes 
+an easy-to-use key management solution for developers, how to interface with
+a potential future build farm on PyPI infrastructure, and discusses the
+feasibility of end-to-end signing.
 
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf/client#updaterpy
 
