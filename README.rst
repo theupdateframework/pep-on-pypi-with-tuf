@@ -321,7 +321,7 @@ independently independent of other snapshots [18]_.
 
 Every year, PyPI administrators SHOULD sign for *root* and *targets* role keys.
 Automation will continuously sign for a timestamped, snapshot of all project.
-A `repository management`__ tool available that can sign metadata files,
+A `repository management`__ tool is available that can sign metadata files,
 generate cryptographic keys, and manage a TUF repository.
 
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf#repository-management
@@ -351,10 +351,11 @@ manipulate TUF metadata using the keys stored online.
 This PEP proposes that the *bins* role (and its delegated roles) sign for all
 PyPI projects with an online key.  The *targets* role, which only signs with an
 offline key, MUST delegate all PyPI projects to the *bins* role.  This means
-that when a package manager such as pip using TUF) downloads a distribution
-from a project on PyPI, it will consult the *bins* role about the TUF metadata
-for the project.  If no bin roles delegated by *bins* specify the project's
-distribution, then the project is considered to be non-existent on PyPI.
+that when a package manager such as pip (i.e., using TUF) downloads a
+distribution from a project on PyPI, it will consult the *bins* role about the
+TUF metadata for the project.  If no bin roles delegated by *bins* specify the
+project's distribution, then the project is considered to be non-existent on
+PyPI.
 
 
 Metadata Expiry Times
@@ -389,7 +390,7 @@ __ https://github.com/theupdateframework/tuf/issues/39
 Based on our findings as of the time of writing, PyPI SHOULD split all targets
 in the *bins* role by delegating them to 1024 delegated roles, each of which
 would sign for PyPI targets whose hashes fall into that "bin" or delegated role
-(see Figure 1).  It was found that 1024 bins would result in the *bins*
+(see Figure 2).  It was found that 1024 bins would result in the *bins*
 metadata, and each of its delegated roles, being about the same size (40-50KB)
 for about 220K PyPI targets (simple indices and distributions).
 
@@ -397,10 +398,10 @@ It is possible to make TUF metadata more compact by representing it in a binary
 format as opposed to the JSON text format.  Nevertheless, we believe that a
 sufficiently large number of projects and distributions will cause scalability
 challenges at some point, and therefore the *bins* role will still need
-delegations in order to address the problem.  Furthermore, the JSON format is
-an open and well-known standard for data interchange.  Due to the large number
-of delegated metadata, compressed versions of *snapshot* metadata SHOULD also
-be made available to clients.
+delegations (as outlined in figure 2) in order to address the problem.
+Furthermore, the JSON format is an open and well-known standard for data
+interchange.  Due to the large number of delegated metadata, compressed
+versions of *snapshot* metadata SHOULD also be made available to clients.
 
 
 PyPI and Key Requirements
@@ -434,10 +435,10 @@ roles called "bins", as discussed in the previous section.  Each of the "bin"
 roles SHOULD share the same key as the *bins* role, due to space efficiency,
 and because there is no security advantage to requiring separate keys.
 
-The *root* role is critical for security and should very rarely be used.  It is
-primarily used for key revocation, and it is the locus of trust for all of
-PyPI.  The *root* role signs for the keys that are authorized for each of the
-top-level roles (including itself).  Keys belonging to the *root* role are
+The *root* role key is critical for security and should very rarely be used.
+It is primarily used for key revocation, and it is the locus of trust for all
+of PyPI.  The *root* role signs for the keys that are authorized for each of
+the top-level roles (including itself).  Keys belonging to the *root* role are
 intended to be very well-protected and used with the least frequency of all
 keys.  It is RECOMMENDED that every PSF board member own a (strong) root key.
 A majority of them can then constitute a quorum to revoke or endow trust in all
