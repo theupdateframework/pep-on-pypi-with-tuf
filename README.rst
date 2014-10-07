@@ -114,10 +114,8 @@ The threat model assumes the following:
 
 * Offline keys are safe and securely stored.
 
-* Attackers can compromise at least one of PyPI's trusted keys stored online.
-
-* Attackers that compromise multiple keys may do so at once, or over a period
-  of time.
+* Attackers can compromise at least one of PyPI's trusted keys stored online,
+  and may do so at once or over a period of time.
 
 * Attackers can respond to client requests.
 
