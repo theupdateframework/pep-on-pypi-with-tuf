@@ -36,9 +36,10 @@ This PEP does not prescribe how package managers such as pip should be adapted
 to install or update projects from PyPI with TUF metadata.   Package managers
 interested in adopting TUF on the client side may consult TUF's `library
 documentation`__, which exists for this purpose.  Support for project
-distributions that are signed by developers is also not proposed in this PEP,
-but is left as a possible future extension.  The maximum security model
-extension is outlined in the appendix.
+distributions that are signed by developers (maximum security model) is also
+not proposed in this PEP, but is left as a possible future extension.  The
+maximum security model extension is outlined in the appendix and covered in
+detail in PEP XXX [VD: Link to PEP once it is completed].
 
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf/client#updaterpy
 
@@ -59,12 +60,13 @@ valuable resource used by thousands, if not millions, of people.
 Before the wiki attack, PyPI used MD5 hashes to tell package managers, such as
 pip, whether or not a package was corrupted in transit.  However, the absence
 of SSL made it hard for package managers to verify transport integrity to PyPI.
-It was therefore easy to launch a man-in-the-middle attack between pip and PyPI
-and change package content arbitrarily.  Users could be tricked into installing
-malicious packages.  After the wiki attack, several steps were proposed (some
-of which were implemented) to deliver a much higher level of security than was
-previously the case: requiring SSL to communicate with PyPI [6]_, restricting
-project names [7]_, and migrating from MD5 to SHA-2 hashes [8]_.
+It was therefore easy to launch a man-in-the-middle attack between pip and
+PyPI, and change package content arbitrarily.  Users could be tricked into
+installing malicious packages with man-in-the-middle attacks.  After the wiki
+attack, several steps were proposed (some of which were implemented) to deliver
+a much higher level of security than was previously the case: requiring SSL to
+communicate with PyPI [6]_, restricting project names [7]_, and migrating from
+MD5 to SHA-2 hashes [8]_.
 
 These steps, though necessary, are insufficient because attacks are still
 possible through other avenues.  For example, a public mirror is trusted to
@@ -79,7 +81,7 @@ wide variety of other attack vectors on package managers [13]_.  These attacks
 can crash client systems, cause obsolete packages to be installed, or even
 allow an attacker to execute arbitrary code.  In `September 2013`__, it was
 shown that the latest version of pip (at the time) was susceptible to such
-attacks and how TUF could protect users against them [14]_.  Specifically,
+attacks, and how TUF could protect users against them [14]_.  Specifically,
 testing was done to see how pip would response to these attacks with and
 without TUF.  Attacks tested included replay and freeze, arbitrary packages,
 slow retrieval, endless data, and how pip would respond if PyPI were
@@ -102,7 +104,7 @@ The threat model assumes the following:
 
 * An attack can compromise at least one of PyPI's trusted keys.
 
-* An attack that compromise multiple keys may do so at once, or over a period
+* An attack that compromises multiple keys may do so at once, or over a period
   of time.
 
 * An attack can respond to client requests.
@@ -116,7 +118,7 @@ of updates, it wants clients to not realize there is anything wrong.
 Definitions
 ===========
 
-The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
+The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD",
 "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be
 interpreted as described in RFC 2119__.
 
@@ -255,7 +257,7 @@ trustworthy, TUF then hands them over to the package manager.
 
 The `Metadata`__ document provides information about each of the required
 metadata and their expected content.  The next section covers the different
-kinds of metadata recommended for PyPI.
+kinds of metadata RECOMMENDED for PyPI.
 
 __ https://github.com/theupdateframework/tuf/blob/develop/METADATA.md
 
@@ -265,7 +267,7 @@ PyPI and TUF Metadata
 
 TUF metadata provides information that clients can use to make update
 decisions.  For example, a *targets* metadata lists the available distributions
-on PyPI and include the distribution's signatures, cryptographic hashes, and
+on PyPI and includes the distribution's signatures, cryptographic hashes, and
 file sizes.  Different metadata files provide different information.  The
 various metadata files are signed by different roles, which are indicated by
 the *root* role.  The concept of roles allows TUF to delegate responsibilities
