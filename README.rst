@@ -988,20 +988,23 @@ __ http://www.python.org/dev/peps/pep-0470/
 
 Potentional  approaches to handle projects hosted externally:
 
-1.  Download external distributions but do not verify them.  Targets metadata
-    does not include information for externally hosted projects.
+1.  Download external distributions but do not verify them.  The targets metadata
+    will not include information for externally hosted projects.
 
-2.  PyPI can periodically visit the site's index.  The purpose is to gather distribution file size and hashes 
-    and generate the appropriate TUF metadata.
+2.  PyPI will periodically download information from the index.  PyPI will 
+    gather the distribution file size and hashes and generate appropriate TUF metadata.
 
-3.  External projects must submit (to PyPI) the file size and cryptographic hash for a
-    distribution.
+3.  External projects MUST submit (to PyPI) the file size and cryptographic hash for
+    a distribution.
 
+4.  External projects MUST provide PyPI a developer key for the index.  The distribution must
+    create TUF metadata signed with that key and stored at the index.  The client will
+    fetch this metadata as part of the package update process.
 
-4.  External projects must provide signed TUF metadata (as allowed by the maximum
+5.  External projects MUST upload to PyPI signed TUF metadata (as allowed by the maximum
     security model) about the distributions that they host externally.  Package
     managers verify distributions by consulting the signed metadata.
-
+  
  
 
 
