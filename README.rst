@@ -339,6 +339,30 @@ generate cryptographic keys, and manage a TUF repository.
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf#repository-management
 
 
+How to Establish Initial Trust in the PyPI Root Keys
+----------------------------------------------------
+
+Package managers like pip need to ship a file called "root.json" with the
+installation files that users initially download. This includes information
+about the keys trusted for certain roles, as well as the root keys themselves.
+Any new version of "root.json" that clients may download are verified against
+the root keys that client's initially trust. If a root key is compromised, but
+a threshold of keys are still secured, the PyPI administrator MUST push a new
+release that revokes trust in the compromised keys. If a threshold of root keys
+are compromised, then "root.json" should be updated out-of-band, however the
+threshold should be chosen so that this is extremely unlikely. The TUF client
+library does not require manual intervention if root keys are revoked or added:
+the update process handles the cases where "root.json" has changed.
+
+To bundle the software, "root.json" MUST be included in the version of pip
+shipped with CPython (via ensurepip). The TUF client library then loads the
+root metadata and downloads the rest of the roles, including updating
+"root.json" if it has changed.  An `outline of the update process`__ is
+available.
+
+__ https://github.com/theupdateframework/tuf/tree/develop/tuf/client#overview-of-the-update-process.
+
+
 Minimum Security Model
 ----------------------
 
@@ -407,13 +431,13 @@ metadata, and each of its delegated roles, being about the same size (40-50KB)
 for about 220K PyPI targets (simple indices and distributions).
 
 It is possible to make TUF metadata more compact by representing it in a binary
-format as opposed to the JSON text format.  Nevertheless, we believe that a
-sufficiently large number of projects and distributions will introduce
-scalability challenges at some point, and therefore the *bins* role will still
-need delegations (as outlined in figure 2) in order to address the problem.
-Furthermore, the JSON format is an open and well-known standard for data
-interchange.  Due to the large number of delegated metadata, compressed
-versions of *snapshot* metadata SHOULD also be made available to clients.
+format as opposed to the JSON text format.  Nevertheless, a sufficiently large
+number of projects and distributions will introduce scalability challenges at
+some point, and therefore the *bins* role will still need delegations (as
+outlined in figure 2) in order to address the problem.  Furthermore, the JSON
+format is an open and well-known standard for data interchange.  Due to the
+large number of delegated metadata, compressed versions of *snapshot* metadata
+SHOULD also be made available to clients.
 
 
 PyPI and Key Requirements
@@ -661,7 +685,7 @@ attack, or metadata inconsistency attacks.
 +-----------------+-------------------+----------------+--------------------------------+
 | Role Compromise | Malicious Updates | Freeze Attack  | Metadata Inconsistency Attacks |
 +=================+===================+================+================================+
-|    timetamp     |       NO          |       YES      |       NO                       |
+|    timestamp    |       NO          |       YES      |       NO                       |
 |                 | snapshot and      | limited by     | snapshot needs to cooperate    |
 |                 | targets or any    | earliest root, |                                |
 |                 | of the bins need  | targets, or    |                                |
@@ -952,6 +976,45 @@ PyPI by the client, where it will be available for download by package managers
 such as pip (i.e., package managers that support TUF metadata).  The entire
 process is transparent to clients (using a package manager that supports TUF)
 who download distributions from PyPI.
+
+
+Appendix C: PEP 470 and Projects Hosted Externally
+==================================================
+
+How should TUF handle distributions that are not hosted on PyPI?  According to
+`PEP 470`__, projects may opt to host their distributions externally and are
+only required to provide PyPI a link to its external index, which package
+managers like pip can use to find the project's distributions.  PEP 470 does
+not mention whether externally hosted projects are considered unverified by
+default, as projects that use this option are not required to submit any
+information about their distributions (e.g., file size and cryptographic hash)
+when the project is registered, nor include a cryptographic hash of the file
+in download links.
+
+__ http://www.python.org/dev/peps/pep-0470/
+
+Potentional approaches that PyPI administrators MAY be considered to handle
+projects hosted externally:
+
+1.  Download external distributions but do not verify them.  The targets
+    metadata will not include information for externally hosted projects.
+
+2.  PyPI will periodically download information from the external index.  PyPI
+    will gather the external distribution's file size and hashes and generate
+    appropriate TUF metadata.
+
+3.  External projects MUST submit to PyPI the file size and cryptographic hash
+    for a distribution.
+
+4.  External projects MUST provide PyPI a developer key for the index.  The
+    distribution MUST create TUF metadata signed with that key and stored at
+    the index.  The client will fetch this metadata as part of the package
+    update process.
+
+5.  External projects MUST upload to PyPI signed TUF metadata (as allowed by
+    the maximum security model) about the distributions that they host
+    externally.  Package managers verify distributions by consulting the signed
+    metadata.
 
 
 References
