@@ -993,7 +993,7 @@ in download links.
 
 __ http://www.python.org/dev/peps/pep-0470/
 
-Potentional approaches that PyPI administrators MAY be considered to handle
+Potentional approaches that PyPI administrators MAY consider to handle
 projects hosted externally:
 
 1.  Download external distributions but do not verify them.  The targets
