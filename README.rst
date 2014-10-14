@@ -338,20 +338,27 @@ generate cryptographic keys, and manage a TUF repository.
 
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf#repository-management
 
-Package managers like pip need to ship the repository's root keys (i.e.,
-"root.json", which is signed by the root role) with the installation files that
-users initially download.  For example, "root.json" can be included in the
-version of pip shipped with CPython (via ensurepip).  The TUF client library
-then loads the root metadata and downloads the rest of the roles, including
-updating "root.json" if it has changed.  An `outline of the update process`__
-is available.
 
-Note: The public keys of root are also listed in "root.json".  Any new version
-of "root.json" that clients may download are verified against the root keys
-that client's initially trust.  If a threshold of root keys are compromised,
-then "root.json" should be updated out-of-band.  The TUF client library does
-not require manual intervention if root keys are revoked or added: the update
-process handles the cases where "root.json" has changed.
+How to Establish Initial Trust in the PyPI Root Keys
+----------------------------------------------------
+
+Package managers like pip need to ship a file called "root.json" with the
+installation files that users initially download. This includes information
+about the keys trusted for certain roles, as well as the root keys themselves.
+Any new version of "root.json" that clients may download are verified against
+the root keys that client's initially trust. If a root key is compromised, but
+a threshold of keys are still secured, the PyPI administrator MUST push a new
+release that revokes trust in the compromised keys. If a threshold of root keys
+are compromised, then "root.json" should be updated out-of-band, however the
+threshold should be chosen so that this is extremely unlikely. The TUF client
+library does not require manual intervention if root keys are revoked or added:
+the update process handles the cases where "root.json" has changed.
+
+To bundle the software, "root.json" MUST be included in the version of pip
+shipped with CPython (via ensurepip). The TUF client library then loads the
+root metadata and downloads the rest of the roles, including updating
+"root.json" if it has changed.  An `outline of the update process`__ is
+available.
 
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf/client#overview-of-the-update-process.
 
@@ -980,32 +987,34 @@ only required to provide PyPI a link to its external index, which package
 managers like pip can use to find the project's distributions.  PEP 470 does
 not mention whether externally hosted projects are considered unverified by
 default, as projects that use this option are not required to submit any
-information about their distributions (e.g., file size and cryptographic hash).
+information about their distributions (e.g., file size and cryptographic hash)
 when the project is registered, nor include a cryptographic hash of the file
 in download links.
 
 __ http://www.python.org/dev/peps/pep-0470/
 
-Potentional  approaches to handle projects hosted externally:
+Potentional approaches that PyPI administrators MAY be considered to handle
+projects hosted externally:
 
-1.  Download external distributions but do not verify them.  The targets metadata
-    will not include information for externally hosted projects.
+1.  Download external distributions but do not verify them.  The targets
+    metadata will not include information for externally hosted projects.
 
-2.  PyPI will periodically download information from the index.  PyPI will 
-    gather the distribution file size and hashes and generate appropriate TUF metadata.
+2.  PyPI will periodically download information from the external index.  PyPI
+    will gather the external distribution's file size and hashes and generate
+    appropriate TUF metadata.
 
-3.  External projects MUST submit (to PyPI) the file size and cryptographic hash for
-    a distribution.
+3.  External projects MUST submit to PyPI the file size and cryptographic hash
+    for a distribution.
 
-4.  External projects MUST provide PyPI a developer key for the index.  The distribution must
-    create TUF metadata signed with that key and stored at the index.  The client will
-    fetch this metadata as part of the package update process.
+4.  External projects MUST provide PyPI a developer key for the index.  The
+    distribution MUST create TUF metadata signed with that key and stored at
+    the index.  The client will fetch this metadata as part of the package
+    update process.
 
-5.  External projects MUST upload to PyPI signed TUF metadata (as allowed by the maximum
-    security model) about the distributions that they host externally.  Package
-    managers verify distributions by consulting the signed metadata.
-  
- 
+5.  External projects MUST upload to PyPI signed TUF metadata (as allowed by
+    the maximum security model) about the distributions that they host
+    externally.  Package managers verify distributions by consulting the signed
+    metadata.
 
 
 References
