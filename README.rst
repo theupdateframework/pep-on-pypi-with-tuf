@@ -1006,15 +1006,24 @@ projects hosted externally:
 3.  External projects MUST submit to PyPI the file size and cryptographic hash
     for a distribution.
 
-4.  External projects MUST provide PyPI a developer key for the index.  The
-    distribution MUST create TUF metadata signed with that key and stored at
-    the index.  The client will fetch this metadata as part of the package
+4.  External projects MUST upload to PyPI a developer public key for the
+    index.  The distribution MUST create TUF metadata that is stored at the
+    index, and signed with the developer's corresponding private key.  The
+    client will fetch the external TUF metadata as part of the package
     update process.
 
 5.  External projects MUST upload to PyPI signed TUF metadata (as allowed by
     the maximum security model) about the distributions that they host
-    externally.  Package managers verify distributions by consulting the signed
-    metadata.
+    externally, and a developer public key.  Package managers verify
+    distributions by consulting the signed metadata uploaded to PyPI.
+    
+Only one of the options listed above should be implemented on PyPI.  Option
+(4) or (5) is RECOMMENDED because external distributions are signed by
+developers. External distributions that are forged (due to a compromised
+PyPI account or external host) may be detected if external developers are
+required to sign metadata, although this requirement is likely only practical
+if an easy-to-use key management solution and developer scripts are provided
+by PyPI.
 
 
 References
