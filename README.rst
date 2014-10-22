@@ -135,7 +135,7 @@ interpreted as described in RFC 2119__.
 
 __ http://www.ietf.org/rfc/rfc2119.txt
 
-This PEP focuses on the application of TUF on PyPI; however, the reader is
+This PEP focuses on integrating TUF with PyPI; however, the reader is
 encouraged to read about TUF's design principles [2]_.  It is also RECOMMENDED
 that the reader be familiar with the TUF specification [16]_.
 
@@ -154,21 +154,26 @@ Terms used in this PEP are defined as follows:
 
 * Simple index: The HTML page that contains internal links to the
   distributions of a project [17]_.
+  
+* Roles: There is one *root* role in PyPI.  There are multiple roles whose      
+  responsibilities are delegated to them directly or indirectly by the *root*   
+  role. The term top-level role refers to the *root* role and any role          
+  delegated by the *root* role. Each role has a single metadata file that it is 
+  trusted to provide.          
 
 * Metadata: Metadata are signed files that describe roles, other metadata, and
   target files.
 
-* Repository: A repository is a source of named metadata and target files.
-  Clients request metadata and target files stored on a repository.
+* Repository: A repository is a resource compromised of named metadata and target
+  files.  Clients request metadata and target files stored on a repository.
 
 * Consistent snapshot: A set of TUF metadata and PyPI targets that capture the
-  complete state of all projects on PyPI as they were at some fixed point in
+  complete state of all projects on PyPI as they existed at some fixed point in
   time.
 
-* The *snapshot* (*release*) role: In order to prevent confusion due
-  to the different meanings of the term "release" as employed by PEP 426 [17]_
-  and the TUF specification [16]_, the *release* role is renamed as the
-  *snapshot* role.
+* The *snapshot* (*release*) role: In order to prevent confusion due to the
+  different meanings of the term "release" used in PEP 426 [17]_ and the TUF
+  specification [16]_, the *release* role is renamed as the *snapshot* role.
   
 * Developer: Either the owner or maintainer of a project who is allowed to
   update the TUF metadata as well as distribution metadata and files for the
