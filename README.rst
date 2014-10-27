@@ -3,7 +3,7 @@ Version: $Revision$
 Last-Modified: $Date$
 Author: Trishank Karthik Kuppusamy <trishank@nyu.edu>,
 Donald Stufft <donald@stufft.io>, Justin Cappos <jcappos@nyu.edu>,
-Vladimir Diaz <vladimir.v.diaz@gmail.com>
+Vladimir Diaz <vd558@nyu.edu>
 
 BDFL-Delegate: Nick Coghlan <ncoghlan@gmail.com>
 Discussions-To: DistUtils mailing list <distutils-sig@python.org>
