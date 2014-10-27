@@ -911,22 +911,25 @@ are briefly covered in subsections that follow.
 There are several reasons for not initially supporting the features discussed
 in this section:
 
-1. A build farm (distribution wheels on supported platforms are generated on
-   PyPI infrastructure for each project) may possibly complicate matters.  PyPI
+1. A build farm (distribution wheels on supported platforms are generated for
+   each project on PyPI infrastructure) may possibly complicate matters.  PyPI
    wants to support a build farm in the future.  Unfortunately, if wheels are
    auto-generated externally, developer signatures for these wheels are
    unlikely.  However, there might still be a benefit to generating wheels from
-   source distributions that *are* signed by developers (provided that reproducible
+   source distributions that are signed by developers (provided that reproducible
    wheels are possible).  Another possibility is to optionally delegate trust
    of these wheels to an online role.
 
-2. An easy-to-use key management solution is needed for developers.
-   `miniLock`__ is one likely candidate for management and generation of keys.
-   Although developer signatures can be left as an option, this approach may be
-   insufficient due to the great number of unsigned dependencies that can occur
-   for a signed distribution requested by a client.  Requiring developers to
-   manually sign distributions and manage keys is expected to render key
-   signing an unused feature.
+2. An easy-to-use key management solution is needed for developers.  `miniLock`__
+   is one likely candidate for management and generation of keys.  Although
+   developer signatures can remain optional, this approach may be inadequate
+   due to the great number of potentially unsigned dependencies each
+   distribution may have.  If any one of these dependencies is unsigned, it
+   negates any benefit the project gains from signing its own distribution
+   (i.e., attackers would only need to compromise one of the unsigned
+   dependencies to attack end-users).  Requiring developers to manually sign
+   distributions and manage keys is expected to render key signing an unused
+   feature.
 
 __ https://minilock.io/
 
