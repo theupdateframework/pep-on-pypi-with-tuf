@@ -855,49 +855,49 @@ like implicit key revocation and metadata mismatch detection [81].
 Appendix A: Repository Attacks Prevented by TUF
 ===============================================
 
-1. Arbitrary software installation: An attacker installs anything they want on
-   the client system. That is, an attacker can provide arbitrary files in
-   respond to download requests and the files will not be detected as
-   illegitimate.
+* **Arbitrary software installation**: An attacker installs anything they want
+  on the client system. That is, an attacker can provide arbitrary files in
+  respond to download requests and the files will not be detected as
+  illegitimate.
 
-2. Rollback attacks: An attacker presents a software update system with older
-   files than those the client has already seen, causing the client to use
-   files older than those the client knows about.
+* **Rollback attacks**: An attacker presents a software update system with
+  older files than those the client has already seen, causing the client to use
+  files older than those the client knows about.
 
-3. Indefinite freeze attacks: An attacker continues to present a software
-   update system with the same files the client has already seen. The result is
-   that the client does not know that new files are available.
+* **Indefinite freeze attacks**: An attacker continues to present a software
+  update system with the same files the client has already seen. The result is
+  that the client does not know that new files are available.
 
-4. Endless data attacks: An attacker responds to a file download request with
-   an endless stream of data, causing harm to clients (e.g., a disk partition
-   filling up or memory exhaustion).
+* **Endless data attacks**: An attacker responds to a file download request
+  with an endless stream of data, causing harm to clients (e.g., a disk
+  partition filling up or memory exhaustion).
 
-5. Slow retrieval attacks: An attacker responds to clients with a very slow
-   stream of data that essentially results in the client never continuing the
-   update process.
+* **Slow retrieval attacks**: An attacker responds to clients with a very slow
+  stream of data that essentially results in the client never continuing the
+  update process.
 
-6. Extraneous dependencies attacks: An attacker indicates to clients that in
-   order to install the software they wanted, they also need to install
-   unrelated software.  This unrelated software can be from a trusted source
-   but may have known vulnerabilities that are exploitable by the attacker.
+* **Extraneous dependencies attacks**: An attacker indicates to clients that in
+  order to install the software they wanted, they also need to install
+  unrelated software.  This unrelated software can be from a trusted source
+  but may have known vulnerabilities that are exploitable by the attacker.
 
-7. Mix-and-match attacks: An attacker presents clients with a view of a
-   repository that includes files that never existed together on the repository
-   at the same time. This can result in, for example, outdated versions of
-   dependencies being installed.
+* **Mix-and-match attacks**: An attacker presents clients with a view of a
+  repository that includes files that never existed together on the repository
+  at the same time. This can result in, for example, outdated versions of
+  dependencies being installed.
 
-8. Wrong software installation: An attacker provides a client with a trusted
-   file that is not the one the client wanted.
+* **Wrong software installation**: An attacker provides a client with a trusted
+  file that is not the one the client wanted.
 
-9. Malicious mirrors preventing updates: An attacker in control of one
-   repository mirror is able to prevent users from obtaining updates from
-   other, good mirrors.
+* **Malicious mirrors preventing updates**: An attacker in control of one
+  repository mirror is able to prevent users from obtaining updates from
+  other, good mirrors.
 
-10. Vulnerability to key compromises: An attacker who is able to compromise a
-    single key or less than a given threshold of keys can compromise clients.
-    This includes relying on a single online key (such as only being protected
-    by SSL) or a single offline key (such as most software update systems use
-    to sign files).
+* **Vulnerability to key compromises**: An attacker who is able to compromise a
+  single key or less than a given threshold of keys can compromise clients.
+  This includes relying on a single online key (such as only being protected
+  by SSL) or a single offline key (such as most software update systems use
+  to sign files).
 
 
 Appendix B: Extension to the Minimum Security Model
