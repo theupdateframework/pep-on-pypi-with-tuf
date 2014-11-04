@@ -5,7 +5,7 @@ Author: Trishank Karthik Kuppusamy <trishank@nyu.edu>,
 Vladimir Diaz <vd558@nyu.edu>,
 Donald Stufft <donald@stufft.io>, Justin Cappos <jcappos@nyu.edu>
 
-BDFL-Delegate: Nick Coghlan <ncoghlan@gmail.com>
+BDFL-Delegate: Richard Jones <r1chardj0n3s@gmail.com>
 Discussions-To: DistUtils mailing list <distutils-sig@python.org>
 Status: Draft
 Type: Standards Track
