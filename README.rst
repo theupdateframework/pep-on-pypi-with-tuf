@@ -2,8 +2,8 @@ Title: Surviving a Compromise of PyPI
 Version: $Revision$
 Last-Modified: $Date$
 Author: Trishank Karthik Kuppusamy <trishank@nyu.edu>,
-Donald Stufft <donald@stufft.io>, Justin Cappos <jcappos@nyu.edu>,
-Vladimir Diaz <vd558@nyu.edu>
+Vladimir Diaz <vd558@nyu.edu>,
+Donald Stufft <donald@stufft.io>, Justin Cappos <jcappos@nyu.edu>
 
 BDFL-Delegate: Nick Coghlan <ncoghlan@gmail.com>
 Discussions-To: DistUtils mailing list <distutils-sig@python.org>
@@ -33,8 +33,8 @@ users from such attacks.  Specifically, this PEP describes how PyPI processes
 should be adapted to generate and incorporate TUF metadata (i.e., the minimum
 security model).  The minimum security model supports verification of PyPI
 distributions that are signed with keys stored on PyPI: distributions uploaded
-by developers are signed by PyPI, require no action from developers (other
-than uploading the distribution), and are immediately available for download.  The
+by developers are signed by PyPI, require no action from developers (other than
+uploading the distribution), and are immediately available for download.  The
 minimum security model also minimizes PyPI administrative responsibilities by
 automating much of the signing process.
 
@@ -44,11 +44,11 @@ interested in adopting TUF on the client side may consult TUF's `library
 documentation`__, which exists for this purpose.  Support for project
 distributions that are signed by developers (maximum security model) is also
 not discussed in this PEP, but is outlined in the appendix as a possible future
-extension and covered in detail in PEP XXX [VD: Link to PEP once it is
-completed].  The PEP XXX extension focuses on the maximum security model, which
-requires more PyPI administrative work (none by clients), but it also proposes 
-an easy-to-use key management solution for developers, how to interface with
-a potential future build farm on PyPI infrastructure, and discusses the
+extension and covered in detail in PEP X [VD: Link to PEP once it is
+completed].  The PEP X extension focuses on the maximum security model, which
+requires more PyPI administrative work (none by clients), but it also proposes
+an easy-to-use key management solution for developers, how to interface with a
+potential future build farm on PyPI infrastructure, and discusses the
 feasibility of end-to-end signing.
 
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf/client#updaterpy
@@ -164,8 +164,9 @@ Terms used in this PEP are defined as follows:
 * Metadata: Metadata are signed files that describe roles, other metadata, and
   target files.
 
-* Repository: A repository is a resource compromised of named metadata and target
-  files.  Clients request metadata and target files stored on a repository.
+* Repository: A repository is a resource compromised of named metadata and
+  target files.  Clients request metadata and target files stored on a
+  repository.
 
 * Consistent snapshot: A set of TUF metadata and PyPI targets that capture the
   complete state of all projects on PyPI as they existed at some fixed point in
@@ -742,7 +743,7 @@ attack other than a freeze attack, one must also compromise the *snapshot* key.
 
 Finally, a compromise of the PyPI infrastructure MAY introduce malicious
 updates to *bins* projects because the keys for these roles are online.  The
-maximum security model discussed in the appendix addresses this issue.  PEP XXX
+maximum security model discussed in the appendix addresses this issue.  PEP X
 [VD: Link to PEP once it is completed] also covers the maximum security model
 and goes into more detail on generating developer keys and signing uploaded
 distributions.
@@ -907,7 +908,7 @@ The maximum security model and end-to-end signing have been intentionally
 excluded from this PEP.  Although both improve PyPI's ability to survive a
 repository compromise and allow developers to sign their distributions, they
 have been postponed for review as a potential future extension to PEP 458.  PEP
-XXX [VD: Link to PEP once it is completed], which discusses the extension in
+X [VD: Link to PEP once it is completed], which discusses the extension in
 detail, is available for review to those developers interested in the
 end-to-end signing option.  The maximum security model and end-to-end signing
 are briefly covered in subsections that follow.
@@ -924,10 +925,10 @@ in this section:
    reproducible wheels are possible).  Another possibility is to optionally
    delegate trust of these wheels to an online role.
 
-2. An easy-to-use key management solution is needed for developers.  `miniLock`__
-   is one likely candidate for management and generation of keys.  Although
-   developer signatures can remain optional, this approach may be inadequate
-   due to the great number of potentially unsigned dependencies each
+2. An easy-to-use key management solution is needed for developers.
+   `miniLock`__ is one likely candidate for management and generation of keys.
+   Although developer signatures can remain optional, this approach may be
+   inadequate due to the great number of potentially unsigned dependencies each
    distribution may have.  If any one of these dependencies is unsigned, it
    negates any benefit the project gains from signing its own distribution
    (i.e., attackers would only need to compromise one of the unsigned
@@ -974,9 +975,9 @@ downloaded by clients.  PyPI is trusted to make uploaded projects available to
 clients (they sign the metadata for this part of the process), and developers
 can sign the distributions that they upload.
 
-PEP XXX [VD: Link to PEP once it is completed] discusses the tools available to
+PEP X [VD: Link to PEP once it is completed] discusses the tools available to
 developers who sign the distributions that they upload to PyPI.  To summarize
-PEP XXX, developers generate cryptographic keys and sign metadata in some
+PEP X, developers generate cryptographic keys and sign metadata in some
 automated fashion, where the metadata includes the information required to
 verify the authenticity of the distribution.  The metadata is then uploaded to
 PyPI by the client, where it will be available for download by package managers
