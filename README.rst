@@ -2,8 +2,8 @@ Title: Surviving a Compromise of PyPI
 Version: $Revision$
 Last-Modified: $Date$
 Author: Trishank Karthik Kuppusamy <trishank@nyu.edu>,
-Donald Stufft <donald@stufft.io>, Justin Cappos <jcappos@nyu.edu>,
-Vladimir Diaz <vladimir.v.diaz@gmail.com>
+Vladimir Diaz <vd558@nyu.edu>,
+Donald Stufft <donald@stufft.io>, Justin Cappos <jcappos@nyu.edu>
 
 BDFL-Delegate: Nick Coghlan <ncoghlan@gmail.com>
 Discussions-To: DistUtils mailing list <distutils-sig@python.org>
@@ -33,8 +33,8 @@ users from such attacks.  Specifically, this PEP describes how PyPI processes
 should be adapted to generate and incorporate TUF metadata (i.e., the minimum
 security model).  The minimum security model supports verification of PyPI
 distributions that are signed with keys stored on PyPI: distributions uploaded
-by developers are signed by PyPI, require no action from developers (other
-than uploading the distribution), and are immediately available for download.  The
+by developers are signed by PyPI, require no action from developers (other than
+uploading the distribution), and are immediately available for download.  The
 minimum security model also minimizes PyPI administrative responsibilities by
 automating much of the signing process.
 
@@ -44,11 +44,11 @@ interested in adopting TUF on the client side may consult TUF's `library
 documentation`__, which exists for this purpose.  Support for project
 distributions that are signed by developers (maximum security model) is also
 not discussed in this PEP, but is outlined in the appendix as a possible future
-extension and covered in detail in PEP XXX [VD: Link to PEP once it is
-completed].  The PEP XXX extension focuses on the maximum security model, which
-requires more PyPI administrative work (none by clients), but it also proposes 
-an easy-to-use key management solution for developers, how to interface with
-a potential future build farm on PyPI infrastructure, and discusses the
+extension and covered in detail in PEP X [VD: Link to PEP once it is
+completed].  The PEP X extension focuses on the maximum security model, which
+requires more PyPI administrative work (none by clients), but it also proposes
+an easy-to-use key management solution for developers, how to interface with a
+potential future build farm on PyPI infrastructure, and discusses the
 feasibility of end-to-end signing.
 
 __ https://github.com/theupdateframework/tuf/tree/develop/tuf/client#updaterpy
@@ -164,8 +164,9 @@ Terms used in this PEP are defined as follows:
 * Metadata: Metadata are signed files that describe roles, other metadata, and
   target files.
 
-* Repository: A repository is a resource compromised of named metadata and target
-  files.  Clients request metadata and target files stored on a repository.
+* Repository: A repository is a resource compromised of named metadata and
+  target files.  Clients request metadata and target files stored on a
+  repository.
 
 * Consistent snapshot: A set of TUF metadata and PyPI targets that capture the
   complete state of all projects on PyPI as they existed at some fixed point in
@@ -686,43 +687,42 @@ that have been compromised, and the columns to its right show whether the
 compromised roles leaves clients susceptible to malicious updates, a freeze
 attack, or metadata inconsistency attacks.
 
-
 +-----------------+-------------------+----------------+--------------------------------+
 | Role Compromise | Malicious Updates | Freeze Attack  | Metadata Inconsistency Attacks |
 +=================+===================+================+================================+
-|    timestamp    |       NO          |       YES      |       NO                       |
+| timestamp       | NO                | YES            | NO                             |
 |                 | snapshot and      | limited by     | snapshot needs to cooperate    |
 |                 | targets or any    | earliest root, |                                |
 |                 | of the bins need  | targets, or    |                                |
 |                 | to cooperate      | bin expiry     |                                |
 |                 |                   | time           |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|    snapshot     |       NO          |       NO       |       NO                       |
+| snapshot        | NO                | NO             | NO                             |
 |                 | timestamp and     | timestamp      | timestamp needs to cooperate   |
 |                 | targets or any of | needs to       |                                |
 |                 | the bins need to  | cooperate      |                                |
 |                 | cooperate         |                |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|    timestamp    |       NO          |       YES      |       YES                      |
-|    **AND**      | targets or any    | limited by     | limited by earliest root,      |
-|    snapshot     | of the bins need  | earliest root, | targets, or bin metadata       |
+| timestamp       | NO                | YES            | YES                            |
+| **AND**         | targets or any    | limited by     | limited by earliest root,      |
+| snapshot        | of the bins need  | earliest root, | targets, or bin metadata       |
 |                 | to cooperate      | targets, or    | expiry time                    |
 |                 |                   | bin metadata   |                                |
 |                 |                   | expiry time    |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|    targets      |       NO          | NOT APPLICABLE |        NOT APPLICABLE          |
-|    **OR**       | timestamp and     | need timestamp | need timestamp and snapshot    |
-|    bin          | snapshot need to  | and snapshot   |                                |
+| targets         | NO                | NOT APPLICABLE | NOT APPLICABLE                 |
+| **OR**          | timestamp and     | need timestamp | need timestamp and snapshot    |
+| bin             | snapshot need to  | and snapshot   |                                |
 |                 | cooperate         |                |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|   timestamp     |       YES         |       YES      |       YES                      |
-|   **AND**       |                   | limited by     | limited by earliest root,      |
-|   snapshot      |                   | earliest root, | targets, or bin metadata       |
-|   **AND**       |                   | targets, or    | expiry time                    |
-|   bin           |                   | bin metadata   |                                |
+| timestamp       | YES               | YES            | YES                            |
+| **AND**         |                   | limited by     | limited by earliest root,      |
+| snapshot        |                   | earliest root, | targets, or bin metadata       |
+| **AND**         |                   | targets, or    | expiry time                    |
+| bin             |                   | bin metadata   |                                |
 |                 |                   | expiry time    |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|     root        |       YES         |       YES      |       YES                      |
+| root            | YES               | YES            | YES                            |
 +-----------------+-------------------+----------------+--------------------------------+
 
 Table 1: Attacks possible by compromising certain combinations of role keys.
@@ -743,7 +743,7 @@ attack other than a freeze attack, one must also compromise the *snapshot* key.
 
 Finally, a compromise of the PyPI infrastructure MAY introduce malicious
 updates to *bins* projects because the keys for these roles are online.  The
-maximum security model discussed in the appendix addresses this issue.  PEP XXX
+maximum security model discussed in the appendix addresses this issue.  PEP X
 [VD: Link to PEP once it is completed] also covers the maximum security model
 and goes into more detail on generating developer keys and signing uploaded
 distributions.
@@ -879,8 +879,8 @@ Appendix A: Repository Attacks Prevented by TUF
 
 * **Extraneous dependencies attacks**: An attacker indicates to clients that in
   order to install the software they wanted, they also need to install
-  unrelated software.  This unrelated software can be from a trusted source but
-  may have known vulnerabilities that are exploitable by the attacker.
+  unrelated software.  This unrelated software can be from a trusted source
+  but may have known vulnerabilities that are exploitable by the attacker.
 
 * **Mix-and-match attacks**: An attacker presents clients with a view of a
   repository that includes files that never existed together on the repository
@@ -891,14 +891,14 @@ Appendix A: Repository Attacks Prevented by TUF
   file that is not the one the client wanted.
 
 * **Malicious mirrors preventing updates**: An attacker in control of one
-  repository mirror is able to prevent users from obtaining updates from other,
-  good mirrors.
+  repository mirror is able to prevent users from obtaining updates from
+  other, good mirrors.
 
 * **Vulnerability to key compromises**: An attacker who is able to compromise a
   single key or less than a given threshold of keys can compromise clients.
-  This includes relying on a single online key (such as only being protected by
-  SSL) or a single offline key (such as most software update systems use to
-  sign files).
+  This includes relying on a single online key (such as only being protected
+  by SSL) or a single offline key (such as most software update systems use
+  to sign files).
 
 
 Appendix B: Extension to the Minimum Security Model
@@ -908,7 +908,7 @@ The maximum security model and end-to-end signing have been intentionally
 excluded from this PEP.  Although both improve PyPI's ability to survive a
 repository compromise and allow developers to sign their distributions, they
 have been postponed for review as a potential future extension to PEP 458.  PEP
-XXX [VD: Link to PEP once it is completed], which discusses the extension in
+X [VD: Link to PEP once it is completed], which discusses the extension in
 detail, is available for review to those developers interested in the
 end-to-end signing option.  The maximum security model and end-to-end signing
 are briefly covered in subsections that follow.
@@ -916,24 +916,27 @@ are briefly covered in subsections that follow.
 There are several reasons for not initially supporting the features discussed
 in this section:
 
-1. A build farm (distribution wheels on supported platforms are generated on
-   PyPI infrastructure for each project) may possibly complicate matters.  PyPI
+1. A build farm (distribution wheels on supported platforms are generated for
+   each project on PyPI infrastructure) may possibly complicate matters.  PyPI
    wants to support a build farm in the future.  Unfortunately, if wheels are
    auto-generated externally, developer signatures for these wheels are
    unlikely.  However, there might still be a benefit to generating wheels from
-   source distributions that *are* signed by developers (provided that reproducible
-   wheels are possible).  Another possibility is to optionally delegate trust
-   of these wheels to an online role.
+   source distributions that are signed by developers (provided that
+   reproducible wheels are possible).  Another possibility is to optionally
+   delegate trust of these wheels to an online role.
 
 2. An easy-to-use key management solution is needed for developers.
    `miniLock`__ is one likely candidate for management and generation of keys.
-   Although developer signatures can be left as an option, this approach may be
-   insufficient due to the great number of unsigned dependencies that can occur
-   for a signed distribution requested by a client.  Requiring developers to
-   manually sign distributions and manage keys is expected to render key
-   signing an unused feature.
+   Although developer signatures can remain optional, this approach may be
+   inadequate due to the great number of potentially unsigned dependencies each
+   distribution may have.  If any one of these dependencies is unsigned, it
+   negates any benefit the project gains from signing its own distribution
+   (i.e., attackers would only need to compromise one of the unsigned
+   dependencies to attack end-users).  Requiring developers to manually sign
+   distributions and manage keys is expected to render key signing an unused
+   feature.
 
-__ https://minilock.io/
+    __ https://minilock.io/
 
 3. A two-phase approach, where the minimum security model is implemented first
    followed by the maximum security model, can simplify matters and give PyPI
@@ -972,9 +975,9 @@ downloaded by clients.  PyPI is trusted to make uploaded projects available to
 clients (they sign the metadata for this part of the process), and developers
 can sign the distributions that they upload.
 
-PEP XXX [VD: Link to PEP once it is completed] discusses the tools available to
+PEP X [VD: Link to PEP once it is completed] discusses the tools available to
 developers who sign the distributions that they upload to PyPI.  To summarize
-PEP XXX, developers generate cryptographic keys and sign metadata in some
+PEP X, developers generate cryptographic keys and sign metadata in some
 automated fashion, where the metadata includes the information required to
 verify the authenticity of the distribution.  The metadata is then uploaded to
 PyPI by the client, where it will be available for download by package managers
@@ -1063,33 +1066,30 @@ References
 .. [24] https://pypi.python.org/pypi/pycrypto
 .. [25] http://ed25519.cr.yp.to/
 
-
 Acknowledgements
 ================
 
 This material is based upon work supported by the National Science Foundation
-under Grant No. CNS-1345049 and CNS-0959138. Any opinions, findings, and
+under Grants No. CNS-1345049 and CNS-0959138. Any opinions, findings, and
 conclusions or recommendations expressed in this material are those of the
 author(s) and do not necessarily reflect the views of the National Science
 Foundation.
 
-Nick Coghlan, Daniel Holth and the distutils-sig community in general for
-helping us to think about how to usably and efficiently integrate TUF with
+We thank Nick Coghlan, Daniel Holth and the distutils-sig community in general
+for helping us to think about how to usably and efficiently integrate TUF with
 PyPI.
 
-Roger Dingledine, Sebastian Hahn, Nick Mathewson,  Martin Peck and Justin
-Samuel for helping us to design TUF from its predecessor Thandy of the Tor
-project.
+Roger Dingledine, Sebastian Hahn, Nick Mathewson, Martin Peck and Justin Samuel
+helped us to design TUF from its predecessor Thandy of the Tor project.
 
-Konstantin Andrianov, Geremy Condra, Vladimir Diaz, Zane Fisher, Justin Samuel,
-Tian Tian, Santiago Torres, John Ward, and Yuyu Zheng for helping us to develop
-TUF.
+We appreciate the efforts of Konstantin Andrianov, Geremy Condra, Zane Fisher,
+Justin Samuel, Tian Tian, Santiago Torres, John Ward, and Yuyu Zheng to to
+develop TUF.
 
-Vladimir Diaz, Monzur Muhammad and Sai Teja Peddinti for helping us to review
-this PEP.
+Vladimir Diaz, Monzur Muhammad and Sai Teja Peddinti helped us to review this
+PEP.
 
-Zane Fisher for helping us to review and transcribe this PEP.
-
+Zane Fisher helped us to review and transcribe this PEP.
 
 Copyright
 =========
