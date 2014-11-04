@@ -686,43 +686,42 @@ that have been compromised, and the columns to its right show whether the
 compromised roles leaves clients susceptible to malicious updates, a freeze
 attack, or metadata inconsistency attacks.
 
-
 +-----------------+-------------------+----------------+--------------------------------+
 | Role Compromise | Malicious Updates | Freeze Attack  | Metadata Inconsistency Attacks |
 +=================+===================+================+================================+
-|    timestamp    |       NO          |       YES      |       NO                       |
+| timestamp       | NO                | YES            | NO                             |
 |                 | snapshot and      | limited by     | snapshot needs to cooperate    |
 |                 | targets or any    | earliest root, |                                |
 |                 | of the bins need  | targets, or    |                                |
 |                 | to cooperate      | bin expiry     |                                |
 |                 |                   | time           |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|    snapshot     |       NO          |       NO       |       NO                       |
+| snapshot        | NO                | NO             | NO                             |
 |                 | timestamp and     | timestamp      | timestamp needs to cooperate   |
 |                 | targets or any of | needs to       |                                |
 |                 | the bins need to  | cooperate      |                                |
 |                 | cooperate         |                |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|    timestamp    |       NO          |       YES      |       YES                      |
-|    **AND**      | targets or any    | limited by     | limited by earliest root,      |
-|    snapshot     | of the bins need  | earliest root, | targets, or bin metadata       |
+| timestamp       | NO                | YES            | YES                            |
+| **AND**         | targets or any    | limited by     | limited by earliest root,      |
+| snapshot        | of the bins need  | earliest root, | targets, or bin metadata       |
 |                 | to cooperate      | targets, or    | expiry time                    |
 |                 |                   | bin metadata   |                                |
 |                 |                   | expiry time    |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|    targets      |       NO          | NOT APPLICABLE |        NOT APPLICABLE          |
-|    **OR**       | timestamp and     | need timestamp | need timestamp and snapshot    |
-|    bin          | snapshot need to  | and snapshot   |                                |
+| targets         | NO                | NOT APPLICABLE | NOT APPLICABLE                 |
+| **OR**          | timestamp and     | need timestamp | need timestamp and snapshot    |
+| bin             | snapshot need to  | and snapshot   |                                |
 |                 | cooperate         |                |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|   timestamp     |       YES         |       YES      |       YES                      |
-|   **AND**       |                   | limited by     | limited by earliest root,      |
-|   snapshot      |                   | earliest root, | targets, or bin metadata       |
-|   **AND**       |                   | targets, or    | expiry time                    |
-|   bin           |                   | bin metadata   |                                |
+| timestamp       | YES               | YES            | YES                            |
+| **AND**         |                   | limited by     | limited by earliest root,      |
+| snapshot        |                   | earliest root, | targets, or bin metadata       |
+| **AND**         |                   | targets, or    | expiry time                    |
+| bin             |                   | bin metadata   |                                |
 |                 |                   | expiry time    |                                |
 +-----------------+-------------------+----------------+--------------------------------+
-|     root        |       YES         |       YES      |       YES                      |
+| root            | YES               | YES            | YES                            |
 +-----------------+-------------------+----------------+--------------------------------+
 
 Table 1: Attacks possible by compromising certain combinations of role keys.
@@ -856,49 +855,49 @@ like implicit key revocation and metadata mismatch detection [81].
 Appendix A: Repository Attacks Prevented by TUF
 ===============================================
 
-* **Arbitrary software installation**: An attacker installs anything they want
-  on the client system. That is, an attacker can provide arbitrary files in
-  respond to download requests and the files will not be detected as
-  illegitimate.
+1. Arbitrary software installation: An attacker installs anything they want on
+   the client system. That is, an attacker can provide arbitrary files in
+   respond to download requests and the files will not be detected as
+   illegitimate.
 
-* **Rollback attacks**: An attacker presents a software update system with
-  older files than those the client has already seen, causing the client to use
-  files older than those the client knows about.
+2. Rollback attacks: An attacker presents a software update system with older
+   files than those the client has already seen, causing the client to use
+   files older than those the client knows about.
 
-* **Indefinite freeze attacks**: An attacker continues to present a software
-  update system with the same files the client has already seen. The result is
-  that the client does not know that new files are available.
+3. Indefinite freeze attacks: An attacker continues to present a software
+   update system with the same files the client has already seen. The result is
+   that the client does not know that new files are available.
 
-* **Endless data attacks**: An attacker responds to a file download request
-  with an endless stream of data, causing harm to clients (e.g., a disk
-  partition filling up or memory exhaustion).
+4. Endless data attacks: An attacker responds to a file download request with
+   an endless stream of data, causing harm to clients (e.g., a disk partition
+   filling up or memory exhaustion).
 
-* **Slow retrieval attacks**: An attacker responds to clients with a very slow
-  stream of data that essentially results in the client never continuing the
-  update process.
+5. Slow retrieval attacks: An attacker responds to clients with a very slow
+   stream of data that essentially results in the client never continuing the
+   update process.
 
-* **Extraneous dependencies attacks**: An attacker indicates to clients that in
-  order to install the software they wanted, they also need to install
-  unrelated software.  This unrelated software can be from a trusted source but
-  may have known vulnerabilities that are exploitable by the attacker.
+6. Extraneous dependencies attacks: An attacker indicates to clients that in
+   order to install the software they wanted, they also need to install
+   unrelated software.  This unrelated software can be from a trusted source
+   but may have known vulnerabilities that are exploitable by the attacker.
 
-* **Mix-and-match attacks**: An attacker presents clients with a view of a
-  repository that includes files that never existed together on the repository
-  at the same time. This can result in, for example, outdated versions of
-  dependencies being installed.
+7. Mix-and-match attacks: An attacker presents clients with a view of a
+   repository that includes files that never existed together on the repository
+   at the same time. This can result in, for example, outdated versions of
+   dependencies being installed.
 
-* **Wrong software installation**: An attacker provides a client with a trusted
-  file that is not the one the client wanted.
+8. Wrong software installation: An attacker provides a client with a trusted
+   file that is not the one the client wanted.
 
-* **Malicious mirrors preventing updates**: An attacker in control of one
-  repository mirror is able to prevent users from obtaining updates from other,
-  good mirrors.
+9. Malicious mirrors preventing updates: An attacker in control of one
+   repository mirror is able to prevent users from obtaining updates from
+   other, good mirrors.
 
-* **Vulnerability to key compromises**: An attacker who is able to compromise a
-  single key or less than a given threshold of keys can compromise clients.
-  This includes relying on a single online key (such as only being protected by
-  SSL) or a single offline key (such as most software update systems use to
-  sign files).
+10. Vulnerability to key compromises: An attacker who is able to compromise a
+    single key or less than a given threshold of keys can compromise clients.
+    This includes relying on a single online key (such as only being protected
+    by SSL) or a single offline key (such as most software update systems use
+    to sign files).
 
 
 Appendix B: Extension to the Minimum Security Model
@@ -921,9 +920,9 @@ in this section:
    wants to support a build farm in the future.  Unfortunately, if wheels are
    auto-generated externally, developer signatures for these wheels are
    unlikely.  However, there might still be a benefit to generating wheels from
-   source distributions that *are* signed by developers (provided that reproducible
-   wheels are possible).  Another possibility is to optionally delegate trust
-   of these wheels to an online role.
+   source distributions that are signed by developers (provided that
+   reproducible wheels are possible).  Another possibility is to optionally
+   delegate trust of these wheels to an online role.
 
 2. An easy-to-use key management solution is needed for developers.
    `miniLock`__ is one likely candidate for management and generation of keys.
@@ -933,7 +932,7 @@ in this section:
    manually sign distributions and manage keys is expected to render key
    signing an unused feature.
 
-__ https://minilock.io/
+    __ https://minilock.io/
 
 3. A two-phase approach, where the minimum security model is implemented first
    followed by the maximum security model, can simplify matters and give PyPI
@@ -1063,33 +1062,30 @@ References
 .. [24] https://pypi.python.org/pypi/pycrypto
 .. [25] http://ed25519.cr.yp.to/
 
-
 Acknowledgements
 ================
 
 This material is based upon work supported by the National Science Foundation
-under Grant No. CNS-1345049 and CNS-0959138. Any opinions, findings, and
+under Grants No. CNS-1345049 and CNS-0959138. Any opinions, findings, and
 conclusions or recommendations expressed in this material are those of the
 author(s) and do not necessarily reflect the views of the National Science
 Foundation.
 
-Nick Coghlan, Daniel Holth and the distutils-sig community in general for
-helping us to think about how to usably and efficiently integrate TUF with
+We thank Nick Coghlan, Daniel Holth and the distutils-sig community in general
+for helping us to think about how to usably and efficiently integrate TUF with
 PyPI.
 
-Roger Dingledine, Sebastian Hahn, Nick Mathewson,  Martin Peck and Justin
-Samuel for helping us to design TUF from its predecessor Thandy of the Tor
-project.
+Roger Dingledine, Sebastian Hahn, Nick Mathewson, Martin Peck and Justin Samuel
+helped us to design TUF from its predecessor Thandy of the Tor project.
 
-Konstantin Andrianov, Geremy Condra, Vladimir Diaz, Zane Fisher, Justin Samuel,
-Tian Tian, Santiago Torres, John Ward, and Yuyu Zheng for helping us to develop
-TUF.
+We appreciate the efforts of Konstantin Andrianov, Geremy Condra, Zane Fisher,
+Justin Samuel, Tian Tian, Santiago Torres, John Ward, and Yuyu Zheng to to
+develop TUF.
 
-Vladimir Diaz, Monzur Muhammad and Sai Teja Peddinti for helping us to review
-this PEP.
+Vladimir Diaz, Monzur Muhammad and Sai Teja Peddinti helped us to review this
+PEP.
 
-Zane Fisher for helping us to review and transcribe this PEP.
-
+Zane Fisher helped us to review and transcribe this PEP.
 
 Copyright
 =========
