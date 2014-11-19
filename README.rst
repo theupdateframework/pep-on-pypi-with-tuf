@@ -163,9 +163,8 @@ Terms used in this PEP are defined as follows:
 * Metadata: Metadata are signed files that describe roles, other metadata, and
   target files.
 
-* Repository: A repository is a resource compromised of named metadata and
-  target files.  Clients request metadata and target files stored on a
-  repository.
+* Repository: A repository is a resource comprised of named metadata and target
+  files.  Clients request metadata and target files stored on a repository.
 
 * Consistent snapshot: A set of TUF metadata and PyPI targets that capture the
   complete state of all projects on PyPI as they existed at some fixed point in
