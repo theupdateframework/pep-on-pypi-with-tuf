@@ -301,7 +301,7 @@ available target files (in our case, it will be all files on PyPI under the
 responsibilities without exception.  Figure 1 provides a table of the roles
 used in TUF.
 
-.. image:: pep-048/figure1.png
+.. image:: pep-0458/figure1.png
 
 Figure 1: An overview of the TUF roles.
 
